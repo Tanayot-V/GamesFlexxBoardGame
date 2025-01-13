@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game1_SpotTheMissing/Scenes/Lobby.unity
+    path: Assets/Game1_SpotTheMissing/Scenes/Game1_Lobby.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Game1_SpotTheMissing/Scenes/MainGame.unity
+    path: Assets/Game1_SpotTheMissing/Scenes/Game2_MainGame.unity
     guid: ad9582b34ef6f48b998e06ccee74ad50
   m_configObjects: {}
