@@ -6,16 +6,26 @@ namespace SpotTheMissing
 {
 public class ClickSlot : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]private GameObject selectedObj;
+
+    private void Start() {}
+
+    public void SelectedObjHide()
     {
-        
+        selectedObj.SetActive(false);
+    }
+    private void SelectedObjShow()
+    {
+        selectedObj.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnMouseDown() {
+        GameManager.Instance.SetStageSummaryTOPrefab(this);
+        GameManager.Instance.levelManager.currentStagePrefabA.ResetSelectedAll();
+        GameManager.Instance.uiGameManager.OKButtonGreen();
+        if(GameManager.Instance.IsLastStage()) GameManager.Instance.uiGameManager.okTX.text = "สรุปคะแนน";
+        else GameManager.Instance.uiGameManager.okTX.text = "ยืนยัน";
+        SelectedObjShow();
     }
 
     private void OnMouseOver() {
@@ -23,7 +33,7 @@ public class ClickSlot : MonoBehaviour
     }
  
     private void OnMouseExit() {
-                this.GetComponent<SpriteRenderer>().color = Color.white;
+        this.GetComponent<SpriteRenderer>().color = Color.white;
     }
 }
 }

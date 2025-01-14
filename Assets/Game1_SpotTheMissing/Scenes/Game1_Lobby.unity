@@ -591,12 +591,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076338425}
-        m_TargetAssemblyTypeName: LobbyUIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: SpotTheMissing.LobbyUIManager, Assembly-CSharp
         m_MethodName: SelectStageButton
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 19783f7c067964c1fb684ed958ad1780, type: 2}
-          m_ObjectArgumentAssemblyTypeName: StageModelSO, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: SpotTheMissing.StageModelSO, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -724,12 +724,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076338425}
-        m_TargetAssemblyTypeName: LobbyUIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: SpotTheMissing.LobbyUIManager, Assembly-CSharp
         m_MethodName: SelectStageButton
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: f6a678602ef784626afd7159ff0fa3f8, type: 2}
-          m_ObjectArgumentAssemblyTypeName: StageModelSO, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: SpotTheMissing.StageModelSO, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1583,12 +1583,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2076338425}
-        m_TargetAssemblyTypeName: LobbyUIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: SpotTheMissing.LobbyUIManager, Assembly-CSharp
         m_MethodName: SelectStageButton
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 1cb13d697cf3141949dd193bd9aa41a9, type: 2}
-          m_ObjectArgumentAssemblyTypeName: StageModelSO, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: SpotTheMissing.StageModelSO, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3171,7 +3171,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: MainGame
+          m_StringArgument: Game1_MainGame
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &2076338423

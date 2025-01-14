@@ -12,7 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8947876bcb5743959b8d8328c27de40, type: 3}
   m_Name: RoundModel_5
   m_EditorClassIdentifier: 
-  id: Round_5
-  prefab: {fileID: 0}
-  correctID: ITM_3
-  correctSprite: {fileID: 0}
+  id: RoundModel_5
+  prefabA: {fileID: 4894027420073139012, guid: ce63dcd2a707547898660fb6ce4ee3f0, type: 3}
+  prefabB: {fileID: 2637870708225066558, guid: b7c70658e4c874b3aae03e6201aee371, type: 3}
+  correctDatas:
+  - id: StageModel_1
+    correctID: ITM_3
+    correctIMG: {fileID: -12686540, guid: 5a378719f40ea424eb591aa66ca512bb, type: 3}
+  - id: StageModel_2
+    correctID: ITM_5
+    correctIMG: {fileID: -1866309473, guid: 5a378719f40ea424eb591aa66ca512bb, type: 3}
+  - id: StageModel_3
+    correctID: ITM_6
+    correctIMG: {fileID: -1844946212, guid: 5a378719f40ea424eb591aa66ca512bb, type: 3}
