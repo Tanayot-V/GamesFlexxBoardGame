@@ -20,7 +20,7 @@ public class UiController : MonoBehaviour
         }
     }
 
-    public static bool IsPointerOverUIObject()
+    public bool IsPointerOverUIObject()
     {
         PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
         eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);

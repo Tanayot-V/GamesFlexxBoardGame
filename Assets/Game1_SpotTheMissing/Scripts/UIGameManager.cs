@@ -45,20 +45,25 @@ namespace SpotTheMissing
     #region  Player A
         public void ApcectButton()
         {
-            if(GameManager.Instance.levelManager.IsLastStage())
-            {
-                ShowSummary();
-                GameManager.Instance.SetCurrentStageSummary();
-                return;
-            }
             if(!GameManager.Instance.levelManager.currentStagePrefabA.IsCanNextLevel()) 
             {
                 return;
             }
             else
             {
-                GameManager.Instance.SetCurrentStageSummary();
-                GameManager.Instance.NextLevel();
+                if(GameManager.Instance.levelManager.IsLastStage())
+                {
+                    GameManager.Instance.SetCurrentStageSummary();
+                    StartCoroutine(UiController.Instance.WaitForSecond(0.125f,()=>{
+                        ShowSummary();
+                    }));
+                    return;
+                }
+                else
+                {
+                    GameManager.Instance.SetCurrentStageSummary();
+                    GameManager.Instance.NextLevel();
+                }
             }
         }
 
@@ -140,6 +145,8 @@ namespace SpotTheMissing
             var displaySummary = displaySummaries[index];
             displaySummary.selectedIMG.sprite = stageSummary.selectSP;
             displaySummary.correctedIMG.sprite = stageSummary.correctSP;
+            Debug.Log("displaySummary.selectedIMG.: " +index+ stageSummary.selectSP.name);
+            Debug.Log("index: " + index);
 
             // เช็คว่าถูกต้องหรือไม่และตั้งค่าภาพ ifCorrectIMG
             displaySummary.ifCorrectIMG.sprite = stageSummary.isCorrect ? ifCorrects[0] : ifCorrects[1];

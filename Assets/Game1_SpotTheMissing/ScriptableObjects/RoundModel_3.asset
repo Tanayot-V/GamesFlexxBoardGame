@@ -18,10 +18,10 @@ MonoBehaviour:
   correctDatas:
   - id: StageModel_1
     correctID: ITM_1
-    correctIMG: {fileID: -12686540, guid: 5a378719f40ea424eb591aa66ca512bb, type: 3}
+    correctIMG: {fileID: 21300000, guid: d773eb2b934d340f98a50affc4c764cc, type: 3}
   - id: StageModel_2
     correctID: ITM_3
-    correctIMG: {fileID: -1866309473, guid: 5a378719f40ea424eb591aa66ca512bb, type: 3}
+    correctIMG: {fileID: 21300000, guid: d967e58b2e8534aa5be89a0ea2a6a512, type: 3}
   - id: StageModel_3
     correctID: ITM_7
-    correctIMG: {fileID: -1844946212, guid: 5a378719f40ea424eb591aa66ca512bb, type: 3}
+    correctIMG: {fileID: 21300000, guid: 2f4eca02156c34d6ab719f325d25bf62, type: 3}

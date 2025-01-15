@@ -20,6 +20,7 @@ public class ClickSlot : MonoBehaviour
     }
 
     private void OnMouseDown() {
+        if(UiController.Instance.IsPointerOverUIObject()) return;
         GameManager.Instance.SetStageSummaryTOPrefab(this);
         GameManager.Instance.levelManager.currentStagePrefabA.ResetSelectedAll();
         GameManager.Instance.uiGameManager.OKButtonGreen();
