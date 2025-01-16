@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SpotTheMissing
 {
-  [CreateAssetMenu(fileName = "RoundModelSO", menuName = "ScriptableObjects/RoundModelSO", order = 1)]
+  [CreateAssetMenu(fileName = "RoundModelSO", menuName = "SpotTheMissing/RoundModelSO", order = 1)]
   public class RoundModelSO : ScriptableObject
   {
     public string id;

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StageModel_1
   m_EditorClassIdentifier: 
   id: StageModel_1
+  summaryDisplay: "\u0E40\u0E09\u0E25\u0E22\u0E23\u0E2D\u0E1A\u0E17\u0E35\u0E48 1"
   roundModelSO:
   - {fileID: 11400000, guid: 19a407753a7f543d1a05f4ce26b1a62e, type: 2}
   - {fileID: 11400000, guid: 5f197d70b7dc345318bff9d8518abb0c, type: 2}

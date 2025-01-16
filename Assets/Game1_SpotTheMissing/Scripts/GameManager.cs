@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace SpotTheMissing
 {
     public class GameManager : Singletons<GameManager>
     {
+        public string gameSeneceName = "Game1_MainGame";
         public LevelManager levelManager;
         public UIGameManager uiGameManager;
 
@@ -27,6 +27,7 @@ namespace SpotTheMissing
 
         private void CreateStage()
         {
+            uiGameManager.headlineGPTX.text = "ด่านที่ "+ (levelManager.roundIndex + 1);
             GameObject gameOBJ;
             UiController.Instance.DestorySlot(uiGameManager.gameworldParent);
             if(levelManager.player == Player.A)

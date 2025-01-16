@@ -6,8 +6,6 @@ using UnityEngine.UI;
 using Spine;
 using Spine.Unity;
 using Spine.Unity.AttachmentTools;
-using UnityEditor;
-using Spine.Unity.Examples;
 
 public class SpineEntitySkinByPath : MonoBehaviour
 {

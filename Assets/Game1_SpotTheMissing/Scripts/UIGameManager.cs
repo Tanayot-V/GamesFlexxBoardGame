@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,12 +12,15 @@ namespace SpotTheMissing
         public GameObject selectStagePanel;
         public GameObject selectPlayerPanel;
 
-        public GameObject[] selecetButtons;
+        public GameObject[] selecetStageButtons;
+        public GameObject[] selecetPlayerButtons;
 
-        [Header("Game World")]
+        [Header("GamePlay")]
         public GameObject loadingObj;
         public GameObject gamePanel;
         public GameObject gameworldParent;
+        public TMPro.TextMeshProUGUI headlineGPTX;
+        public Material materialGray;
 
         [Header("UI Player A")]
         public GameObject playerAPanel;
@@ -28,18 +32,16 @@ namespace SpotTheMissing
 
         [Header("Summary")]
         public GameObject summaryPanel;
+        public TMPro.TextMeshProUGUI headlineSUMTX;
+
         public Sprite[] ifCorrects;
         public DisplaySummary[] displaySummaries;
+        public GameObject[] animationQueue;
         
 
         public void LoadSceneByName(string _name)
         {
             DataCenterManager.Instance.LoadSceneByName(_name);
-        }
-
-        public void SelectStageButton(StageModelSO _stageModelSO)
-        {
-            GameManager.Instance.SetStageModelSO(_stageModelSO);
         }
 
     #region  Player A
@@ -54,9 +56,9 @@ namespace SpotTheMissing
                 if(GameManager.Instance.levelManager.IsLastStage())
                 {
                     GameManager.Instance.SetCurrentStageSummary();
-                    StartCoroutine(UiController.Instance.WaitForSecond(0.125f,()=>{
-                        ShowSummary();
-                    }));
+                    GameManager.Instance.ShowLoading(()=>{
+                          ShowSummary();
+                    });
                     return;
                 }
                 else
@@ -69,28 +71,39 @@ namespace SpotTheMissing
 
         public void OKButtonGray()
         {
-            okButton.GetComponent<Image>().color = Color.gray;
+            okButton.targetGraphic.material = materialGray;
         }
         public void OKButtonGreen()
         {
-            okButton.GetComponent<Image>().color = Color.green;
+            okButton.targetGraphic.material = null;
         }
     #endregion
 
     #region Player B
     public void NextBButton()
     {
-        GameManager.Instance.NextLevel();
-        if(GameManager.Instance.IsLastStage()) DataCenterManager.Instance.LoadSceneByName("Game1_MainGame");
+        if(GameManager.Instance.IsLastStage()) 
+        {
+            DataCenterManager.Instance.LoadSceneByName(GameManager.Instance.gameSeneceName);
+        }
+        else GameManager.Instance.NextLevel();
     }
     public void BackBButton()
     {
-        GameManager.Instance.BackLevel();
-        if(GameManager.Instance.levelManager.roundIndex <= 0) DataCenterManager.Instance.LoadSceneByName("Game1_MainGame");
+        if(GameManager.Instance.levelManager.roundIndex <= 0) 
+        {
+            DataCenterManager.Instance.LoadSceneByName(GameManager.Instance.gameSeneceName);
+        }
+        else GameManager.Instance.BackLevel();
     }
     #endregion
 
     #region  Lobby
+        public void SelectStageButton(StageModelSO _stageModelSO)
+        {
+            GameManager.Instance.SetStageModelSO(_stageModelSO);
+        }
+
         public void SelectPlayerButton(string _id)
         {
             switch(_id)
@@ -110,6 +123,9 @@ namespace SpotTheMissing
             selectPlayerPanel.SetActive(false);
             selectStagePanel.SetActive(true);
             summaryPanel.SetActive(false);
+
+            selecetStageButtons.ToList().ForEach(o => { o.GetComponent<ButtonClickSlot>().HideAuraStage();});
+            selecetStageButtons[0].GetComponent<Button>().onClick.Invoke();
         }
 
         public void OpenSelectPlayerPanel()
@@ -117,6 +133,10 @@ namespace SpotTheMissing
             gamePanel.SetActive(false);
             selectStagePanel.SetActive(false);
             selectPlayerPanel.SetActive(true);
+            GameManager.Instance.levelManager.SetupStageSummary();
+
+            selecetPlayerButtons.ToList().ForEach(o => {o.GetComponent<ButtonClickSlot>().HideAuraStage();});
+            selecetPlayerButtons[0].GetComponent<Button>().onClick.Invoke();
         }
 
         public void CloseSelectPlayerPanel()
@@ -137,6 +157,7 @@ namespace SpotTheMissing
     #region  Summary
     public void ShowSummary()
     {
+        headlineSUMTX.text = GameManager.Instance.levelManager.currentStage.summaryDisplay;
         summaryPanel.SetActive(true);
         int index = 0;
 
@@ -152,6 +173,21 @@ namespace SpotTheMissing
             displaySummary.ifCorrectIMG.sprite = stageSummary.isCorrect ? ifCorrects[0] : ifCorrects[1];
             
             index++;
+        }
+        //Animation
+        StartCoroutine(PlayAnimation());
+
+        IEnumerator PlayAnimation()
+        {
+            animationQueue.ToList().ForEach(o => {
+                o.GetComponent<RectTransform>().localScale = Vector3.zero;
+            });
+
+            foreach (var o in animationQueue.ToList())
+            {
+                UITransition.Instance.ScaleOneSet(o, Vector3.zero, Vector3.one);
+                yield return new WaitForSeconds(0.125f); // หน่วงเวลา 0.5 วินาที (ปรับได้ตามต้องการ)
+            }
         }
     }
     #endregion

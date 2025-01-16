@@ -85,7 +85,7 @@ public class LevelManager : MonoBehaviour
     public void SetStageModelSO(StageModelSO _stageModelSO)
     {
         currentStage = _stageModelSO;
-        SetupStageSummary();
+        //SetupStageSummary();
     }
     public void SetRoundModelSO(RoundModelSO _roundModelSO)
     {
@@ -102,7 +102,6 @@ public class LevelManager : MonoBehaviour
         player = Player.A;
         GameManager.Instance.uiGameManager.OpenSelectStagePanel();
         stageSummaries.Clear();
-        GameManager.Instance.uiGameManager.selecetButtons[0].GetComponent<Button>().onClick.Invoke();
         roundIndex = 0;
     }
 
