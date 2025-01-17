@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a41b03cd8ca0a408f87bbec86975a702, type: 3}
+  m_Name: Lv4_Card_24_R
+  m_EditorClassIdentifier: 
+  id: Card_24
+  picture: {fileID: 21300000, guid: a667f7b86d1f34eb98e4897a1bf57e3a, type: 3}
+  level: 3
+  type: 2
+  dispalyName: 
+  description: "\u0E2B\u0E21\u0E38\u0E19\u0E15\u0E31\u0E27\u0E2B\u0E19\u0E36\u0E48\u0E07\u0E23\u0E2D\u0E1A "
+  bgColor: {r: 0.99215686, g: 0.29803923, b: 0.18431373, a: 1}

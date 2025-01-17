@@ -1,0 +1,115 @@
+<mxfile host="65bd71144e">
+    <diagram id="ts22CMXIrcILV0iI1m7x" name="Page-1">
+        <mxGraphModel dx="4572" dy="1043" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="GOD WarShip" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Comic Sans MS;fontSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="-2820" y="100" width="230" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" style="edgeStyle=none;html=1;" edge="1" parent="1" source="13" target="14">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="สุ่ม Pool LV.1 (100%)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-3290" y="310" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="14" target="15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="จองตำแหน่ง สุ่ม 4-9&lt;br&gt;การ์ดสีเขียว&lt;br&gt;[บังคับออก]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;" vertex="1" parent="1">
+                    <mxGeometry x="-3100" y="310" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" style="edgeStyle=none;html=1;" edge="1" parent="1" source="15" target="16">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="สุ่ม Pool LV.1 (20%)&lt;br&gt;สุ่ม Pool LV.2 (80%)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2890" y="310" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" style="edgeStyle=none;html=1;" edge="1" parent="1" source="16" target="26">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="ระหว่างสุ่ม ถ้าถึงตำแหน่งสีเขียว =&amp;gt; ADD CARD =&amp;gt; ดึงออกจาก Pool" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+                    <mxGeometry x="-2882.5" y="400" width="105" height="105" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="LV.1 - ใบที่ 1-3" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-3290" y="230" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="LV.2 -ใบที่ 4-6" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2890" y="220" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="LV.3 - ใบที่ 7-9" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2680" y="220" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="22" target="25">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="สุ่ม Pool LV.2 (30%)&lt;br&gt;สุ่ม Pool LV.3 (70%)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2680" y="310" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" style="edgeStyle=none;html=1;" edge="1" parent="1" source="25" target="29">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="25" target="16">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="ระหว่างสุ่ม ถ้าถึงตำแหน่งสีเขียว =&amp;gt; ADD CARD =&amp;gt; ดึงออกจาก Pool" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+                    <mxGeometry x="-2670" y="405" width="100.5" height="100.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" style="edgeStyle=none;html=1;" edge="1" parent="1" source="26" target="27">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="สุ่มเสร็จแล้ว" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2890" y="560" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" style="edgeStyle=none;html=1;" edge="1" parent="1" source="27" target="28">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="[เช็คสีแดง] ถ้าสีแดงในเลเวลนี้ไม่ออก&lt;br&gt;ให้เพิ่มโอกาสการ์ดสีแดง เลเวลถัดไป" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+                    <mxGeometry x="-2905" y="650" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" style="edgeStyle=none;html=1;" edge="1" parent="1" source="28" target="49">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="ADD REDCARD to &lt;br&gt;Pool LV.3 เพิ่ม 2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+                    <mxGeometry x="-2905" y="760" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" style="edgeStyle=none;html=1;" edge="1" parent="1" source="29" target="30">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="สุ่มเสร็จแล้ว" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2680" y="540" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" style="edgeStyle=none;html=1;" edge="1" parent="1" source="30" target="31">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="[เช็คสีแดง]&amp;nbsp;ถ้าสีแดงในเลเวลนี้ไม่ออก&lt;br&gt;ให้เพิ่มโอกาสการ์ดสีแดง เลเวลถัดไป" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+                    <mxGeometry x="-2695" y="650" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="31" target="32">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="ADD REDCARD&amp;nbsp;to &lt;br&gt;Pool LV.4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+                    <mxGeometry x="-2694.5" y="760" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="ถ้าไม่ออกเลยระหว่าง LV2 กับ LV3&lt;br&gt;เพิ่มโอกาสออก +2 รวตัวเองมีใน Pool&amp;nbsp;&amp;nbsp;เป็น 3 ใบ&lt;br&gt;=&amp;gt; มีโอกาสเกิดเยอะขึ้น แต่ไม่บังคับออก" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+                    <mxGeometry x="-2747.5" y="860" width="255" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="LV.4 - ใบที่ 10-12" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2500" y="220" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="สุ่ม Pool LV.3 (40%)&lt;br&gt;สุ่ม Pool LV.4 (60%)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2500" y="310" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="ถ้าออกก็จะไม่แอดเพิ่ม pool อื่นเพิ่ม" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-2890" y="850" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="การ์ดสีแดง Action จะเป็นของเลเวลนั้นๆ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d80073;fontColor=#ffffff;strokeColor=#A50040;" vertex="1" parent="1">
+                    <mxGeometry x="-2800" y="980" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="ถ้าออกแล้ว อันนี้ไม่ต้อง" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="-2755" y="420" width="60" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
