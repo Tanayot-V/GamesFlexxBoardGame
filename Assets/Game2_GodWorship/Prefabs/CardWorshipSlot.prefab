@@ -209,6 +209,81 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4918422281091174629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7620649241344452628}
+  - component: {fileID: 2729105678081957377}
+  - component: {fileID: 5103861698321379562}
+  m_Layer: 5
+  m_Name: SelectedAura
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &7620649241344452628
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4918422281091174629}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2508146617730258403}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.446, y: 10.251}
+  m_SizeDelta: {x: 377.157, y: 435.48}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2729105678081957377
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4918422281091174629}
+  m_CullTransparentMesh: 1
+--- !u!114 &5103861698321379562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4918422281091174629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0df99f527e883496691b43879c96e3da, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5694376101973283726
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,6 +534,7 @@ GameObject:
   - component: {fileID: 7067398019809899466}
   - component: {fileID: 3543289464917765121}
   - component: {fileID: 6352198910107793498}
+  - component: {fileID: 1213024266615352325}
   m_Layer: 5
   m_Name: CardWorshipSlot
   m_TagString: Untagged
@@ -478,6 +554,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7620649241344452628}
   - {fileID: 8033053004488076146}
   - {fileID: 6544997649070122833}
   - {fileID: 8147526594138413444}
@@ -513,6 +590,7 @@ MonoBehaviour:
   isOpen: 0
   pictureIMG: {fileID: 7851530200724137225}
   coverGO: {fileID: 5694376101973283726}
+  selectedAuraGO: {fileID: 4918422281091174629}
   numberCardTX: {fileID: 4484921764613022687}
 --- !u!114 &6352198910107793498
 MonoBehaviour:
@@ -539,7 +617,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5686275, g: 0.5686275, b: 0.5686275, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -570,3 +648,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1213024266615352325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8871929053575030789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e32b35793519842a4cb88cd100ba86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groupName: SelectedAura
+  key: 
+  autoUninteracable: 0
+  effects:
+  - effectType: 0
+    effectColor: {r: 0, g: 0, b: 0, a: 0}
+    effectSwapSprite: {fileID: 0}
+    effectVector2: {x: 0, y: 0}
+    effectVector3: {x: 0, y: 0, z: 0}
+    effectAnimator: {fileID: 0}
+    effectShowAndHideTarget: {fileID: 4918422281091174629}
+    transition: 0
+    targetEffect: {fileID: 0}
+    targetRect: {fileID: 0}
+    transitionValue: 0
+    savedSprite: {fileID: 0}
+    savedColor: {r: 0, g: 0, b: 0, a: 0}
+    savedActive: 0
+    savedVector2: {x: 0, y: 0}
+    savedVector3: {x: 0, y: 0, z: 0}
+    vector2: {x: 0, y: 0}
+    vector3: {x: 0, y: 0, z: 0}

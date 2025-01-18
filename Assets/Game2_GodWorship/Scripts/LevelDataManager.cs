@@ -25,30 +25,32 @@ namespace GodWarShip
     {
         public CardDatabaseSO cardDatabaseSO;
 
-        [SerializeField] List<CardSO> poolCardNormalLevel1 = new List<CardSO>();
-        [SerializeField] List<CardSO> poolCardNormalLevel2 = new List<CardSO>();
-        [SerializeField] CardSO greenCard;
-        [SerializeField] CardSO redCardLevel2;
+        private List<CardSO> poolCardNormalLevel1 = new List<CardSO>();
+        private List<CardSO> poolCardNormalLevel2 = new List<CardSO>();
+        private CardSO greenCard;
+        private CardSO redCardLevel2;
 
-        [SerializeField] List<CardSO> poolCardNormalLevel3 = new List<CardSO>();
-        [SerializeField] CardSO redCardLevel3;
+        private List<CardSO> poolCardNormalLevel3 = new List<CardSO>();
+        private CardSO redCardLevel3;
 
-        [SerializeField] List<CardSO> poolCardNormalLevel4 = new List<CardSO>();
-        [SerializeField] CardSO redCardLevel4;
+        private List<CardSO> poolCardNormalLevel4 = new List<CardSO>();
+        private CardSO redCardLevel4;
 
-        [SerializeField] bool isShowGreenCard;
-        [SerializeField] List<CardSO> usedCards = new List<CardSO>();
-        private LevelCard currentLevelCardl;
+        private List<CardSO> usedCards = new List<CardSO>();
+
+        private List<string> usedIndexes = new List<string>();
 
         public void InitGame()
         {
             cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
+            //ShuffleDeck(poolCardNormalLevel1);
 
             cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
                 if(o.type != CardType.Green) poolCardNormalLevel2.Add(o);
                 if(o.type == CardType.Red) { redCardLevel2 = o;}
                 if(o.type == CardType.Green) greenCard = o;
             });
+            //ShuffleDeck(poolCardNormalLevel2);
 
             cardDatabaseSO.level3Cards.ToList().ForEach(o => { 
                 poolCardNormalLevel3.Add(o);
@@ -61,20 +63,17 @@ namespace GodWarShip
             });
         }
 
-       public void RandomCard()
+        public void RandomCard()
        {
             int randomChance = Random.Range(0, 100);
 
            //Level 1 สุ่มการ์ดในเลเวลแบบไม่ซ้ำ 100%
             for(int i = 0 ;i < 3; i++)
             {
-                CardSO selectedCard = GetUniqueRandomCard(poolCardNormalLevel1);
-                if (selectedCard != null)
-                {
-                    Debug.Log($"Round {i + 1}: Selected Card = {selectedCard.name}");
-                }
+                GetUniqueRandomCard(poolCardNormalLevel1);
             }
 
+            /*----- END LEVEL.1 ------*/
             //หาตำแหน่งแทรกการ์ดสีเขียว
             int indexGreenCard = Random.Range(1, 7);
             Debug.Log("<color=green>Index Green Card:"+ indexGreenCard+"</color>");
@@ -82,6 +81,7 @@ namespace GodWarShip
             // == Lv2 ==
             // Level 2 => Lv 20% Lv2 80%
             int percentageFromLevel1 = 20; // สัดส่วนการ์ดจากเลเวล 1 (20%)
+            usedIndexes.Clear();
             for(int i = 0 ;i < 3; i++)
             {
                 if(indexGreenCard == 1 && i == 0) { usedCards.Add(greenCard); }
@@ -92,16 +92,16 @@ namespace GodWarShip
                     if (randomChance <= percentageFromLevel1 && poolCardNormalLevel1.Count > 0)
                     {
                         // สุ่มจาก Pool 1
-                        RandomCard(poolCardNormalLevel1);
+                        GetUniqueRandomCard(poolCardNormalLevel1);
                     }
                     else
                     {
                         // สุ่มจาก Pool 2
-                        RandomCard(poolCardNormalLevel2);
+                        GetUniqueRandomCard(poolCardNormalLevel2);
                     }
                 }
             }
-            /*
+
             //เช็ค Level 2 ว่าออก RedCard ไปหรือยัง
             bool isRedLv2 = false;
             usedCards.ForEach(o => { if(o == redCardLevel2) isRedLv2 = true;});
@@ -110,25 +110,27 @@ namespace GodWarShip
                 poolCardNormalLevel3.Add(redCardLevel3);
                 Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL3</color>");
             }
-            poolCardNormalLevel2.RemoveAll(o => o != null && o.type == CardType.Red);
+
+            /*----- END LEVEL.2 ------*/
             
             // == Lv3 ==
             // Level 3 => Lv2 30% Lv3 70%
             int percentageFromLevel2 = 30; // สัดส่วนการ์ดจากเลเวล 1 (20%)
             for(int i = 0 ;i < 3; i++)
             {
-                if(indexGreenCard == 4 && i == 0) { usedCards.Add(greenCard); i++;}
-                else if(indexGreenCard == 5 && i == 1) { usedCards.Add(greenCard); i++;}
-                else if(indexGreenCard == 6 && i == 2) { usedCards.Add(greenCard); i++;}
+                if(indexGreenCard == 4 && i == 0) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 5 && i == 1) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 6 && i == 2) { usedCards.Add(greenCard); }
                 else
                 {
                     if (randomChance <= percentageFromLevel2 && poolCardNormalLevel2.Count > 0)
                     {
                         GetUniqueRandomCard(poolCardNormalLevel2);
+                      
                     }
                     else
                     {
-                    GetUniqueRandomCard(poolCardNormalLevel3);
+                        GetUniqueRandomCard(poolCardNormalLevel3);
                     }
                 }
             }
@@ -145,9 +147,7 @@ namespace GodWarShip
                 poolCardNormalLevel4.Add(redCardLevel4);
                 Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-2</color>");
             }
-
-            poolCardNormalLevel3.RemoveAll(o => o != null && o.type == CardType.Red);
-            /*
+            
             // == Lv4 ==
             // Level 4 => Lv3 40% Lv4 60%
             int percentageFromLevel3 = 40; // สัดส่วนการ์ดจากเลเวล 1 (20%)
@@ -162,37 +162,39 @@ namespace GodWarShip
                 {
                    GetUniqueRandomCard(poolCardNormalLevel4);
                 }
-            }*/
-            GameManager.Instance.uIGameManager.SetAllIMG(usedCards);
-            
-            void RandomCard(List<CardSO> _poolCardSOs)
-            {
-                RemoveCard(_poolCardSOs,GetUniqueRandomCard(_poolCardSOs));
             }
+            GameManager.Instance.uIGameManager.SetAllIMG(usedCards);
+
+            List<string> logMessages = new List<string>();   
+            for (int i = 0; i < usedCards.Count; i++)
+            {
+                var card = usedCards[i];
+
+                if (card != null) // ตรวจสอบว่าการ์ดไม่ใช่ null
+                {
+                    logMessages.Add($"[{i}] {card.name}"); // เพิ่มตำแหน่งและชื่อ
+                }
+            }
+            // รวมข้อความทั้งหมดด้วยการขึ้นบรรทัดใหม่
+            string result = string.Join("\n", logMessages);
+            Debug.Log("Card Names with Positions:\n" + result);
 
             CardSO GetUniqueRandomCard(List<CardSO> _poolCardSOs)
             {
+                
                 if (_poolCardSOs == null || _poolCardSOs.Count == 0)
                 {
                     Debug.LogWarning("No cards available in the pool!");
                     return null;
                 }
-
-                List<CardSO> tempPool = new List<CardSO>(_poolCardSOs);
                 int randomIndex = Random.Range(0, _poolCardSOs.Count);
                 CardSO selectedCard = _poolCardSOs[randomIndex];
-
                 usedCards.Add(selectedCard);
-                //if(selectedCard.type != CardType.Red)  tempPool.RemoveAt(randomIndex);
+                if(selectedCard.type != CardType.Red) _poolCardSOs.RemoveAt(randomIndex);
+                _poolCardSOs.RemoveAll(item => item == null);
                 return selectedCard;
             }
-
-            void RemoveCard(List<CardSO> _poolCardSOs,CardSO _cardSO)
-            {
-                //if(_cardSO.type != CardType.Red) _poolCardSOs.RemoveAll(o => o != null && o == _cardSO);
-            }
        }
-
 
         public void ClearCards()
         {
@@ -201,7 +203,6 @@ namespace GodWarShip
             poolCardNormalLevel2.Clear();
             poolCardNormalLevel3.Clear();
             poolCardNormalLevel4.Clear();
-            isShowGreenCard = false;
             usedCards.Clear();
         }
     }

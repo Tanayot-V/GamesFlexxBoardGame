@@ -11,6 +11,7 @@ public class CardWorshipSlot : MonoBehaviour
     public bool isOpen;
     public Image pictureIMG;
     public GameObject coverGO;
+    public GameObject selectedAuraGO;
     public TMPro.TextMeshProUGUI numberCardTX;
 
     public void InitSlot(int _index)
@@ -20,6 +21,8 @@ public class CardWorshipSlot : MonoBehaviour
         this.GetComponent<Button>().targetGraphic = coverGO.GetComponent<Image>();
         index = _index;
         numberCardTX.text = (index + 1).ToString();
+        selectedAuraGO.SetActive(false);
+        this.GetComponent<ButtonGroup>().key = name;
     }
 
     public void ClickButton()
@@ -28,12 +31,26 @@ public class CardWorshipSlot : MonoBehaviour
         {
             coverGO.GetComponent<CanvasGroupTransition>().FadeOut(()=>{
                 coverGO.SetActive(false);
+                GameManager.Instance.uIGameManager.SetShowIMG(cardSO.picture);
             });
+            this.GetComponent<Button>().targetGraphic = pictureIMG;
             isOpen = true;
+            GameManager.Instance.uIGameManager.OnButtonPressed(index);
+            if(index <= 0)
+            {
+                GameManager.Instance.uIGameManager.FaedShowCover();
+            }
         }
         else
         {
-            this.GetComponent<Button>().targetGraphic = pictureIMG;
+            GameManager.Instance.uIGameManager.SetShowIMG(cardSO.picture);
+        }
+
+        if(index >= 11)
+        {
+            StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{
+                GameManager.Instance.uIGameManager.reloadGO.SetActive(true);
+            }));
         }
     }
 }

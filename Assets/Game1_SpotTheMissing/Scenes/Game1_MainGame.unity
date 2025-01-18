@@ -5679,7 +5679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcdb0867aab3c42a691b5c8844c84766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiElement: {fileID: 0}
+  uiElement: {fileID: 1104610991}
   scaleMultiplier: 1.15
   duration: 1
   animationEase: 7
