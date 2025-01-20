@@ -169,6 +169,12 @@ namespace SpotTheMissing
             Debug.Log("displaySummary.selectedIMG.: " +index+ stageSummary.selectSP.name);
             Debug.Log("index: " + index);
 
+            if(stageSummary.roundID == "RoundModel_5") 
+            {
+                displaySummary.selectedIMG.sprite = stageSummary.roundModelSO.GetItemSprite(stageSummary.selectID);
+                displaySummary.correctedIMG.sprite = stageSummary.roundModelSO.GetItemSprite(stageSummary.correctID);
+            }
+            
             // เช็คว่าถูกต้องหรือไม่และตั้งค่าภาพ ifCorrectIMG
             displaySummary.ifCorrectIMG.sprite = stageSummary.isCorrect ? ifCorrects[0] : ifCorrects[1];
             

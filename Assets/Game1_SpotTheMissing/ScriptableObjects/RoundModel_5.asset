@@ -25,3 +25,26 @@ MonoBehaviour:
   - id: StageModel_3
     correctID: ITM_6
     correctIMG: {fileID: 21300000, guid: e211885aa43fd44cba1bc82715d667b3, type: 3}
+  pictureItems:
+  - id: ITM_1
+    sprite: {fileID: 21300000, guid: 2bb9f41cc79f249559e18c8c01b13a9c, type: 3}
+  - id: ITM_2
+    sprite: {fileID: 21300000, guid: d648b0c26a355413692a99bb67d336f3, type: 3}
+  - id: ITM_3
+    sprite: {fileID: 21300000, guid: 20b0c0713f9b641309267ef4d4058409, type: 3}
+  - id: ITM_4
+    sprite: {fileID: 21300000, guid: 51f0d7a65c7e5458ba69b1620c01fede, type: 3}
+  - id: ITM_5
+    sprite: {fileID: 21300000, guid: 7d68300f9835b44a89953eb065149a84, type: 3}
+  - id: ITM_6
+    sprite: {fileID: 21300000, guid: a2be1dfb92a104b66a4cd5a6256284c3, type: 3}
+  - id: ITM_7
+    sprite: {fileID: 21300000, guid: 509d42aad55ca42c689f097facab2bd3, type: 3}
+  - id: ITM_8
+    sprite: {fileID: 21300000, guid: ee66b079c6a2a4154b53cd142df05f48, type: 3}
+  - id: ITM_9
+    sprite: {fileID: 21300000, guid: a60a6e03842c3474ea721698b8e36b94, type: 3}
+  - id: ITM_10
+    sprite: {fileID: 21300000, guid: f34a7d58915a24018853dc694649f5d7, type: 3}
+  - id: ITM_11
+    sprite: {fileID: 21300000, guid: 01a81ba9c06f04ada8f06316ffc93637, type: 3}

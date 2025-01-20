@@ -12,6 +12,7 @@ namespace SpotTheMissing
     public GameObject prefabA;
     public GameObject prefabB;
     public CorrectData[] correctDatas;
+    public PictureItems[] pictureItems;
 
     public bool IsCorrect(string _StageID,string _ITMid)
     {
@@ -44,6 +45,12 @@ namespace SpotTheMissing
               return correctDatas[2].correctIMG;
       }
        return correctDatas[0].correctIMG;
+    }
+
+    public Sprite GetItemSprite(string _id)
+    {
+        var item = pictureItems.FirstOrDefault(o => o.id == _id);
+        return item != null ? item.sprite : null;
     }
   }
 }
