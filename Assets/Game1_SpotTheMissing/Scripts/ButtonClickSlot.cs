@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using System.Linq;
 using SpotTheMissing;
 
+namespace SpotTheMissing
+{
 public class ButtonClickSlot : MonoBehaviour
 {
     public GameObject[] auraOBJ;
@@ -33,4 +35,5 @@ public class ButtonClickSlot : MonoBehaviour
        if(this.GetComponent<RectTransform>().localScale.x != 1f) UITransition.Instance.ScaleOneSet(this.gameObject,new Vector3(1.2f,1.2f,1.2f),Vector3.one,0.5f);
         //if(uIBounceAnimation != null)uIBounceAnimation.StopBounce();
     }
+}
 }

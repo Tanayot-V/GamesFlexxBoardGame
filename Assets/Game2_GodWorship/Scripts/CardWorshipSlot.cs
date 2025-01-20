@@ -4,6 +4,8 @@ using GodWarShip;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace GodWarShip
+{
 public class CardWorshipSlot : MonoBehaviour
 {
     public int index;
@@ -53,4 +55,5 @@ public class CardWorshipSlot : MonoBehaviour
             }));
         }
     }
+}
 }
