@@ -10,6 +10,7 @@ namespace BriefMe
        [SerializeField] GameObject lobbyPanelGO;
        [SerializeField] GameObject gamePlayPanelGO;
        [SerializeField] GameObject loadingPanelGO;
+       [SerializeField] GameObject backComfirmGO;
        [SerializeField] Image showIMG;
 
        public void InitStartGameUI()
@@ -17,6 +18,7 @@ namespace BriefMe
             lobbyPanelGO.SetActive(true);
             gamePlayPanelGO.SetActive(false);
             loadingPanelGO.SetActive(false);
+            backComfirmGO.SetActive(false);
        }
 
         public void LoadSecene(string _name)
@@ -53,6 +55,7 @@ namespace BriefMe
         {
             lobbyPanelGO.SetActive(true);
             gamePlayPanelGO.SetActive(false);
+            backComfirmGO.SetActive(false);
         }
     }
 }

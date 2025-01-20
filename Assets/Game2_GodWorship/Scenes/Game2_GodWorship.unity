@@ -523,7 +523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0E2A\u0E38\u0E48\u0E21\u0E43\u0E2B\u0E21\u0E48"
+  m_text: "\u0E40\u0E23\u0E34\u0E48\u0E21\u0E43\u0E2B\u0E21\u0E48"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89d9145b8a0c24bd4bfed9a6e821c7f9, type: 2}
   m_sharedMaterial: {fileID: 6082239585133862587, guid: 89d9145b8a0c24bd4bfed9a6e821c7f9, type: 2}
@@ -532,8 +532,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4287371053
+  m_fontColor: {r: 0.17745574, g: 0.090334624, b: 0.5471698, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -657,7 +657,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6e9993c3eac60403eba5a67c12ed0c38, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 639cd431f0da14bd7bf6ba22f955d34a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6e9993c3eac60403eba5a67c12ed0c38, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 639cd431f0da14bd7bf6ba22f955d34a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -802,7 +802,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7392138, g: 0.5222944, b: 0.9150943, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1134,7 +1134,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d50be3f8add324503a81cefad4d6d372, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 74938635dd4b44ad29963775a5a1c78a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1771,7 +1771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingPanel: {fileID: 185666179}
   showGO: {fileID: 989912108}
-  coverIMG: {fileID: 21300000, guid: 6d9471879e8a748cc937869eafc2e12d, type: 3}
+  coverIMG: {fileID: 21300000, guid: 3beed4557838c40d19c2e09b9087563b, type: 3}
   imgChilds: {fileID: 584197112}
   cardSlot: {fileID: 8871929053575030789, guid: 81ce1024b16ea47089c76a35aba28263, type: 3}
   buttons: []
@@ -1813,7 +1813,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -600.38, y: 1.019}
+  m_AnchoredPosition: {x: -576.70605, y: 1.019}
   m_SizeDelta: {x: 676.52, y: 974.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &989912110
