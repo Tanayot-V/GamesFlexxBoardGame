@@ -19,17 +19,7 @@ namespace GodWarShip
 
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                levelDataManager.ClearCards();
-                levelDataManager.InitGame();
-                levelDataManager.RandomCard();
-                /*
-                StartCoroutine(                
-                    UiController.Instance.WaitForSecond(1 ,()=> {
-                    levelDataManager.RandomCard();
-                }));*/
-            }
+           
         }
     }
 }

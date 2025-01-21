@@ -26,8 +26,9 @@ namespace Chunking
         public Sprite normal_SP;
         public Sprite selected_SP;
         public Sprite show_SP;
+        public Sprite showGameplay_SP;
+        public string[] descriptions;
     }
-
 
     [System.Serializable]
     public class ChunkingShowData
@@ -55,11 +56,15 @@ namespace Chunking
         public Color colorSelected_2;
 
         public List<ChunkingShowData> showDataList = new List<ChunkingShowData>();
-
+        
         [Header("Clicked")]
         public ChunkingShowPrefab currentShowPrefab;
         public ChunkingSelectPrefab currentSelectPrefab;
         public WayType currentwayType;
+        List<Button> showSlots = new List<Button>();
+        List<ChunkingShowData> showResultDataList = new List<ChunkingShowData>();
+        [Header("Gameplay")]
+        public int currentDataIndex;
 
        public void InitSelectSlot()
        {
@@ -96,28 +101,22 @@ namespace Chunking
                 }
                 slot.name = i.ToString();
                 slot.GetComponent<ButtonGroup>().key = i.ToString();
-                if(i == 0) 
-                {
-                    ButtonGroupManager.Instance.Select(slot.GetComponent<ButtonGroup>());
-                }
                 showDataList.Add(new ChunkingShowData(slot));
+                slot.GetComponent<Button>().interactable = false;
+                showSlots.Add(slot.GetComponent<Button>());
             }
-            currentShowPrefab = showDataList[0].showSlot;
-
+            SetIndexShowSlot(0);
+            SetFristLobby();
+            //ตัวอย่าง Slot แรก
             currentSelectPrefab.GetComponent<Button>().onClick.Invoke();
-            currentwayType = WayType.Up;
-            Button btnChar = ButtonGroupManager.Instance.GetButton("ChunkingWayType", "Up");
-            if (btnChar != null) ButtonGroupManager.Instance.Select(btnChar.GetComponent<ButtonGroup>());
-       }
-
-       public void StartGameClick()
-       {
-            showDataList.ForEach(o => {
-                o.chunkingSO = o.showSlot.chunkingSO;
-                o.type = o.showSlot.wayType;
-            });
        }
        
+       public void SetFristLobby()
+       {
+            currentShowPrefab = showDataList[0].showSlot;
+            ButtonGroupManager.Instance.Select(currentShowPrefab.GetComponent<ButtonGroup>());   
+       }
+
        public void ClickSelected(ChunkingSelectPrefab _chunkingSelectPrefab)
        {
             currentSelectPrefab = _chunkingSelectPrefab;
@@ -140,10 +139,74 @@ namespace Chunking
             {
                 currentShowPrefab.SetType(_wayType);
             }
-            if(currentSelectPrefab != null)
+            if(currentShowPrefab.chunkingSO == null)
             {
-                currentSelectPrefab.ClickButton();
+                if(currentSelectPrefab != null)
+                {
+                    currentSelectPrefab.ClickButton();
+                }
             }
        }
+       
+       //ใส่ตามลำดับ
+       public void SetIndexShowSlot(int _currentIndex)
+       {
+            if (_currentIndex < showSlots.Count)
+            {
+                showSlots[_currentIndex].interactable = true;
+            }
+
+            if (_currentIndex + 1 < showSlots.Count)
+            {
+                showSlots[_currentIndex + 1].interactable = true;
+            }
+       }
+
+        #region  GamePlay
+        public void StartGameClick()
+        {
+            showResultDataList.Clear();
+            showDataList.ForEach(o => {
+                o.chunkingSO = o.showSlot.chunkingSO;
+                o.type = o.showSlot.wayType;
+                if(o.chunkingSO != null) showResultDataList.Add(o);
+            });
+
+            if(showResultDataList.Count > 0)
+            {
+                GameManager.Instance.uIGameManager.ShowGamePlay(showResultDataList[0]);
+            }
+            currentDataIndex = 0;
+            GameManager.Instance.uIGameManager.nextGO.SetActive(true);
+            GameManager.Instance.uIGameManager.backGO.SetActive(false);
+            if(showResultDataList.Count <= 1) GameManager.Instance.uIGameManager.nextGO.SetActive(false);
+       }
+       
+       public void NextClick()
+       {
+            if (currentDataIndex < showResultDataList.Count - 1) currentDataIndex += 1;
+            else  currentDataIndex = showResultDataList.Count - 1;
+            GameManager.Instance.uIGameManager.ShowGamePlay(showResultDataList[currentDataIndex]);
+            
+            //Index สุดท้าย
+            if (currentDataIndex == showResultDataList.Count - 1)
+            {
+                GameManager.Instance.uIGameManager.nextGO.SetActive(false);
+            }
+            else GameManager.Instance.uIGameManager.backGO.SetActive(true);
+       }
+
+       public void BackClick()
+       {
+            currentDataIndex -=1;
+            if(currentDataIndex <= 0) 
+            {
+                currentDataIndex = 0;
+                GameManager.Instance.uIGameManager.nextGO.SetActive(true);
+                GameManager.Instance.uIGameManager.backGO.SetActive(false);
+            }
+            GameManager.Instance.uIGameManager.ShowGamePlay(showResultDataList[currentDataIndex]);
+       }
+    #endregion
     }
 }

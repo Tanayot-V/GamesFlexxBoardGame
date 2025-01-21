@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using Unity.VisualScripting;
-using SpotTheMissing;
 
 namespace GodWarShip
 {
@@ -12,6 +10,7 @@ namespace GodWarShip
     {
         public GameObject loadingPanel;
         public GameObject showGO;
+        public GameObject coverBigShowGO;
         public Sprite coverIMG;
         public GameObject imgChilds;
         public GameObject cardSlot;
@@ -26,6 +25,7 @@ namespace GodWarShip
           ShowLoading();
           reloadGO.SetActive(false);
           reloadComfirmPanel.SetActive(false);
+          coverBigShowGO.SetActive(true);
         }
 
          public void ShowLoading(System.Action _action = null)

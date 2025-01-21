@@ -20,5 +20,10 @@ namespace Chunking
         {
             
         }
+
+        public ChunkingData GetChunkingData(WayType _wayType)
+        {
+            return levelManager.databaseSO.GetChunkingData(_wayType);
+        }
     }
 }

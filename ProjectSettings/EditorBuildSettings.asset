@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Game0/StartGame.unity
+    guid: 49362a017125f4a63be07ec9fc9dc323
+  - enabled: 1
     path: Assets/Game1_SpotTheMissing/Scenes/Game1_MainGame.unity
     guid: ad9582b34ef6f48b998e06ccee74ad50
+  - enabled: 1
+    path: Assets/Game2_GodWorship/Scenes/Game2_GodWorship.unity
+    guid: 81e7a018c5b134923afa851e92a8cc27
+  - enabled: 1
+    path: Assets/Game3_BriefMe/Scenes/Game3_BriefMe.unity
+    guid: 5ed0aabaea06c40ea89952cb6d0611a5
+  - enabled: 1
+    path: Assets/Game4_Chunking/Scenes/Game4_Chunking.unity
+    guid: 3dc8fe2b9637e45468c5831988edb31a
   m_configObjects: {}
