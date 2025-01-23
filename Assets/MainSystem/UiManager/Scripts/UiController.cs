@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UiController : MonoBehaviour
 {
@@ -122,4 +123,11 @@ public class UiController : MonoBehaviour
         prefab.GetComponent<RectTransform>().localScale = Vector3.one;
         return prefab;
     }
+
+    public void SetButtonGroup(string _group,string _key)
+    {
+        Button btn = ButtonGroupManager.Instance.GetButton(_group, _key);
+        if (btn != null) ButtonGroupManager.Instance.Select(btn.GetComponent<ButtonGroup>());
+    }
+    
 }
