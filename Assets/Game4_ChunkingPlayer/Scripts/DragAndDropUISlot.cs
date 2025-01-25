@@ -35,6 +35,7 @@ public class DragAndDropUISlot : MonoBehaviour, IBeginDragHandler, IDragHandler,
         eventData.pointerDrag = draggableItemObject;
 
         draggableItem.GetComponent<DraggableItem>().parentDrag = this.gameObject;
+        draggableItem.name = transform.GetChild(0).transform.GetComponent<TMPro.TextMeshProUGUI>().text;
         this.gameObject.SetActive(false);
     }
 

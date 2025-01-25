@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour
     public void ResetLobbySecene()
     {
         player = Player.A;
-        GameManager.Instance.uiGameManager.OpenSelectStagePanel();
+        GameManager.Instance.uiGameManager.OpenSelectPlayerPanel();
         stageSummaries.Clear();
         roundIndex = 0;
     }

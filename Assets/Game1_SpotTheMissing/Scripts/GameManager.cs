@@ -22,6 +22,8 @@ namespace SpotTheMissing
             uiGameManager.gamePanel.SetActive(true);
             uiGameManager.playerAPanel.SetActive(false);
             uiGameManager.playerBPanel.SetActive(false);
+            uiGameManager.summaryPanel.SetActive(false);
+            uiGameManager.comfirmScorePanel.SetActive(false);
             CreateStage();
         }
 
@@ -38,6 +40,8 @@ namespace SpotTheMissing
                 levelManager.currentStagePrefabA.ResetSelectedAll();
                 uiGameManager.OKButtonGray();
                 uiGameManager.okTX.text = "ยืนยัน";
+                if(IsLastStage()) uiGameManager.scoreSummaryButton.SetActive(false);
+                else uiGameManager.scoreSummaryButton.SetActive(true);
             }
             else
             {

@@ -9,8 +9,8 @@ namespace SpotTheMissing
     public class UIGameManager : MonoBehaviour
     {
         [Header("Lobby")]
-        public GameObject selectStagePanel;
         public GameObject selectPlayerPanel;
+        public GameObject selectStagePanel;
 
         public GameObject[] selecetStageButtons;
         public GameObject[] selecetPlayerButtons;
@@ -26,6 +26,8 @@ namespace SpotTheMissing
         public GameObject playerAPanel;
         public Button okButton;
         public TMPro.TextMeshProUGUI okTX;
+        public GameObject scoreSummaryButton;
+        public GameObject comfirmScorePanel;
         
         [Header("UI Player B")]
         public GameObject playerBPanel;
@@ -37,6 +39,7 @@ namespace SpotTheMissing
         public Sprite[] ifCorrects;
         public DisplaySummary[] displaySummaries;
         public GameObject[] animationQueue;
+        public Sprite nullSP;
         
 
         public void LoadSceneByName(string _name)
@@ -55,10 +58,7 @@ namespace SpotTheMissing
             {
                 if(GameManager.Instance.levelManager.IsLastStage())
                 {
-                    GameManager.Instance.SetCurrentStageSummary();
-                    GameManager.Instance.ShowLoading(()=>{
-                          ShowSummary();
-                    });
+                    OpenSummaryPanel();
                     return;
                 }
                 else
@@ -77,6 +77,20 @@ namespace SpotTheMissing
         {
             okButton.targetGraphic.material = null;
         }
+        public void OpenComfirmScorePanel()
+        {
+            comfirmScorePanel.SetActive(true);
+            comfirmScorePanel.GetComponent<CanvasGroupTransition>().FadeIn();
+        }
+
+        public void OpenSummaryPanel()
+        {
+            GameManager.Instance.SetCurrentStageSummary();
+            GameManager.Instance.ShowLoading(()=>{
+                ShowSummary();
+            });
+        }
+
     #endregion
 
     #region Player B
@@ -133,21 +147,21 @@ namespace SpotTheMissing
             gamePanel.SetActive(false);
             selectStagePanel.SetActive(false);
             selectPlayerPanel.SetActive(true);
-            GameManager.Instance.levelManager.SetupStageSummary();
+            summaryPanel.SetActive(false);
 
             selecetPlayerButtons.ToList().ForEach(o => {o.GetComponent<ButtonClickSlot>().HideAuraStage();});
             selecetPlayerButtons[0].GetComponent<Button>().onClick.Invoke();
         }
-
-        public void CloseSelectPlayerPanel()
-        {    
+       
+        public void CloseSelectStagePanel()
+        {
             selectStagePanel.SetActive(false);
             selectPlayerPanel.SetActive(false);
-            GameManager.Instance.ShowLoading();
-            GameManager.Instance.InitGameWorld();
             GameManager.Instance.SetupStageSummary();
+            GameManager.Instance.InitGameWorld();
+            GameManager.Instance.ShowLoading();
         }
-       
+
         public void LoadSecene(string _name)
         {
             DataCenterManager.Instance.LoadSceneByName(_name);
@@ -164,20 +178,28 @@ namespace SpotTheMissing
         foreach (var stageSummary in GameManager.Instance.levelManager.stageSummaries)
         {
             var displaySummary = displaySummaries[index];
-            displaySummary.selectedIMG.sprite = stageSummary.selectSP;
-            displaySummary.correctedIMG.sprite = stageSummary.correctSP;
-            Debug.Log("displaySummary.selectedIMG.: " +index+ stageSummary.selectSP.name);
-            Debug.Log("index: " + index);
-
-            if(stageSummary.roundID == "RoundModel_5") 
+            if(stageSummary.selectSP == null) 
             {
-                displaySummary.selectedIMG.sprite = stageSummary.roundModelSO.GetItemSprite(stageSummary.selectID);
-                displaySummary.correctedIMG.sprite = stageSummary.roundModelSO.GetItemSprite(stageSummary.correctID);
+                displaySummary.selectedIMG.sprite = nullSP;
+                displaySummary.correctedIMG.sprite = nullSP;
+                displaySummary.ifCorrectIMG.sprite = nullSP;
             }
-            
-            // เช็คว่าถูกต้องหรือไม่และตั้งค่าภาพ ifCorrectIMG
-            displaySummary.ifCorrectIMG.sprite = stageSummary.isCorrect ? ifCorrects[0] : ifCorrects[1];
-            
+            else
+            {
+                displaySummary.selectedIMG.sprite = stageSummary.selectSP;
+                displaySummary.correctedIMG.sprite = stageSummary.correctSP;
+                Debug.Log("displaySummary.selectedIMG.: " +index+ stageSummary.selectSP.name);
+                Debug.Log("index: " + index);
+
+                if(stageSummary.roundID == "RoundModel_5") 
+                {
+                    displaySummary.selectedIMG.sprite = stageSummary.roundModelSO.GetItemSprite(stageSummary.selectID);
+                    displaySummary.correctedIMG.sprite = stageSummary.roundModelSO.GetItemSprite(stageSummary.correctID);
+                }
+                
+                // เช็คว่าถูกต้องหรือไม่และตั้งค่าภาพ ifCorrectIMG
+                displaySummary.ifCorrectIMG.sprite = stageSummary.isCorrect ? ifCorrects[0] : ifCorrects[1];
+            }
             index++;
         }
         //Animation

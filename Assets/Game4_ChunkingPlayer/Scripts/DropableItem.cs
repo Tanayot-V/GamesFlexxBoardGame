@@ -30,47 +30,38 @@ public class DropableItem : MonoBehaviour, IBeginDragHandler,IDropHandler, IPoin
     {
         if (eventData.pointerDrag != null)
         {
-            //Debug.Log(eventData.pointerDrag.name);
-            //this.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = eventData.pointerDrag.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text;
-            if(draggableItem == null)
+            draggableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
+            if (draggableItem != null)
             {
-                draggableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
-                if (draggableItem != null)
+                if(draggableItem.isSnapOnSlot) return;
+                GameObject parent = draggableItem.parentDrop;
+                //สลับไอเทมไปที่ว่าง และเคลียร์ช่องเก่าให้ว่าง
+                if(draggableItem.parentDrop != null) draggableItem.parentDrop.GetComponent<DropableItem>().draggableItem = null;
+                else Debug.Log("From UI");
+                draggableItem.SnapToSlot(this.gameObject);
+                draggableItem.transform.SetParent(transform);
+                draggableItem.transform.localPosition = Vector3.zero;
+
+                if(transform.childCount > 1)
                 {
-                    if(draggableItem.isSnapOnSlot) return;
-                    //สลับไอเทมไปที่ว่าง และเคลียร์ช่องเก่าให้ว่าง
-                    if(draggableItem.parentDrop != null)
+                    if(parent != null)
                     {
-                        draggableItem.parentDrop.GetComponent<DropableItem>().draggableItem = null;
+                        Debug.Log("Switch!!! ภายในเกม");
+                        DraggableItem switchItem = transform.GetChild(0).GetComponent<DraggableItem>();
+                        switchItem.SnapToSlot(parent);
+                        switchItem.transform.SetParent(parent.transform);
+                        switchItem.transform.localPosition = Vector3.zero;
+                        parent.GetComponent<DropableItem>().draggableItem = parent.transform.GetChild(0).GetComponent<DraggableItem>();
                     }
-                     if(draggableItem.parentDrop == null)
+                    else
                     {
-                       Debug.Log("From UI");
+                        Debug.Log("Switch!!! จาก UI");
+                        DraggableItem switchItem = transform.GetChild(0).GetComponent<DraggableItem>();
+                        switchItem.transform.localPosition = Vector3.zero;
+                        switchItem.parentDrag.SetActive(true);
+                        Destroy(switchItem.gameObject);
                     }
-                    draggableItem.SnapToSlot(this.gameObject);
-                    draggableItem.transform.SetParent(transform);
-                    draggableItem.transform.localPosition = Vector3.zero;
                 }
-            }
-            else
-            {
-                Debug.Log("draggableItem(Switch!!):" + name);
-                DraggableItem swicthableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
-                GameObject parent = swicthableItem.parentDrop;
-                if (swicthableItem != null)
-                {
-                    swicthableItem.SnapToSlot(this.gameObject);
-                    swicthableItem.transform.SetParent(transform);
-                    swicthableItem.transform.localPosition = Vector3.zero;
-                }
-                if (draggableItem != null)
-                {
-                    draggableItem.SnapToSlot(parent);
-                    if(parent != null)draggableItem.transform.SetParent(parent.transform);
-                    draggableItem.transform.localPosition = Vector3.zero;
-                }
-                swicthableItem.parentDrop.GetComponent<DropableItem>().draggableItem =  swicthableItem.parentDrop.transform.GetChild(0).GetComponent<DraggableItem>();
-                if(parent != null)parent.GetComponent<DropableItem>().draggableItem = parent.transform.GetChild(0).GetComponent<DraggableItem>();
             }
         }
     }

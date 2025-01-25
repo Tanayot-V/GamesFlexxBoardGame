@@ -39,7 +39,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             parentDrag.SetActive(true);
             Debug.Log("OnEndDrag");
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
     public void OnPointerClick(PointerEventData eventData)

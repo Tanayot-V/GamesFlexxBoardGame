@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "GamesFlexxBoardGame.sln"
+    "dotnet.defaultSolution": "GamesFlexxBoardGame.sln",
+    "liveServer.settings.port": 5501
 }
