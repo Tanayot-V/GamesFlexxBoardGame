@@ -8,6 +8,7 @@ namespace GodWarShip
 {
     public class UIGameManager : MonoBehaviour
     {
+        public GameObject lobbyPanel;
         public GameObject loadingPanel;
         public GameObject showGO;
         public GameObject coverBigShowGO;
@@ -37,6 +38,23 @@ namespace GodWarShip
             }));
         }
         
+        public void SelectMode(string _mode)
+        {
+            lobbyPanel.SetActive(false);
+            ShowLoading();
+            switch(_mode)
+            {
+                case "Easy":
+                    GameManager.Instance.levelDataManager.InitGameEasyMode();
+                    break;
+                case "Normal":
+                     GameManager.Instance.levelDataManager.InitGameNormalMode();
+                    break;
+                case "Hard":
+                     GameManager.Instance.levelDataManager.InitGameHardMode();
+                    break;
+            }
+        }
         public void SetAllIMG(List<CardSO> _cardSOs)
         {
             UiController.Instance.DestorySlot(imgChilds);
