@@ -11,6 +11,8 @@ namespace SpotTheMissing
         [Header("Lobby")]
         public GameObject selectPlayerPanel;
         public GameObject selectStagePanel;
+        public GameObject aPanel;
+        public GameObject bPanel;
 
         public GameObject[] selecetStageButtons;
         public GameObject[] selecetPlayerButtons;
@@ -124,9 +126,13 @@ namespace SpotTheMissing
             {
                 case "A":
                     GameManager.Instance.SetPlayer(Player.A);
+                    aPanel.SetActive(true);
+                    bPanel.SetActive(false);
                 break;
                 case "B":
                     GameManager.Instance.SetPlayer(Player.B);
+                    aPanel.SetActive(false);
+                    bPanel.SetActive(true);
                 break;
             }
         }

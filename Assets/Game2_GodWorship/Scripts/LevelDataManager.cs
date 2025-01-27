@@ -43,6 +43,49 @@ namespace GodWarShip
         public void InitGameEasyMode()
         {
             Debug.Log("InitGameEasyMode");
+            cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
+            cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
+                if(o.type != CardType.Green) poolCardNormalLevel2.Add(o);
+                if(o.type == CardType.Red) { redCardLevel2 = o;}
+                if(o.type == CardType.Green) greenCard = o;
+            });
+
+            int randomChance = Random.Range(0, 100);
+            //Level 1 สุ่มการ์ดในเลเวลแบบไม่ซ้ำ 100%
+            for(int i = 0 ;i < 3; i++)
+            {
+                GetUniqueRandomCard(poolCardNormalLevel1);
+            }
+
+            /*----- END LEVEL.1 ------*/
+            //หาตำแหน่งแทรกการ์ดสีเขียว
+            int indexGreenCard = Random.Range(1, 4);
+            Debug.Log("<color=green>Index Green Card:"+ indexGreenCard+"</color>");
+
+             // == Lv2 ==
+            // Level 2 => Lv 20% Lv2 80%
+            int percentageFromLevel1 = 20; // สัดส่วนการ์ดจากเลเวล 1 (20%)
+            usedIndexes.Clear();
+            for(int i = 0 ;i < 3; i++)
+            {
+                if(indexGreenCard == 1 && i == 0) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 2 && i == 1) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 3 && i == 2) { usedCards.Add(greenCard); }
+                else
+                {
+                    if (randomChance <= percentageFromLevel1 && poolCardNormalLevel1.Count > 0)
+                    {
+                        // สุ่มจาก Pool 1
+                        GetUniqueRandomCard(poolCardNormalLevel1);
+                    }
+                    else
+                    {
+                        // สุ่มจาก Pool 2
+                        GetUniqueRandomCard(poolCardNormalLevel2);
+                    }
+                }
+            }
+            GameManager.Instance.uIGameManager.SetAllIMG(usedCards);
         }
 
         public void InitGameNormalMode()
@@ -177,8 +220,9 @@ namespace GodWarShip
             // รวมข้อความทั้งหมดด้วยการขึ้นบรรทัดใหม่
             string result = string.Join("\n", logMessages);
             Debug.Log("Card Names with Positions:\n" + result);
+        }
 
-            CardSO GetUniqueRandomCard(List<CardSO> _poolCardSOs)
+         CardSO GetUniqueRandomCard(List<CardSO> _poolCardSOs)
             {
                 if (_poolCardSOs == null || _poolCardSOs.Count == 0)
                 {
@@ -192,8 +236,6 @@ namespace GodWarShip
                 _poolCardSOs.RemoveAll(item => item == null);
                 return selectedCard;
             }
-
-        }
 
         public void InitGameHardMode()
         {

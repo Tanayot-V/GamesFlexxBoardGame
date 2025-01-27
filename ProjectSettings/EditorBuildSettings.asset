@@ -24,6 +24,6 @@ EditorBuildSettings:
     path: Assets/Game4_ChunkingPlayer/Scenes/Game4_ChunkingPlayer.unity
     guid: 4e3ce3b919fdc4dc299a72b7aa4c577a
   - enabled: 1
-    path: Assets/Game6_StoryCard/Scenes/GamePlay.unity
-    guid: 7445369cb1656a14592066e7a5e336b3
+    path: Assets/Game5_BuildMe/Scenes/Game5_BuildMe.unity
+    guid: 0c37a501abb7d4c30919371441c2142d
   m_configObjects: {}

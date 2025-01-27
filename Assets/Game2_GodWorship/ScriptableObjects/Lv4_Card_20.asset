@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a41b03cd8ca0a408f87bbec86975a702, type: 3}
-  m_Name: Lv3_Card_19
+  m_Name: Lv4_Card_20
   m_EditorClassIdentifier: 
-  id: Card_19
-  picture: {fileID: 21300000, guid: 24270df466ce54a7aa8b50e522f1725b, type: 3}
-  level: 2
+  id: Card_22
+  picture: {fileID: 21300000, guid: 570cd325fc6244e0091a0dd8f08f3e01, type: 3}
+  level: 3
   type: 0
   dispalyName: 
-  description: "\u0E2B\u0E31\u0E19\u0E2B\u0E19\u0E49\u0E32\u0E44\u0E1B\u0E14\u0E49\u0E32\u0E19\u0E0B\u0E49\u0E32\u0E22 "
-  bgColor: {r: 1, g: 0.63529414, b: 0.078431375, a: 1}
+  description: "\u0E28\u0E2D\u0E01\u0E02\u0E49\u0E32\u0E07\u0E2B\u0E19\u0E36\u0E48\u0E07\u0E23\u0E30\u0E14\u0E31\u0E1A\u0E40\u0E2D\u0E27 "
+  bgColor: {r: 0.99215686, g: 0.29803923, b: 0.18431373, a: 1}

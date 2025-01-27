@@ -12,6 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56322f8951a3a49d1a29adbe4a5a42a7, type: 3}
   m_Name: CardDatabaseSO
   m_EditorClassIdentifier: 
+  level1Cards_easy:
+  - {fileID: 11400000, guid: 32699ef9ba00c4ef1a696ffa7c04b14b, type: 2}
+  - {fileID: 11400000, guid: ca7624e38fdba4444a90db0d72677a92, type: 2}
+  - {fileID: 11400000, guid: cc4d29f6a8f6d41fdadd69a24d304213, type: 2}
+  - {fileID: 11400000, guid: 88ffeafb466c042af8b8b722b3f038aa, type: 2}
+  - {fileID: 11400000, guid: 2e3306fcc7615444e85ce0fcfa48ec08, type: 2}
+  level2Cards_easy:
+  - {fileID: 11400000, guid: ed321f0813e0d424bbad197aa9c26dad, type: 2}
+  - {fileID: 11400000, guid: f1925811fd4e74b6c842c9388bfcd3cb, type: 2}
+  - {fileID: 11400000, guid: 7229d2d6609f144f1bc11fad6125e39e, type: 2}
+  - {fileID: 11400000, guid: 973303f9745434fa0839ae585dcc3b88, type: 2}
+  - {fileID: 11400000, guid: 7f3f20453cc4545bea2e8e8d65756d39, type: 2}
+  - {fileID: 11400000, guid: 719678bf8b9be497191cdfdddf2e92f7, type: 2}
+  - {fileID: 11400000, guid: d71abd60c92f24be5bde76f409e94f11, type: 2}
   level1Cards:
   - {fileID: 11400000, guid: 32699ef9ba00c4ef1a696ffa7c04b14b, type: 2}
   - {fileID: 11400000, guid: ca7624e38fdba4444a90db0d72677a92, type: 2}
@@ -32,8 +46,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a5797d95334a435fbd295f667cec288, type: 2}
   - {fileID: 11400000, guid: c51936cd24bf14febb35d6e1b035fff0, type: 2}
   - {fileID: 11400000, guid: 1e275aa9867cb40c4a1b2cb281e29ec6, type: 2}
-  - {fileID: 11400000, guid: d1edb59c59d7b467cbf9fe41c4f25b11, type: 2}
-  - {fileID: 11400000, guid: 8de8859eba7394f39b0cb18dcdb7ada3, type: 2}
   - {fileID: 11400000, guid: 8e3841036652d4fd8a931c63c1a4b9a6, type: 2}
   - {fileID: 11400000, guid: 76a77c5fb163b4464897bf2e66b15bc3, type: 2}
   level4Cards:
