@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 namespace BuildMe
@@ -11,16 +12,11 @@ namespace BuildMe
         public List<string> selectedFunctions = new List<string>();
         public List<string> selectedTargets = new List<string>();
 
-        void Start()
-        {
-            GameManager.Instance.uiGameManager.ShowLoading();
-            SetRandom();
-        }
+        void Start(){ }
 
         public void SetRandom()
         {
-            GameManager.Instance.uiGameManager.ShowLoading();
-            // เรียกใช้การสุ่มโดยไม่ให้ซ้ำ
+            //เรียกใช้การสุ่มโดยไม่ให้ซ้ำ
             selectedItems = GetRandomElements(GameManager.Instance.innovationDatabase.items, 3);
             selectedFunctions = GetRandomElements(GameManager.Instance.innovationDatabase.functions, 2);
             selectedTargets = GetRandomElements(GameManager.Instance.innovationDatabase.targets, 1);
@@ -41,6 +37,8 @@ namespace BuildMe
 
                 return sourceList.OrderBy(x => Random.value).Take(count).ToList();
             }
+            GameManager.Instance.uiGameManager.transitionPanel.SetActive(true);
+            //StartCoroutine(GameManager.Instance.uiGameManager.PlayRandomTransitions());
         }
     }
 }
