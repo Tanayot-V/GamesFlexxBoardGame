@@ -31,6 +31,7 @@ public class ClickSlot : MonoBehaviour
 
     private void OnMouseOver() {
         this.GetComponent<SpriteRenderer>().color = Color.gray;
+        //if(selectedObj.activeSelf) this.GetComponent<SpriteRenderer>().color = Color.white;
     }
  
     private void OnMouseExit() {

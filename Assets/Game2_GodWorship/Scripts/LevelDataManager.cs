@@ -40,17 +40,20 @@ namespace GodWarShip
 
         private List<string> usedIndexes = new List<string>();
 
-        public void InitGame()
+        public void InitGameEasyMode()
         {
-            cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
-            //ShuffleDeck(poolCardNormalLevel1);
+            Debug.Log("InitGameEasyMode");
+        }
 
+        public void InitGameNormalMode()
+        {
+            Debug.Log("InitGameNormalMode");
+            cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
             cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
                 if(o.type != CardType.Green) poolCardNormalLevel2.Add(o);
                 if(o.type == CardType.Red) { redCardLevel2 = o;}
                 if(o.type == CardType.Green) greenCard = o;
             });
-            //ShuffleDeck(poolCardNormalLevel2);
 
             cardDatabaseSO.level3Cards.ToList().ForEach(o => { 
                 poolCardNormalLevel3.Add(o);
@@ -61,10 +64,7 @@ namespace GodWarShip
                 poolCardNormalLevel4.Add(o);
                 if(o.type == CardType.Red) { redCardLevel4 = o;}
             });
-        }
 
-        public void RandomCard()
-       {
             int randomChance = Random.Range(0, 100);
 
            //Level 1 สุ่มการ์ดในเลเวลแบบไม่ซ้ำ 100%
@@ -112,7 +112,6 @@ namespace GodWarShip
             }
 
             /*----- END LEVEL.2 ------*/
-            
             // == Lv3 ==
             // Level 3 => Lv2 30% Lv3 70%
             int percentageFromLevel2 = 30; // สัดส่วนการ์ดจากเลเวล 1 (20%)
@@ -181,7 +180,6 @@ namespace GodWarShip
 
             CardSO GetUniqueRandomCard(List<CardSO> _poolCardSOs)
             {
-                
                 if (_poolCardSOs == null || _poolCardSOs.Count == 0)
                 {
                     Debug.LogWarning("No cards available in the pool!");
@@ -194,7 +192,13 @@ namespace GodWarShip
                 _poolCardSOs.RemoveAll(item => item == null);
                 return selectedCard;
             }
-       }
+
+        }
+
+        public void InitGameHardMode()
+        {
+
+        }
 
         public void ClearCards()
         {

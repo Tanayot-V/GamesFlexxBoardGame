@@ -5,6 +5,12 @@ using UnityEngine;
 
 namespace GodWarShip
 {
+    public enum Mode
+    {
+        Easy,
+        Normal,
+        Hard
+    }
     public class GameManager : Singletons<GameManager>
     {
         public LevelDataManager levelDataManager;
@@ -12,9 +18,11 @@ namespace GodWarShip
 
         void Start()
         {
-             levelDataManager.ClearCards();
-                levelDataManager.InitGame();
-                levelDataManager.RandomCard();
+            /*
+            levelDataManager.ClearCards();
+            levelDataManager.InitGame();
+            levelDataManager.RandomCard();
+            */
         }
 
         void Update()
