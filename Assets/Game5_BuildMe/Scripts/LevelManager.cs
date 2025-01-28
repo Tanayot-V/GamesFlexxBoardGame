@@ -37,8 +37,16 @@ namespace BuildMe
 
                 return sourceList.OrderBy(x => Random.value).Take(count).ToList();
             }
-            GameManager.Instance.uiGameManager.transitionPanel.SetActive(true);
-            //StartCoroutine(GameManager.Instance.uiGameManager.PlayRandomTransitions());
+            
+            var setEventVideo = GameManager.Instance.uiGameManager.animator.GetComponent<SetEventVideo>();
+            setEventVideo.Init();
+            setEventVideo.displayShow.Add("ไอเทม!");
+            selectedItems.ToList().ForEach(x => setEventVideo.displayShow.Add(x));
+            setEventVideo.displayShow.Add("ฟังก์ชั่น!");
+            selectedFunctions.ToList().ForEach(x => setEventVideo.displayShow.Add(x));
+            setEventVideo.displayShow.Add("เป้าหมาย!");
+            selectedTargets.ToList().ForEach(x => setEventVideo.displayShow.Add(x));
+            
         }
     }
 }

@@ -19,18 +19,12 @@ namespace BuildMe
         [Header("Transition")]
         public GameObject transitionPanel;
         public Animator animator;
-        private List<string> transitionNames = new List<string>
-    {
-        "Transition1", "Transition2", "Transition3", "Transition4",
-        "Transition5", "Transition6", "Transition7", "Transition8"
-    };
-        public TextMeshProUGUI transitionText; 
 
         public void ShowLobbyPanel()
         {
             lobbyPanel.SetActive(true);
             gamePanel.SetActive(false);
-            transitionPanel.SetActive(false);
+            //transitionPanel.SetActive(false);
         }
         public void ShowGamePanel()
         {
@@ -60,29 +54,6 @@ namespace BuildMe
                 loadingPanel.SetActive(false);
                 if(_action != null) _action(); 
             }));
-        }
-
-       public IEnumerator PlayRandomTransitions()
-        {
-            // สุ่มแอนิเมชัน 6 ตัวโดยไม่ซ้ำกัน
-            List<string> randomTransitions = transitionNames.OrderBy(x => Random.value).Take(6).ToList();
-
-            for (int i = 0; i < randomTransitions.Count; i++)
-            {
-                string selectedTransition = randomTransitions[i];
-
-                // แสดงข้อความของแอนิเมชันที่เลือก
-                transitionText.text = "Now Playing: " + selectedTransition;
-
-                // เล่นแอนิเมชัน
-                animator.Play(selectedTransition);
-                Debug.Log("Playing: " + selectedTransition);
-
-                // รอให้แอนิเมชันเล่นจนจบแล้วรอ 2 วินาที
-                yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length + 0.125f);
-            }
-
-            Debug.Log("All animations played!");
         }
     }
 }
