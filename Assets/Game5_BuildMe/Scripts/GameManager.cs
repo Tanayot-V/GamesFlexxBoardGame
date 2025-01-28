@@ -14,6 +14,7 @@ namespace BuildMe
       public void Start()
       {
         //innovationDatabase.LoadDataFromCSV();
+        uiGameManager.ShowLoading();
         uiGameManager.ShowLobbyPanel();
       }
     }

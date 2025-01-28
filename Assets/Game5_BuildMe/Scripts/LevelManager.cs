@@ -46,7 +46,7 @@ namespace BuildMe
             selectedFunctions.ToList().ForEach(x => setEventVideo.displayShow.Add(x));
             setEventVideo.displayShow.Add("เป้าหมาย!");
             selectedTargets.ToList().ForEach(x => setEventVideo.displayShow.Add(x));
-            
+            setEventVideo.AtTextAllLists();
         }
     }
 }
