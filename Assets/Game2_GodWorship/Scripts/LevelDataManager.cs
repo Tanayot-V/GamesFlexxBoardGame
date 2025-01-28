@@ -40,6 +40,12 @@ namespace GodWarShip
 
         private List<string> usedIndexes = new List<string>();
 
+        private void Update() {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                DataCenterManager.Instance.LoadSceneByName("Game2_GodWorship");
+            }
+        }
         public void InitGameEasyMode()
         {
             Debug.Log("InitGameEasyMode");
@@ -153,6 +159,8 @@ namespace GodWarShip
                 poolCardNormalLevel3.Add(redCardLevel3);
                 Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL3</color>");
             }
+            //เคลียการ์ดสีแดง level 2
+            poolCardNormalLevel2.RemoveAll(o => o == redCardLevel2);
 
             /*----- END LEVEL.2 ------*/
             // == Lv3 ==
@@ -189,7 +197,9 @@ namespace GodWarShip
                 poolCardNormalLevel4.Add(redCardLevel4);
                 Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-2</color>");
             }
-            
+            //เคลียการ์ดสีแดง level 2
+            poolCardNormalLevel3.RemoveAll(o => o == redCardLevel3);
+
             // == Lv4 ==
             // Level 4 => Lv3 40% Lv4 60%
             int percentageFromLevel3 = 40; // สัดส่วนการ์ดจากเลเวล 1 (20%)
@@ -222,7 +232,124 @@ namespace GodWarShip
             Debug.Log("Card Names with Positions:\n" + result);
         }
 
-         CardSO GetUniqueRandomCard(List<CardSO> _poolCardSOs)
+        public void InitGameHardMode()
+        {
+            int randomChance = Random.Range(0, 100);
+            cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
+            cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
+                if(o.type != CardType.Green) poolCardNormalLevel2.Add(o);
+                if(o.type == CardType.Red) { redCardLevel2 = o;}
+                if(o.type == CardType.Green) greenCard = o;
+            });
+            cardDatabaseSO.level3Cards.ToList().ForEach(o => { 
+                poolCardNormalLevel3.Add(o);
+                if(o.type == CardType.Red) { redCardLevel3 = o;}
+            });
+            cardDatabaseSO.level4Cards.ToList().ForEach(o => { 
+                poolCardNormalLevel4.Add(o);
+                if(o.type == CardType.Red) { redCardLevel4 = o;}
+            });            
+            for(int i = 0 ;i < 5; i++) { GetUniqueRandomCard(poolCardNormalLevel1); }
+
+            /*----- END LEVEL.1 ------*/
+
+            //หาตำแหน่งแทรกการ์ดสีเขียว
+            int indexGreenCard = Random.Range(0, 10);
+            Debug.Log("<color=green>Index Green Card:"+ indexGreenCard+"</color>");
+
+             // == Lv2 ==
+            // Level 2 => Lv 20% Lv2 80%
+            usedIndexes.Clear();
+            for(int i = 0 ;i < 5; i++)
+            {
+                if(indexGreenCard == 0 && i == 0) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 1 && i == 1) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 2 && i == 2) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 3 && i == 3) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 4 && i == 4) { usedCards.Add(greenCard); }
+                else
+                {
+                    GetUniqueRandomCard(poolCardNormalLevel2);
+                }
+            }
+
+            //เช็ค Level 2 ว่าออก RedCard ไปหรือยัง
+            bool isRedLv2 = false;
+            usedCards.ForEach(o => { if(o == redCardLevel2) isRedLv2 = true;});
+            if(!isRedLv2) 
+            {
+                poolCardNormalLevel3.Add(redCardLevel3);
+                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL3</color>");
+            }
+            //เคลียการ์ดสีแดง level 2
+            poolCardNormalLevel2.RemoveAll(o => o == redCardLevel2);
+
+            /*----- END LEVEL.2 ------*/
+            int percentageFromLevel2 = 40;
+            for(int i = 0 ;i < 5; i++)
+            {
+                if(indexGreenCard == 5 && i == 0) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 6 && i == 1) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 7 && i == 2) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 8 && i == 3) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 9 && i == 4) { usedCards.Add(greenCard); }
+                else if(indexGreenCard == 10 && i == 5) { usedCards.Add(greenCard); }
+                else
+                {
+                    if (randomChance <= percentageFromLevel2 && poolCardNormalLevel2.Count > 0)
+                    {
+                        GetUniqueRandomCard(poolCardNormalLevel2);
+                      
+                    }
+                    else
+                    {
+                        GetUniqueRandomCard(poolCardNormalLevel3);
+                    }
+                }
+            }
+            //เช็ค Level 2,Level 3 ว่าออก RedCard ไปหรือยัง
+            bool isRedLv3 = false;
+            usedCards.ForEach(o => { if(o == redCardLevel3) isRedLv3 = true;});
+            if(!isRedLv2) 
+            {
+                poolCardNormalLevel4.Add(redCardLevel4);
+                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-1</color>");
+            }
+            if(!isRedLv3) 
+            {
+                poolCardNormalLevel4.Add(redCardLevel4);
+                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-2</color>");
+            }
+            //เคลียการ์ดสีแดง level 3
+            poolCardNormalLevel3.RemoveAll(o => o == redCardLevel3);
+
+            // == Lv4 ==
+            // Level 4 => Lv3 40% Lv4 60%
+            int percentageFromLevel4_2 = 20; // สัดส่วนการ์ดจากเลเวล 1 (20%)
+            int percentageFromLevel4_3 = 30; // สัดส่วนการ์ดจากเลเวล 1 (20%)
+            for(int i = 0; i < 5; i++)
+            {
+                // ถ้า randomChance อยู่ในช่วง 0 - 39 (สุ่มจากเลเวล 3)
+                if (randomChance < percentageFromLevel4_3 && poolCardNormalLevel3.Count > 0)
+                {
+                    GetUniqueRandomCard(poolCardNormalLevel3);
+                }
+                // ถ้า randomChance อยู่ในช่วง 40 - 59 (สุ่มจากเลเวล 2)
+                else if (randomChance < (percentageFromLevel4_3 + percentageFromLevel4_2) && poolCardNormalLevel2.Count > 0)
+                {
+                    GetUniqueRandomCard(poolCardNormalLevel2);
+                }
+                // ถ้า randomChance อยู่ในช่วง 60 - 100 (สุ่มจากเลเวล 4)
+                else
+                {
+                    GetUniqueRandomCard(poolCardNormalLevel4);
+                }
+            }
+            GameManager.Instance.uIGameManager.SetAllIMG(usedCards);
+
+        }
+
+        CardSO GetUniqueRandomCard(List<CardSO> _poolCardSOs)
             {
                 if (_poolCardSOs == null || _poolCardSOs.Count == 0)
                 {
@@ -236,11 +363,6 @@ namespace GodWarShip
                 _poolCardSOs.RemoveAll(item => item == null);
                 return selectedCard;
             }
-
-        public void InitGameHardMode()
-        {
-
-        }
 
         public void ClearCards()
         {
