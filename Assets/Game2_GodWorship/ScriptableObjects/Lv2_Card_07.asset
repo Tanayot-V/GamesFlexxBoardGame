@@ -12,11 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a41b03cd8ca0a408f87bbec86975a702, type: 3}
   m_Name: Lv2_Card_07
   m_EditorClassIdentifier: 
-  id: Card_07
-  picture: {fileID: 21300000, guid: ffebd7288d467453988c1d34a6538629, type: 3}
+  picture: {fileID: 21300000, guid: 01d2ae6f1edaa4e3d8180fbb44e31775, type: 3}
   level: 1
   type: 0
-  dispalyName: 
   description: "\u0E19\u0E34\u0E49\u0E27\u0E0A\u0E35\u0E49 \u0E41\u0E25\u0E30 \u0E19\u0E34\u0E49\u0E27\u0E42\u0E1B\u0E49\u0E07
     \u0E02\u0E49\u0E32\u0E07\u0E2B\u0E19\u0E36\u0E48\u0E07 \u0E15\u0E34\u0E14\u0E01\u0E31\u0E19 "
-  bgColor: {r: 0.8980392, g: 0.94509804, b: 0.23529412, a: 1}

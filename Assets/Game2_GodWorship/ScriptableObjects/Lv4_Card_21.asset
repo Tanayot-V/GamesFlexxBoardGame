@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a41b03cd8ca0a408f87bbec86975a702, type: 3}
   m_Name: Lv4_Card_21
   m_EditorClassIdentifier: 
-  id: Card_23
-  picture: {fileID: 21300000, guid: f770927bc56344daeb1ac9de9856ac95, type: 3}
+  picture: {fileID: 21300000, guid: 549c5416d8c4941a59e0a73dca1c6db5, type: 3}
   level: 3
   type: 0
-  dispalyName: 
   description: "\u0E21\u0E37\u0E2D\u0E41\u0E15\u0E30\u0E01\u0E31\u0E19 "
-  bgColor: {r: 0.99215686, g: 0.29803923, b: 0.18431373, a: 1}

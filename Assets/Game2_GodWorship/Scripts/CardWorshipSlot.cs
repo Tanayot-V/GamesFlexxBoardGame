@@ -33,25 +33,29 @@ public class CardWorshipSlot : MonoBehaviour
         {
             coverGO.GetComponent<CanvasGroupTransition>().FadeOut(()=>{
                 coverGO.SetActive(false);
-                GameManager.Instance.uIGameManager.SetShowIMG(cardSO.picture);
             });
             this.GetComponent<Button>().targetGraphic = pictureIMG;
             isOpen = true;
             GameManager.Instance.uIGameManager.OnButtonPressed(index);
+            //Cover
+            GameManager.Instance.uIGameManager.SetShowIMG(cardSO.picture);
+            GameManager.Instance.uIGameManager.FaedShowCover();
+            /*
             if(index <= 0)
             {
                 GameManager.Instance.uIGameManager.FaedShowCover();
-            }
+            }*/
         }
         else
         {
             GameManager.Instance.uIGameManager.SetShowIMG(cardSO.picture);
         }
-
-        if(index >= 11)
+        
+        if(index >= (GameManager.Instance.uIGameManager.imgChilds.transform.childCount-1))
         {
             StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{
                 GameManager.Instance.uIGameManager.reloadGO.SetActive(true);
+                //GameManager.Instance.uIGameManager.backGO.SetActive(false);
             }));
         }
     }
