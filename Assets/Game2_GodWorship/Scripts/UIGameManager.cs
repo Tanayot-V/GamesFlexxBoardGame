@@ -8,9 +8,12 @@ namespace GodWarShip
 {
     public class UIGameManager : MonoBehaviour
     {
-        public GameObject lobbyPanel;
+        private string gameSceneName = "Game2_GodWorship";
+        public GameObject gameplayPanel;
         public GameObject loadingPanel;
         public GameObject showGO;
+        public GameObject backGO;
+        public GameObject backPanel;
         public GameObject coverBigShowGO;
         public Sprite coverIMG;
         public GameObject imgChilds;
@@ -21,15 +24,25 @@ namespace GodWarShip
         public GameObject reloadGO;
         public GameObject reloadComfirmPanel;
 
+        [Header("Lobby")]
+        public GameObject lobbyPanel;
+        public Mode mode;
+        public GridLayoutGroup gridLayoutGroup;
+
         private void Start() {
           showGO.transform.GetChild(1).GetComponent<Image>().sprite = coverIMG;
           ShowLoading();
           reloadGO.SetActive(false);
           reloadComfirmPanel.SetActive(false);
           coverBigShowGO.SetActive(true);
+          lobbyPanel.SetActive(true);
+          gameplayPanel.SetActive(false); 
+          backPanel.SetActive(false);
+          mode = Mode.Normal;
+          UiController.Instance.SetButtonGroup("G2SelectMode","1");
         }
 
-         public void ShowLoading(System.Action _action = null)
+        public void ShowLoading(System.Action _action = null)
         {
             loadingPanel.SetActive(true);
             StartCoroutine(UiController.Instance.WaitForSecond(1,()=>{
@@ -40,25 +53,69 @@ namespace GodWarShip
         
         public void SelectMode(string _mode)
         {
-            lobbyPanel.SetActive(false);
-            ShowLoading();
             switch(_mode)
             {
                 case "Easy":
-                    GameManager.Instance.levelDataManager.InitGameEasyMode();
+                    mode = Mode.Easy;
                     break;
                 case "Normal":
-                     GameManager.Instance.levelDataManager.InitGameNormalMode();
+                    mode = Mode.Normal;
                     break;
                 case "Hard":
-                     GameManager.Instance.levelDataManager.InitGameHardMode();
+                    mode = Mode.Hard;
                     break;
             }
         }
+
+        public void StartButton()
+        {
+            lobbyPanel.SetActive(false);
+            ShowLoading();
+            gameplayPanel.SetActive(true);   
+            ClearUI();
+            switch(mode)
+            {
+                case Mode.Easy:
+                    gridLayoutGroup.constraintCount = 3;
+                    gridLayoutGroup.cellSize = new Vector2(300,400);
+                    gridLayoutGroup.spacing = new Vector2(10,10);
+                    gridLayoutGroup.childAlignment = TextAnchor.UpperCenter;
+
+                    GameManager.Instance.levelDataManager.InitGameEasyMode();
+                    break;
+                case Mode.Normal:
+                    gridLayoutGroup.constraintCount = 4;
+                    gridLayoutGroup.cellSize = new Vector2(230,313);
+                    gridLayoutGroup.spacing = new Vector2(10,10);
+                    gridLayoutGroup.childAlignment = TextAnchor.UpperCenter;
+
+                    GameManager.Instance.levelDataManager.InitGameNormalMode();
+                    break;
+                case Mode.Hard:
+                    gridLayoutGroup.constraintCount = 5;
+                    gridLayoutGroup.cellSize = new Vector2(178,240);
+                    gridLayoutGroup.spacing = new Vector2(10,10);
+                    gridLayoutGroup.childAlignment = TextAnchor.MiddleCenter;
+
+                    GameManager.Instance.levelDataManager.InitGameHardMode();
+                    break;
+            }
+
+            void ClearUI()
+            {
+                UiController.Instance.DestorySlot(imgChilds);
+                currentIndex = 0;
+                reloadGO.SetActive(false);
+                reloadComfirmPanel.SetActive(false);
+                backPanel.SetActive(false);
+            }
+        }
+
         public void SetAllIMG(List<CardSO> _cardSOs)
         {
             UiController.Instance.DestorySlot(imgChilds);
             int index = 0;
+            buttons.Clear();
           _cardSOs.ForEach(o => {
             CardWorshipSlot cardWorshipSlot = UiController.Instance.InstantiateUIView(cardSlot,imgChilds).GetComponent<CardWorshipSlot>();
             cardWorshipSlot.pictureIMG.sprite = _cardSOs[index].picture;
@@ -118,6 +175,11 @@ namespace GodWarShip
         showGO.transform.GetChild(0).GetComponent<Image>().sprite = _sprite;
       }
 
+      public void LoadSeceneGame()
+      {
+        DataCenterManager.Instance.LoadSceneByName(gameSceneName);
+      }
+
       public void LoadSecene(string _name)
       {
         DataCenterManager.Instance.LoadSceneByName(_name);
@@ -127,6 +189,12 @@ namespace GodWarShip
       {
         reloadComfirmPanel.SetActive(true);
         reloadComfirmPanel.GetComponent<CanvasGroupTransition>().FadeIn();
+      }
+
+      public void ShowBackComfirmPanelButton()
+      {
+        backPanel.SetActive(true);
+        backPanel.GetComponent<CanvasGroupTransition>().FadeIn();
       }
     }
 }

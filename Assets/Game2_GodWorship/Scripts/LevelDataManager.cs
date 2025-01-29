@@ -37,65 +37,37 @@ namespace GodWarShip
         private CardSO redCardLevel4;
 
         private List<CardSO> usedCards = new List<CardSO>();
-
-        private List<string> usedIndexes = new List<string>();
-
-        private void Update() {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                DataCenterManager.Instance.LoadSceneByName("Game2_GodWorship");
-            }
-        }
+        List<CardSO> usedLevel2 = new List<CardSO>();
+        
         public void InitGameEasyMode()
         {
             Debug.Log("InitGameEasyMode");
+            ClearCards();
             cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
             cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
-                if(o.type != CardType.Green) poolCardNormalLevel2.Add(o);
+                if(o.type != CardType.Green && o.type != CardType.Red) poolCardNormalLevel2.Add(o);
                 if(o.type == CardType.Red) { redCardLevel2 = o;}
                 if(o.type == CardType.Green) greenCard = o;
             });
 
-            int randomChance = Random.Range(0, 100);
-            //Level 1 สุ่มการ์ดในเลเวลแบบไม่ซ้ำ 100%
+            // == Lv1 ==
             for(int i = 0 ;i < 3; i++)
             {
                 GetUniqueRandomCard(poolCardNormalLevel1);
             }
 
-            /*----- END LEVEL.1 ------*/
-            //หาตำแหน่งแทรกการ์ดสีเขียว
-            int indexGreenCard = Random.Range(1, 4);
-            Debug.Log("<color=green>Index Green Card:"+ indexGreenCard+"</color>");
-
-             // == Lv2 ==
-            // Level 2 => Lv 20% Lv2 80%
-            int percentageFromLevel1 = 20; // สัดส่วนการ์ดจากเลเวล 1 (20%)
-            usedIndexes.Clear();
-            for(int i = 0 ;i < 3; i++)
-            {
-                if(indexGreenCard == 1 && i == 0) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 2 && i == 1) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 3 && i == 2) { usedCards.Add(greenCard); }
-                else
-                {
-                    if (randomChance <= percentageFromLevel1 && poolCardNormalLevel1.Count > 0)
-                    {
-                        // สุ่มจาก Pool 1
-                        GetUniqueRandomCard(poolCardNormalLevel1);
-                    }
-                    else
-                    {
-                        // สุ่มจาก Pool 2
-                        GetUniqueRandomCard(poolCardNormalLevel2);
-                    }
-                }
-            }
+            // == Lv2 ==
+            usedLevel2.Add(greenCard);
+            usedLevel2.Add(redCardLevel2);
+            GetUniqueRandomCard(poolCardNormalLevel2);
+            usedLevel2 = usedLevel2.OrderBy(x => Random.value).ToList();
+            usedLevel2.ForEach(o => { usedCards.Add(o); });
             GameManager.Instance.uIGameManager.SetAllIMG(usedCards);
         }
 
         public void InitGameNormalMode()
         {
+            ClearCards();
             Debug.Log("InitGameNormalMode");
             cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
             cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
@@ -130,7 +102,6 @@ namespace GodWarShip
             // == Lv2 ==
             // Level 2 => Lv 20% Lv2 80%
             int percentageFromLevel1 = 20; // สัดส่วนการ์ดจากเลเวล 1 (20%)
-            usedIndexes.Clear();
             for(int i = 0 ;i < 3; i++)
             {
                 if(indexGreenCard == 1 && i == 0) { usedCards.Add(greenCard); }
@@ -234,6 +205,7 @@ namespace GodWarShip
 
         public void InitGameHardMode()
         {
+            ClearCards();
             int randomChance = Random.Range(0, 100);
             cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
             cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
@@ -259,7 +231,6 @@ namespace GodWarShip
 
              // == Lv2 ==
             // Level 2 => Lv 20% Lv2 80%
-            usedIndexes.Clear();
             for(int i = 0 ;i < 5; i++)
             {
                 if(indexGreenCard == 0 && i == 0) { usedCards.Add(greenCard); }
@@ -371,7 +342,12 @@ namespace GodWarShip
             poolCardNormalLevel2.Clear();
             poolCardNormalLevel3.Clear();
             poolCardNormalLevel4.Clear();
+            greenCard = null;
+            redCardLevel2 = null;
+            redCardLevel3 = null;
+            redCardLevel4 = null;
             usedCards.Clear();
+            GameManager.Instance.uIGameManager.showGO.transform.GetChild(1).GetComponent<CanvasGroup>().alpha = 1;
         }
     }
 }

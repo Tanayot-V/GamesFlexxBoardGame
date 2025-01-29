@@ -15,19 +15,5 @@ namespace GodWarShip
     {
         public LevelDataManager levelDataManager;
         public UIGameManager uIGameManager;
-
-        void Start()
-        {
-            /*
-            levelDataManager.ClearCards();
-            levelDataManager.InitGame();
-            levelDataManager.RandomCard();
-            */
-        }
-
-        void Update()
-        {
-           
-        }
     }
 }
