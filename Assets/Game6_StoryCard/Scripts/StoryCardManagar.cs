@@ -18,6 +18,10 @@ public class StoryCardManagar : MonoBehaviour
     public Button plusButton, minusButton, openButton;
     public TMP_Text numberOfCardToOpenText;
 
+    public Transform cardShowPos;
+
+    public int showCardIndex = -1;
+
     [Space(50)]
     [Header("Transition")]
     public SpriteRenderer mainFade;
@@ -27,6 +31,7 @@ public class StoryCardManagar : MonoBehaviour
     [Space(30)]
     [Header("ResetGame")]
     public CanvasGroup resetGamePanel;
+    public bool isShowResetGamePanel = false;
 
     
     void Start()
@@ -34,7 +39,8 @@ public class StoryCardManagar : MonoBehaviour
         List<IconData> iconDatas = iconDataPool.GetRandomIconDatas(cards.Count);
         for (int i = 0; i < cards.Count; i++)
         {
-            cards[i].SetUp(iconDatas[i]);
+            int temp = i;
+            cards[i].SetUp(iconDatas[i], this, temp);
         }
         numberOfCardToOpen = 1;
         minusButton.interactable = false;
@@ -80,6 +86,10 @@ public class StoryCardManagar : MonoBehaviour
 
     public void OpenCard()
     {
+        if (showCardIndex != -1)
+        {
+            cards[showCardIndex].OnMouseDown();
+        }
         openButton.interactable = false;
 
         for (int i = 0; i < openCardIndex.Count; i++)
@@ -156,10 +166,16 @@ public class StoryCardManagar : MonoBehaviour
 
     public void ResetGameBtnClick()
     {
+        if (showCardIndex != -1)
+        {
+            cards[showCardIndex].OnMouseDown();
+        }
+        isShowResetGamePanel = true;
         StartCoroutine(FadeResetGamePanel(true));
     }
     public void CancelResetGameBtnClick()
     {
+        isShowResetGamePanel = false;
         StartCoroutine(FadeResetGamePanel(false));
     }
     public void ConfirmResetGameBtnClick()
@@ -204,5 +220,14 @@ public class StoryCardManagar : MonoBehaviour
             resetGamePanel.blocksRaycasts = false;
         }
         
+    }
+
+    public void ShowCard(int index)
+    {
+        if (showCardIndex != -1)
+        {
+            cards[showCardIndex].OnMouseDown();
+        }
+        showCardIndex = index;
     }
 }

@@ -29647,7 +29647,6 @@ GameObject:
   m_Component:
   - component: {fileID: 751236420897557602}
   - component: {fileID: 1642740978856293307}
-  - component: {fileID: 2006714630428597014}
   - component: {fileID: 9222351282814337742}
   m_Layer: 0
   m_Name: Main Camera
@@ -29655,7 +29654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &751236420897557602
 Transform:
   m_ObjectHideFlags: 0
@@ -29723,14 +29722,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2006714630428597014
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7778426589285493020}
-  m_Enabled: 1
 --- !u!114 &9222351282814337742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34891,6 +34882,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -540
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 0464afc39207ab540b94807b2273e3e5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ede32632be0c69b4fabd8d3c3edc0c71, type: 2}
     - target: {fileID: -927199367670048503, guid: 0464afc39207ab540b94807b2273e3e5, type: 3}
       propertyPath: m_Name
       value: PlayingCards_00 (3)

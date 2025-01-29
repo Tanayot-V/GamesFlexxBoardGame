@@ -4,17 +4,27 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-    public SpriteRenderer icon;
+    public StoryCardManagar storyCardManagar;
+    public int index;
+    public MeshRenderer icon;
     public IconData data;
     public float flipTime = 1f;
     public bool isFlipping = false;
     public GameObject highlightParticle;
     public ParticleSystem ray,star;
 
-    public void SetUp(IconData _iconData)
+    [Header("ShowCard")]
+    public Vector3 originalPos;
+    public bool isShow = false;
+    public float showTime = 0.5f;
+
+    public void SetUp(IconData _iconData, StoryCardManagar _storyCardManagar, int _index)
     {
+        originalPos = transform.position;
         data = _iconData;
-        icon.sprite = _iconData.icon;
+        icon.material.SetTexture("_BaseMap",_iconData.icon.texture);
+        storyCardManagar = _storyCardManagar;
+        index = _index;
     }
 
     public IEnumerator Highlight()
@@ -44,5 +54,46 @@ public class Card : MonoBehaviour
         ray.Stop();
         star.Stop();
         //highlightParticle.GetComponent<ParticleSystem>().Stop();
+    }
+
+    public void OnMouseDown()
+    {
+        if (!isFlipping || storyCardManagar.isShowResetGamePanel) return;
+        if (!isShow)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ShowCard());
+        } 
+        else 
+        {
+            StopAllCoroutines();
+            StartCoroutine(HideCard());
+        }
+    }
+
+    public IEnumerator ShowCard()
+    {
+        storyCardManagar.ShowCard(index);
+        isShow = true;
+        float timer = 0;
+        while (timer < showTime)
+        {
+            timer += Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, storyCardManagar.cardShowPos.position, timer / showTime);
+            yield return null;
+        }
+    }
+
+    public IEnumerator HideCard()
+    {
+        storyCardManagar.showCardIndex = -1;
+        isShow = false;
+        float timer = 0;
+        while (timer < showTime)
+        {
+            timer += Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, originalPos, timer / showTime);
+            yield return null;
+        }
     }
 }
