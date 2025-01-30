@@ -245,7 +245,7 @@ namespace GodWarShip
                 }
             }
 
-            level4Card.OrderBy(x => Random.value).Distinct().Take(emptySlotsLv4.Count).ToList();
+            level4Card.OrderBy(x => Random.value).ToList();
             for (int i = 0; i < emptySlotsLv4.Count; i++)
             {
                 selectedCards[emptySlotsLv4[i]] = level4Card[i];
