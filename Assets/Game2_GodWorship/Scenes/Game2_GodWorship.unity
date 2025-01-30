@@ -18866,7 +18866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiElement: {fileID: 1148903192}
-  scaleMultiplier: 1.125
+  scaleMultiplier: 1.1
   duration: 1
   animationEase: 7
   isPlayStart: 0

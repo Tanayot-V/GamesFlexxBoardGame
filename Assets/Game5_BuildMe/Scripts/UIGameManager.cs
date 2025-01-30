@@ -12,6 +12,8 @@ namespace BuildMe
         [SerializeField] GameObject lobbyPanel;
         [SerializeField] GameObject gamePanel;
         [SerializeField] GameObject loadingPanel;
+        [SerializeField] Animator bgAnimator;
+         private int transitionCount = 5;
         [SerializeField] TextMeshProUGUI[] itemsIMG;
         [SerializeField] TextMeshProUGUI[] functionsIMG;
         [SerializeField] TextMeshProUGUI[] targetsIMG;
@@ -24,7 +26,7 @@ namespace BuildMe
         {
             lobbyPanel.SetActive(true);
             gamePanel.SetActive(false);
-            //transitionPanel.SetActive(false);
+            transitionPanel.SetActive(false);
         }
         public void ShowGamePanel()
         {

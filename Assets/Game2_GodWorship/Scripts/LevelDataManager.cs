@@ -37,8 +37,7 @@ namespace GodWarShip
         private CardSO redCardLevel4;
 
         private List<CardSO> usedCards = new List<CardSO>();
-        List<CardSO> usedLevel2 = new List<CardSO>();
-        
+        List<CardSO> selectedCards = new List<CardSO>(new CardSO[9]);
         public void InitGameEasyMode()
         {
             Debug.Log("InitGameEasyMode");
@@ -57,6 +56,7 @@ namespace GodWarShip
             }
 
             // == Lv2 ==
+            List<CardSO> usedLevel2 = new List<CardSO>();
             usedLevel2.Add(greenCard);
             usedLevel2.Add(redCardLevel2);
             GetUniqueRandomCard(poolCardNormalLevel2);
@@ -71,253 +71,188 @@ namespace GodWarShip
             Debug.Log("InitGameNormalMode");
             cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
             cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
-                if(o.type != CardType.Green) poolCardNormalLevel2.Add(o);
+                if(o.type != CardType.Green && o.type != CardType.Red) poolCardNormalLevel2.Add(o);
                 if(o.type == CardType.Red) { redCardLevel2 = o;}
                 if(o.type == CardType.Green) greenCard = o;
             });
 
             cardDatabaseSO.level3Cards.ToList().ForEach(o => { 
-                poolCardNormalLevel3.Add(o);
+                if(o.type != CardType.Red) poolCardNormalLevel3.Add(o);
                 if(o.type == CardType.Red) { redCardLevel3 = o;}
             });
 
             cardDatabaseSO.level4Cards.ToList().ForEach(o => { 
-                poolCardNormalLevel4.Add(o);
+                if(o.type != CardType.Red) poolCardNormalLevel4.Add(o);
                 if(o.type == CardType.Red) { redCardLevel4 = o;}
             });
 
             int randomChance = Random.Range(0, 100);
-
-           //Level 1 สุ่มการ์ดในเลเวลแบบไม่ซ้ำ 100%
+            
+            /*----- LEVEL.1 ------*/
             for(int i = 0 ;i < 3; i++)
             {
                 GetUniqueRandomCard(poolCardNormalLevel1);
             }
 
-            /*----- END LEVEL.1 ------*/
-            //หาตำแหน่งแทรกการ์ดสีเขียว
-            int indexGreenCard = Random.Range(1, 7);
-            Debug.Log("<color=green>Index Green Card:"+ indexGreenCard+"</color>");
-            
-            // == Lv2 ==
-            // Level 2 => Lv 20% Lv2 80%
-            int percentageFromLevel1 = 20; // สัดส่วนการ์ดจากเลเวล 1 (20%)
-            for(int i = 0 ;i < 3; i++)
+            /*----- CARD Green,Red ------*/
+            selectedCards = new List<CardSO>(new CardSO[9]);
+            HashSet<int> occupiedPositions = new HashSet<int>();
+
+            // ฟังก์ชันสุ่มตำแหน่งที่ยังว่าง และตรวจสอบไม่ให้การ์ดสีแดงติดกัน
+            int GetUniqueRandomPosition(int min, int max, params int[] restrictedAdjacent)
             {
-                if(indexGreenCard == 1 && i == 0) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 2 && i == 1) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 3 && i == 2) { usedCards.Add(greenCard); }
-                else
+                int pos;
+                do
                 {
-                    if (randomChance <= percentageFromLevel1 && poolCardNormalLevel1.Count > 0)
-                    {
-                        // สุ่มจาก Pool 1
-                        GetUniqueRandomCard(poolCardNormalLevel1);
-                    }
-                    else
-                    {
-                        // สุ่มจาก Pool 2
-                        GetUniqueRandomCard(poolCardNormalLevel2);
-                    }
-                }
+                    pos = Random.Range(min, max);
+                } while (occupiedPositions.Contains(pos) || restrictedAdjacent.Contains(pos));
+                occupiedPositions.Add(pos);
+                return pos;
             }
 
-            //เช็ค Level 2 ว่าออก RedCard ไปหรือยัง
-            bool isRedLv2 = false;
-            usedCards.ForEach(o => { if(o == redCardLevel2) isRedLv2 = true;});
-            if(!isRedLv2) 
-            {
-                poolCardNormalLevel3.Add(redCardLevel3);
-                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL3</color>");
-            }
-            //เคลียการ์ดสีแดง level 2
-            poolCardNormalLevel2.RemoveAll(o => o == redCardLevel2);
+            // ** สุ่มตำแหน่งการ์ดสีเขียว **
+            int greenIndex = Random.Range(0, 6);
+            selectedCards[greenIndex] = greenCard;
+            occupiedPositions.Add(greenIndex);
 
-            /*----- END LEVEL.2 ------*/
-            // == Lv3 ==
-            // Level 3 => Lv2 30% Lv3 70%
-            int percentageFromLevel2 = 30; // สัดส่วนการ์ดจากเลเวล 1 (20%)
-            for(int i = 0 ;i < 3; i++)
-            {
-                if(indexGreenCard == 4 && i == 0) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 5 && i == 1) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 6 && i == 2) { usedCards.Add(greenCard); }
-                else
-                {
-                    if (randomChance <= percentageFromLevel2 && poolCardNormalLevel2.Count > 0)
-                    {
-                        GetUniqueRandomCard(poolCardNormalLevel2);
-                      
-                    }
-                    else
-                    {
-                        GetUniqueRandomCard(poolCardNormalLevel3);
-                    }
-                }
-            }
-            //เช็ค Level 2,Level 3 ว่าออก RedCard ไปหรือยัง
-            bool isRedLv3 = false;
-            usedCards.ForEach(o => { if(o == redCardLevel3) isRedLv3 = true;});
-            if(!isRedLv2) 
-            {
-                poolCardNormalLevel4.Add(redCardLevel4);
-                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-1</color>");
-            }
-            if(!isRedLv3) 
-            {
-                poolCardNormalLevel4.Add(redCardLevel4);
-                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-2</color>");
-            }
-            //เคลียการ์ดสีแดง level 2
-            poolCardNormalLevel3.RemoveAll(o => o == redCardLevel3);
+            // ** สุ่มตำแหน่งการ์ดสีแดง โดยห้ามอยู่ติดกัน **
+            int redIndexLv2 = GetUniqueRandomPosition(0, 2  ,greenIndex);
+            int redIndexLv3 = GetUniqueRandomPosition(3, 5, redIndexLv2,greenIndex); // ห้ามติด Lv2
+            int redIndexLv4 = GetUniqueRandomPosition(6, 8, redIndexLv3,greenIndex); // ห้ามติด Lv3
 
-            // == Lv4 ==
-            // Level 4 => Lv3 40% Lv4 60%
-            int percentageFromLevel3 = 40; // สัดส่วนการ์ดจากเลเวล 1 (20%)
-            for(int i = 0 ;i < 3; i++)
+            selectedCards[redIndexLv2] = redCardLevel2;
+            selectedCards[redIndexLv3] = redCardLevel3;
+            selectedCards[redIndexLv4] = redCardLevel4;
+
+            // ** ค้นหาตำแหน่งที่ยังว่างอยู่ **
+            List<int> emptySlotsLv2 = Enumerable.Range(0, 3).Where(i => i < selectedCards.Count && selectedCards[i] == null).ToList();
+            List<int> emptySlotsLv3 = Enumerable.Range(3, 3).Where(i => i < selectedCards.Count && selectedCards[i] == null).ToList();
+            List<int> emptySlotsLv4 = Enumerable.Range(6, 3).Where(i => i < selectedCards.Count && selectedCards[i] == null).ToList();
+
+            // ** สุ่มและเลือกการ์ดธรรมดาที่ไม่ซ้ำกัน **
+            List<CardSO> shuffledLv2 = poolCardNormalLevel2.OrderBy(x => Random.value).Distinct().Take(emptySlotsLv2.Count).ToList();
+            List<CardSO> shuffledLv3 = poolCardNormalLevel3.OrderBy(x => Random.value).Distinct().Take(emptySlotsLv3.Count).ToList();
+            List<CardSO> shuffledLv4 = poolCardNormalLevel4.OrderBy(x => Random.value).Distinct().Take(emptySlotsLv4.Count).ToList();
+
+            // ** ใส่การ์ดธรรมดาที่ไม่ซ้ำกัน ลงในช่องที่เหลือ **
+            for (int i = 0; i < emptySlotsLv2.Count; i++)
             {
-                // สุ่มค่าเปอร์เซ็นต์
-                if (randomChance <= percentageFromLevel3 && poolCardNormalLevel3.Count > 0)
-                {
-                    GetUniqueRandomCard(poolCardNormalLevel3);
-                }
-                else
-                {
-                   GetUniqueRandomCard(poolCardNormalLevel4);
-                }
+                selectedCards[emptySlotsLv2[i]] = shuffledLv2[i];
             }
+            for (int i = 0; i < emptySlotsLv3.Count; i++)
+            {
+                selectedCards[emptySlotsLv3[i]] = shuffledLv3[i];
+            }
+            for (int i = 0; i < emptySlotsLv4.Count; i++)
+            {
+                selectedCards[emptySlotsLv4[i]] = shuffledLv4[i];
+            }
+            selectedCards.ForEach(o => { usedCards.Add(o); });
             GameManager.Instance.uIGameManager.SetAllIMG(usedCards);
-
-            List<string> logMessages = new List<string>();   
-            for (int i = 0; i < usedCards.Count; i++)
-            {
-                var card = usedCards[i];
-
-                if (card != null) // ตรวจสอบว่าการ์ดไม่ใช่ null
-                {
-                    logMessages.Add($"[{i}] {card.name}"); // เพิ่มตำแหน่งและชื่อ
-                }
-            }
-            // รวมข้อความทั้งหมดด้วยการขึ้นบรรทัดใหม่
-            string result = string.Join("\n", logMessages);
-            Debug.Log("Card Names with Positions:\n" + result);
         }
 
         public void InitGameHardMode()
         {
             ClearCards();
-            int randomChance = Random.Range(0, 100);
             cardDatabaseSO.level1Cards.ToList().ForEach(o => { poolCardNormalLevel1.Add(o);});
             cardDatabaseSO.level2Cards.ToList().ForEach(o => { 
-                if(o.type != CardType.Green) poolCardNormalLevel2.Add(o);
+                if(o.type != CardType.Green && o.type != CardType.Red) poolCardNormalLevel2.Add(o);
                 if(o.type == CardType.Red) { redCardLevel2 = o;}
                 if(o.type == CardType.Green) greenCard = o;
             });
+
             cardDatabaseSO.level3Cards.ToList().ForEach(o => { 
-                poolCardNormalLevel3.Add(o);
+                if(o.type != CardType.Red) poolCardNormalLevel3.Add(o);
                 if(o.type == CardType.Red) { redCardLevel3 = o;}
             });
+
             cardDatabaseSO.level4Cards.ToList().ForEach(o => { 
-                poolCardNormalLevel4.Add(o);
+                if(o.type != CardType.Red) poolCardNormalLevel4.Add(o);
                 if(o.type == CardType.Red) { redCardLevel4 = o;}
-            });            
+            });
+
+            /*----- LEVEL.1 ------*/            
             for(int i = 0 ;i < 5; i++) { GetUniqueRandomCard(poolCardNormalLevel1); }
-
             /*----- END LEVEL.1 ------*/
-
-            //หาตำแหน่งแทรกการ์ดสีเขียว
-            int indexGreenCard = Random.Range(0, 10);
-            Debug.Log("<color=green>Index Green Card:"+ indexGreenCard+"</color>");
-
-             // == Lv2 ==
-            // Level 2 => Lv 20% Lv2 80%
-            for(int i = 0 ;i < 5; i++)
+            
+            selectedCards = new List<CardSO>(new CardSO[15]);
+            HashSet<int> occupiedPositions = new HashSet<int>();
+             // ฟังก์ชันสุ่มตำแหน่งที่ยังว่าง และตรวจสอบไม่ให้การ์ดสีแดงติดกัน
+            int GetUniqueRandomPosition(int min, int max, params int[] restrictedAdjacent)
             {
-                if(indexGreenCard == 0 && i == 0) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 1 && i == 1) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 2 && i == 2) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 3 && i == 3) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 4 && i == 4) { usedCards.Add(greenCard); }
-                else
+                int pos;
+                do
                 {
-                    GetUniqueRandomCard(poolCardNormalLevel2);
+                    pos = Random.Range(min, max);
+                } while (occupiedPositions.Contains(pos) || restrictedAdjacent.Contains(pos));
+                occupiedPositions.Add(pos);
+                return pos;
+            }
+
+            // ** สุ่มตำแหน่งการ์ดสีเขียว **
+            int greenIndex = Random.Range(0, 10);
+            selectedCards[greenIndex] = greenCard;
+            occupiedPositions.Add(greenIndex);
+
+            // ** สุ่มตำแหน่งการ์ดสีแดง โดยห้ามอยู่ติดกัน **
+            int redIndexLv2 = GetUniqueRandomPosition(0, 4, greenIndex);
+            int redIndexLv3 = GetUniqueRandomPosition(5, 9, redIndexLv2,greenIndex); // ห้ามติด Lv2
+            int redIndexLv4 = GetUniqueRandomPosition(10, 14, redIndexLv3,greenIndex); // ห้ามติด Lv3
+
+            selectedCards[redIndexLv2] = redCardLevel2;
+            selectedCards[redIndexLv3] = redCardLevel3;
+            selectedCards[redIndexLv4] = redCardLevel4;
+            
+            // ** ค้นหาตำแหน่งที่ยังว่างอยู่ **
+            List<int> emptySlotsLv2 = Enumerable.Range(0, 5).Where(i => i < selectedCards.Count && selectedCards[i] == null).ToList();
+            List<int> emptySlotsLv3 = Enumerable.Range(5, 5).Where(i => i < selectedCards.Count && selectedCards[i] == null).ToList();
+            List<int> emptySlotsLv4 = Enumerable.Range(10, 5).Where(i => i < selectedCards.Count && selectedCards[i] == null).ToList();
+
+            // ** สุ่มและเลือกการ์ดธรรมดาที่ไม่ซ้ำกัน **
+            List<CardSO> shuffledLv2 = poolCardNormalLevel2.OrderBy(x => Random.value).Distinct().Take(emptySlotsLv2.Count).ToList();
+            List<CardSO> shuffledLv3 = poolCardNormalLevel3.OrderBy(x => Random.value).Distinct().Take(emptySlotsLv3.Count).ToList();
+            List<CardSO> shuffledLv4 = poolCardNormalLevel4.OrderBy(x => Random.value).Distinct().Take(emptySlotsLv4.Count).ToList();
+
+            // ** ใส่การ์ดธรรมดาที่ไม่ซ้ำกัน ลงในช่องที่เหลือ **
+            for (int i = 0; i < emptySlotsLv2.Count; i++)
+            {
+                selectedCards[emptySlotsLv2[i]] = shuffledLv2[i];
+            }
+            for (int i = 0; i < emptySlotsLv3.Count; i++)
+            {
+                selectedCards[emptySlotsLv3[i]] = shuffledLv3[i];
+            }
+
+            List<CardSO> level4Card = new List<CardSO>();
+            int count = System.Math.Min(emptySlotsLv4.Count, shuffledLv4.Count);
+            for (int i = 0; i < count; i++)
+            {
+                level4Card.Add(shuffledLv4[i]);
+                //selectedCards[emptySlotsLv4[i]] = shuffledLv4[i];
+            }
+            int remainingSlots = emptySlotsLv4.Count - count;
+            if (remainingSlots > 0)
+            {
+                List<CardSO> extraLv3Cards = poolCardNormalLevel3.Except(shuffledLv3) // เอาการ์ดที่ยังไม่ได้ใช้
+                                                                .OrderBy(x => Random.value)
+                                                                .Take(remainingSlots)
+                                                                .ToList();
+
+                for (int i = 0; i < extraLv3Cards.Count; i++)
+                {
+                    level4Card.Add(extraLv3Cards[i]);
+                    //selectedCards[emptySlotsLv4[count + i]] = extraLv3Cards[i];
                 }
             }
 
-            //เช็ค Level 2 ว่าออก RedCard ไปหรือยัง
-            bool isRedLv2 = false;
-            usedCards.ForEach(o => { if(o == redCardLevel2) isRedLv2 = true;});
-            if(!isRedLv2) 
+            level4Card.OrderBy(x => Random.value).ToList();
+            for (int i = 0; i < emptySlotsLv4.Count; i++)
             {
-                poolCardNormalLevel3.Add(redCardLevel3);
-                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL3</color>");
+                selectedCards[emptySlotsLv4[i]] = level4Card[i];
             }
-            //เคลียการ์ดสีแดง level 2
-            poolCardNormalLevel2.RemoveAll(o => o == redCardLevel2);
 
-            /*----- END LEVEL.2 ------*/
-            int percentageFromLevel2 = 40;
-            for(int i = 0 ;i < 5; i++)
-            {
-                if(indexGreenCard == 5 && i == 0) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 6 && i == 1) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 7 && i == 2) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 8 && i == 3) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 9 && i == 4) { usedCards.Add(greenCard); }
-                else if(indexGreenCard == 10 && i == 5) { usedCards.Add(greenCard); }
-                else
-                {
-                    if (randomChance <= percentageFromLevel2 && poolCardNormalLevel2.Count > 0)
-                    {
-                        GetUniqueRandomCard(poolCardNormalLevel2);
-                      
-                    }
-                    else
-                    {
-                        GetUniqueRandomCard(poolCardNormalLevel3);
-                    }
-                }
-            }
-            //เช็ค Level 2,Level 3 ว่าออก RedCard ไปหรือยัง
-            bool isRedLv3 = false;
-            usedCards.ForEach(o => { if(o == redCardLevel3) isRedLv3 = true;});
-            if(!isRedLv2) 
-            {
-                poolCardNormalLevel4.Add(redCardLevel4);
-                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-1</color>");
-            }
-            if(!isRedLv3) 
-            {
-                poolCardNormalLevel4.Add(redCardLevel4);
-                Debug.Log("<color=red> ADD RED CARD TO POOL LEVEL4-2</color>");
-            }
-            //เคลียการ์ดสีแดง level 3
-            poolCardNormalLevel3.RemoveAll(o => o == redCardLevel3);
-
-            // == Lv4 ==
-            // Level 4 => Lv3 40% Lv4 60%
-            int percentageFromLevel4_2 = 20; // สัดส่วนการ์ดจากเลเวล 1 (20%)
-            int percentageFromLevel4_3 = 30; // สัดส่วนการ์ดจากเลเวล 1 (20%)
-            for(int i = 0; i < 5; i++)
-            {
-                // ถ้า randomChance อยู่ในช่วง 0 - 39 (สุ่มจากเลเวล 3)
-                if (randomChance < percentageFromLevel4_3 && poolCardNormalLevel3.Count > 0)
-                {
-                    GetUniqueRandomCard(poolCardNormalLevel3);
-                }
-                // ถ้า randomChance อยู่ในช่วง 40 - 59 (สุ่มจากเลเวล 2)
-                else if (randomChance < (percentageFromLevel4_3 + percentageFromLevel4_2) && poolCardNormalLevel2.Count > 0)
-                {
-                    GetUniqueRandomCard(poolCardNormalLevel2);
-                }
-                // ถ้า randomChance อยู่ในช่วง 60 - 100 (สุ่มจากเลเวล 4)
-                else
-                {
-                    GetUniqueRandomCard(poolCardNormalLevel4);
-                }
-            }
+            selectedCards.ForEach(o => { usedCards.Add(o); });
             GameManager.Instance.uIGameManager.SetAllIMG(usedCards);
-
         }
 
         CardSO GetUniqueRandomCard(List<CardSO> _poolCardSOs)
