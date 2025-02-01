@@ -38,15 +38,15 @@ namespace BuildMe
         {
             for (int i = 0; i < itemsIMG.Length; i++)
             {
-                itemsIMG[i].text = items[i];
+                itemsIMG[i].text = string.Format(items[i], "\n");
             }
             for (int i = 0; i < functionsIMG.Length; i++)
             {
-                functionsIMG[i].text = functions[i];
+                functionsIMG[i].text = string.Format(functions[i], "\n");
             }
             for (int i = 0; i < targetsIMG.Length; i++)
             {
-                targetsIMG[i].text = targets[i];
+                targetsIMG[i].text = string.Format(targets[i], "\n");
             }
         }
         public void ShowLoading(System.Action _action = null)

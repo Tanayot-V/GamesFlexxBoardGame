@@ -21,7 +21,7 @@ namespace BuildMe
         
         public void Text(TextMeshProUGUI _text)
         {
-            _text.text = displayShow[index];
+            _text.text = string.Format(displayShow[index], "\n");
             index++;
         }
 

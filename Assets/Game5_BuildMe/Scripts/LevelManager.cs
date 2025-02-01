@@ -37,7 +37,7 @@ namespace BuildMe
 
                 return sourceList.OrderBy(x => Random.value).Take(count).ToList();
             }
-
+            
             GameManager.Instance.uiGameManager.transitionPanel.SetActive(true);
             var setEventVideo = GameManager.Instance.uiGameManager.animator.GetComponent<SetEventVideo>();
             setEventVideo.Init();
