@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace BuildMe
 {
-    [CreateAssetMenu(fileName = "InnovationDatabaseSO", menuName = "Innovation/InnovationDatabaseSO", order = 0)]
+    [CreateAssetMenu(fileName = "DailyIntention", menuName = "Innovation/DatabaseSO", order = 0)]
     public class InnovationDatabaseSO : ScriptableObject 
     {
         public TextAsset csv;
