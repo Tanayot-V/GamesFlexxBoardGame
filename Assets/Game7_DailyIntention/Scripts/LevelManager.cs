@@ -48,5 +48,10 @@ namespace DailyIntention
     public class LevelManager : MonoBehaviour
     {
         public IntentionDatabaseSO intentionDatabaseSO;
+        public IntentionDataSO currentDataSO;
+        public void RandomData()
+        {
+            currentDataSO = intentionDatabaseSO.GetRandomPage();
+        }
     }
 }
