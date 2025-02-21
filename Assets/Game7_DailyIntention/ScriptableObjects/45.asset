@@ -15,4 +15,4 @@ MonoBehaviour:
   txHeadIMG: {fileID: 21300000, guid: 1ff95ad21b6cb4145adaada76210033a, type: 3}
   txAnswerIMG: {fileID: 21300000, guid: 6f7258c685ae44dcebca8a6c6f06b5e0, type: 3}
   cloudType: 0
-  bGType: 0
+  bGType: 2

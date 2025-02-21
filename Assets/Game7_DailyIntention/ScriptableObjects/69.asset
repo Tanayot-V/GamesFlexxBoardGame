@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   txHeadIMG: {fileID: 21300000, guid: 9e39635b9c0284a36b0736933e24779f, type: 3}
   txAnswerIMG: {fileID: 21300000, guid: a6d526f91b653468b85358ef7d2961e5, type: 3}
-  cloudType: 0
-  bGType: 0
+  cloudType: 2
+  bGType: 1

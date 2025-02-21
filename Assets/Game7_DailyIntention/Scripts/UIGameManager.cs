@@ -54,6 +54,23 @@ namespace DailyIntention
             }
         }
 
+        public void QClick()
+        {
+            GameManager.Instance.levelManager.NextData();
+            SettingUPGameplayPage();
+            gameplayPanel.SetActive(true);
+            headPanel.SetActive(true);
+
+            void SettingUPGameplayPage()
+            {
+                LevelManager levelManager = GameManager.Instance.levelManager;
+                bgIMG.sprite = levelManager.intentionDatabaseSO.GetBGData(levelManager.currentDataSO.bGType).sprite;
+                couldIMG.sprite = levelManager.intentionDatabaseSO.GetCloudData(levelManager.currentDataSO.cloudType).sprite;
+                textIMG.sprite = levelManager.currentDataSO.txHeadIMG;
+                textAnsIMG.sprite = levelManager.currentDataSO.txAnswerIMG;
+            }
+        }
+
         public void HeadPageClick()
         {
             headPanel.SetActive(false);
@@ -69,6 +86,15 @@ namespace DailyIntention
         public void LoadSecene()
         {
             DataCenterManager.Instance.LoadSceneByName("Game7_DailyIntention");
+        }
+
+        public void BackButton()
+        {
+            lobbyPanel.SetActive(true);
+            gameplayPanel.SetActive(false);
+            headPanel.SetActive(false);
+            ansPanel.SetActive(false);
+            backPanel.SetActive(false);
         }
     }
 }

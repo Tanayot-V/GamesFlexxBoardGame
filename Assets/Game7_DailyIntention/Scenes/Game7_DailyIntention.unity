@@ -135,8 +135,9 @@ GameObject:
   - component: {fileID: 149081770}
   - component: {fileID: 149081769}
   - component: {fileID: 149081771}
+  - component: {fileID: 149081772}
   m_Layer: 5
-  m_Name: Image
+  m_Name: button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -255,6 +256,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &149081772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149081767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcdb0867aab3c42a691b5c8844c84766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiElement: {fileID: 149081768}
+  scaleMultiplier: 1.05
+  duration: 1
+  animationEase: 7
+  isPlayStart: 0
 --- !u!1 &214444376
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,6 +919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   intentionDatabaseSO: {fileID: 11400000, guid: 4b70dac4a3b6b4f09b3fb792215abc92, type: 2}
   currentDataSO: {fileID: 0}
+  currentIndex: 89
 --- !u!1 &544396471
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,7 +1520,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &920378754
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1675,8 +1694,20 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 900115731}
         m_TargetAssemblyTypeName: DailyIntention.UIGameManager, Assembly-CSharp
-        m_MethodName: LoadSecene
+        m_MethodName: BackButton
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1925817345}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2993,7 +3024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiElement: {fileID: 2052868043}
-  scaleMultiplier: 1.05
+  scaleMultiplier: 1.025
   duration: 1
   animationEase: 7
   isPlayStart: 0
