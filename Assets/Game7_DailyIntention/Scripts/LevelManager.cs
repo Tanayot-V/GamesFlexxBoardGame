@@ -50,32 +50,33 @@ namespace DailyIntention
         public IntentionDatabaseSO intentionDatabaseSO;
         public IntentionDataSO currentDataSO;
         public int currentIndex;
+
         public void RandomData()
         {
             currentDataSO = intentionDatabaseSO.GetRandomPage();
         }
 
-    //  เรียงลำดับ
+        //เรียงลำดับ
         public void SetCurrentData(int index)
-    {
-        if (index >= 0 && index < intentionDatabaseSO.pageDatas.Length)
         {
-            currentIndex = index;
-            currentDataSO = intentionDatabaseSO.pageDatas[currentIndex];
+            if (index >= 0 && index < intentionDatabaseSO.pageDatas.Length)
+            {
+                currentIndex = index;
+                currentDataSO = intentionDatabaseSO.pageDatas[currentIndex];
 
-            // ตัวอย่างการแสดงผล
-            Debug.Log($"Current Data: {currentDataSO.name}, Index: {currentIndex}");
+                // ตัวอย่างการแสดงผล
+                Debug.Log($"Current Data: {currentDataSO.name}, Index: {currentIndex}");
+            }
+            else
+            {
+                Debug.LogWarning("Index out of range!");
+            }
         }
-        else
+
+        public void NextData()
         {
-            Debug.LogWarning("Index out of range!");
+            int nextIndex = (currentIndex + 1) % intentionDatabaseSO.pageDatas.Length;
+            SetCurrentData(nextIndex);
         }
-    }
-
-     public void NextData()
-    {
-        int nextIndex = (currentIndex + 1) % intentionDatabaseSO.pageDatas.Length;
-        SetCurrentData(nextIndex);
-    }
     }
 }
