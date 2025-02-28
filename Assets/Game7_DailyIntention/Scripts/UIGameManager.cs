@@ -113,11 +113,11 @@ namespace DailyIntention
         {
             HideAllPage();
             allCardsPanel.SetActive(true);
-            
+            LevelManager levelManager = GameManager.Instance.levelManager;
             UiController.Instance.DestorySlot(allCardparent);
-            GameManager.Instance.levelManager.intentionDatabaseSO.pageDatas.ToList().ForEach(x => {
+            levelManager.intentionDatabaseSO.pageDatas.ToList().ForEach(x => {
                 GameObject slot = UiController.Instance.InstantiateUIView(cardSlotPrefab,allCardparent);
-                slot.GetComponent<IntentionSlot>().currentDataSO = x;
+                slot.GetComponent<IntentionSlot>().InitSlot(levelManager,x);
             });
         }
 
