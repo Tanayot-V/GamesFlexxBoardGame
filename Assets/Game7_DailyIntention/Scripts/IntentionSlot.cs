@@ -23,6 +23,7 @@ namespace DailyIntention
         public void ClickButton()
         {
             GameManager.Instance.uIGameManager.IndexClick(currentDataSO);
+            GameManager.Instance.uIGameManager.isFormAllCard = true;
         }
     }
 }

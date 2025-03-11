@@ -31,6 +31,7 @@ namespace DailyIntention
         [Header("all crads Panel")]
         public GameObject allCardparent;
         public GameObject cardSlotPrefab;
+        public bool isFormAllCard;
 
         void Start()
         {
@@ -51,6 +52,7 @@ namespace DailyIntention
             headPanel.SetActive(true);
             ShowEffect();
             SkipToEndOfAnimation("OpenHead");
+            isFormAllCard = false;
         }
 
         public void QClick()
@@ -75,9 +77,10 @@ namespace DailyIntention
         public void HeadPageClick()
         {
             if(!isCanClick) return;
+            gameplayPanel.SetActive(true);
+            animCard.SetBool("isClick",true);
             headPanel.SetActive(false);
             ansPanel.SetActive(true);
-            animCard.SetBool("isClick",true);
         }
 
          void SettingUPGameplayPage()
@@ -93,9 +96,10 @@ namespace DailyIntention
         public void AnsClick()
         {
             if(!isCanClick) return;
+            gameplayPanel.SetActive(true);
+            animCard.SetBool("isClick",false);
             headPanel.SetActive(true);
             ansPanel.SetActive(false);
-            animCard.SetBool("isClick",false);
         }
 
         public void LoadSecene()
@@ -104,6 +108,17 @@ namespace DailyIntention
         }
 
         public void BackButton()
+        {
+            animCard.SetBool("isClick",false);
+            HideAllPage();
+            lobbyPanel.SetActive(true);
+            if(isFormAllCard)
+            {
+                ShowAllPage();
+            }
+        }
+
+        public void BackButton_AllCards()
         {
             HideAllPage();
             lobbyPanel.SetActive(true);
