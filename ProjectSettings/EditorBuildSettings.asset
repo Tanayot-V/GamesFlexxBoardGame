@@ -20,7 +20,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Game6_StoryCard/Scenes/GamePlay.unity
     guid: 7445369cb1656a14592066e7a5e336b3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Game7_DailyIntention/Scenes/Game7_DailyIntention.unity
     guid: 6b5c22d0b95f74628808d1f58c45d937
+  - enabled: 1
+    path: Assets/Game8_PersonalValue/Scenes/8_ProsonalValue.unity
+    guid: 04b74624eaea540328cf2d29c5bac51d
   m_configObjects: {}

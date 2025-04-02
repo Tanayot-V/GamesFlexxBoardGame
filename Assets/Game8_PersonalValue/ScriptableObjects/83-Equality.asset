@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d24d6101a2e744410b14204d0e562fb8, type: 3}
+  m_Name: 83-Equality
+  m_EditorClassIdentifier: 
+  cardTH: "\u0E04\u0E27\u0E32\u0E21\u0E40\u0E17\u0E48\u0E32\u0E40\u0E17\u0E35\u0E22\u0E21"
+  cardEN: Equality
+  picture: {fileID: 21300000, guid: e629f934433ca45e4884012585e6f2e1, type: 3}
