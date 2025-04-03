@@ -117,4 +117,15 @@ public class DropableItem : MonoBehaviour, IBeginDragHandler,IDropHandler, IPoin
         
     }
 
+     private void OnTriggerEnter2D(Collider2D collision)
+    {
+       Debug.Log(name+ ": OnTriggerEnter2D");
+    
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Debug.Log(name+ ": OnTriggerExit2D");
+    }
+
 }

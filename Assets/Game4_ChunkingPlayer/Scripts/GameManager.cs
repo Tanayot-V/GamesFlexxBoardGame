@@ -12,7 +12,7 @@ namespace ChunkingPlayer
 
     void Start()
     {
-        WebGLInput.mobileKeyboardSupport = true;  // เปิดให้รองรับแป้นพิมพ์มือถือ
+        //WebGLInput.mobileKeyboardSupport = true;  // เปิดให้รองรับแป้นพิมพ์มือถือ
     }
 
     public void OpenKeyboard()
