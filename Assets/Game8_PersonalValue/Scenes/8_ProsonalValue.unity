@@ -562,6 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropName: 
+  cardDataSOList: []
 --- !u!114 &244967369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,7 +636,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 116.4, y: 113.4}
+  m_AnchoredPosition: {x: 116.3999, y: 113.400024}
   m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &304831603
@@ -982,6 +983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardDatabaseSO: {fileID: 11400000, guid: fd1e4084253414de29abfb66460422e6, type: 2}
   levelManager: {fileID: 544532188}
+  countdownTimer: {fileID: 1437189064}
 --- !u!1 &720690578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1252,6 +1254,7 @@ Transform:
   m_Children:
   - {fileID: 619484808}
   - {fileID: 544532187}
+  - {fileID: 1437189063}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &968452799
@@ -1380,6 +1383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropName: 
+  cardDataSOList: []
 --- !u!114 &968452804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1658,6 +1662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropName: 
+  cardDataSOList: []
 --- !u!114 &1155451212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1932,6 +1937,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239138537}
   m_CullTransparentMesh: 0
+--- !u!1 &1437189062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1437189063}
+  - component: {fileID: 1437189064}
+  m_Layer: 5
+  m_Name: CountdownTimer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1437189063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437189062}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 862830986}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1437189064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437189062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f0c9001307b4a8ba9569fdb5417976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fillImage: {fileID: 304831603}
+  duration: 30
+  timeText: {fileID: 190356131}
 --- !u!1 &1521622530
 GameObject:
   m_ObjectHideFlags: 0
@@ -1989,7 +2041,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E01\u0E32\u0E23\u0E4C\u0E14\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13"
+  m_text: "\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E01\u0E32\u0E23\u0E4C\u0E14\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E43\u0E2A\u0E48\u0E01\u0E25\u0E48\u0E2D\u0E07"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9ca01555c2df14bb29514e6e3efa851c, type: 2}
   m_sharedMaterial: {fileID: -4631288324482900370, guid: 9ca01555c2df14bb29514e6e3efa851c, type: 2}
@@ -2673,6 +2725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropName: 
+  cardDataSOList: []
 --- !u!114 &1871993897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3360,7 +3413,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f982594c40844c59ae9d337fef56239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxTrigger: {fileID: 0}
+  dropBox: {fileID: 0}
+  dragDropCard: {fileID: 0}
 --- !u!225 &5412070562061524887
 CanvasGroup:
   m_ObjectHideFlags: 0

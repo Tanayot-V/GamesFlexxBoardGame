@@ -19,10 +19,5 @@ public class DropBox : MonoBehaviour
     {
         
     }
-    
-    public void OnMouseOver()
-    {
-        Debug.Log(name+"OnMouseOver");
-    }
 
 }

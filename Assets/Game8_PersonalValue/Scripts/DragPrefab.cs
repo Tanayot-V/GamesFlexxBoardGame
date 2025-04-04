@@ -49,13 +49,12 @@ namespace  PersonalValue
        if(dropBox != null)
        {
          dropBox.GetComponent<DropBox>().cardDataSOList.Add(dragDropCard.cardDataSO);
+         GameManager.Instance.levelManager.RemoveCardFromList(dragDropCard.cardDataSO);
          Destroy(dragDropCard.gameObject);
+        //ถ้าเป็นใบสุดท้ายจะสุ่มขึ้นมาใหม่
+         GameManager.Instance.levelManager.currentCardCount--;
+         GameManager.Instance.levelManager.CheckCardCount();
        }
-    }
-
-    private void OnTiggerStay2D(Collider2D collision)
-    {
-        Debug.Log(collision.gameObject.name+ ": OnTiggerStay2D");
     }
 
        private void OnTriggerEnter2D(Collider2D collision)
@@ -63,7 +62,6 @@ namespace  PersonalValue
             if(collision.tag == "Menu")
             {
                 collision.gameObject.GetComponent<Image>().color = Color.red;
-                Debug.Log(collision.gameObject.name + ": OnTriggerEnter2D");
                 dropBox = collision.gameObject;
             }
         }
@@ -73,7 +71,7 @@ namespace  PersonalValue
             if(collision.tag == "Menu")
             {
                 collision.gameObject.GetComponent<Image>().color = UiController.Instance.SetColorWithHex("#8C5E44");
-                 dropBox = null;
+                dropBox = null;
             }
         }
     

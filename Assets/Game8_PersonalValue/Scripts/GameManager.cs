@@ -9,7 +9,8 @@ public class GameManager : Singletons<GameManager>
 {
     public PersonalValueDatabaseSO cardDatabaseSO;
     public LevelManager levelManager;
-    // Start is called before the first frame update
+    public CountdownTimer countdownTimer;
+   
     void Start()
     {
         
