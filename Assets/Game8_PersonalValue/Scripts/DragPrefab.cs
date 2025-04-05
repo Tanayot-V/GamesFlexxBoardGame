@@ -53,7 +53,10 @@ namespace  PersonalValue
          Destroy(dragDropCard.gameObject);
         //ถ้าเป็นใบสุดท้ายจะสุ่มขึ้นมาใหม่
          GameManager.Instance.levelManager.currentCardCount--;
-         GameManager.Instance.levelManager.CheckCardCount();
+        if(!GameManager.Instance.levelManager.CheckAllCardCount())
+        {
+            GameManager.Instance.levelManager.CheckCardCount();
+        }
        }
     }
 

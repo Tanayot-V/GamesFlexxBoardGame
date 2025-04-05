@@ -8,7 +8,7 @@ namespace PersonalValue
     public class CountdownTimer : MonoBehaviour
     {
          [SerializeField] private Image fillImage;
-        [SerializeField] private float duration = 30f;
+        private float duration = 30f;
         [SerializeField] private TMPro.TextMeshProUGUI timeText;
 
         private Coroutine countdownCoroutine;
@@ -16,8 +16,18 @@ namespace PersonalValue
         // 👉 เริ่มนับถอยหลัง
         public void StartCountdown()
         {
+
             StopCountdown(); // หยุดก่อนถ้ามีการทำงานอยู่
             countdownCoroutine = StartCoroutine(Countdown());
+            switch (GameManager.Instance.levelManager.currentStage)
+            {
+                case Stage.Stage1:
+                    duration = 30f;
+                    break;
+                case Stage.Stage2:
+                    duration = 40f;
+                    break;
+            }
 
             /*
             countdownTimer.StartCountdown(); // เริ่มใหม่
