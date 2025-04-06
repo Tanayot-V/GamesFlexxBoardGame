@@ -49,6 +49,7 @@ namespace  PersonalValue
        if(dropBox != null)
        {
          dropBox.GetComponent<DropBox>().cardDataSOList.Add(dragDropCard.cardDataSO);
+         GameManager.Instance.levelManager.UpdateFillCount(1);
          GameManager.Instance.levelManager.RemoveCardFromList(dragDropCard.cardDataSO);
          Destroy(dragDropCard.gameObject);
         //ถ้าเป็นใบสุดท้ายจะสุ่มขึ้นมาใหม่
@@ -73,7 +74,8 @@ namespace  PersonalValue
         {
             if(collision.tag == "Menu")
             {
-                collision.gameObject.GetComponent<Image>().color = UiController.Instance.SetColorWithHex("#8C5E44");
+                //collision.gameObject.GetComponent<Image>().color = UiController.Instance.SetColorWithHex("#8C5E44");
+                collision.gameObject.GetComponent<Image>().color = Color.white;
                 dropBox = null;
             }
         }

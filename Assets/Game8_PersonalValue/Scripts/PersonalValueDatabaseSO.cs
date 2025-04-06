@@ -9,9 +9,10 @@ namespace PersonalValue
     public class PersonalValueDatabaseSO : ScriptableObject 
     {
         public CardDataSO[] cardDataSO;
-        public string[] boxsNameList_1;
-        public string[] boxsNameList_2;
-        public string[] boxsNameList_3;
+        public string[] headers;
+        public BoxData[] boxsNameList_1;
+        public BoxData[] boxsNameList_2;
+        public BoxData[] boxsNameList_3;
         private Dictionary<string,CardDataSO> cardDataDIC = new Dictionary<string,CardDataSO>();
         public CardDataSO GetCardData(string _id)
         {

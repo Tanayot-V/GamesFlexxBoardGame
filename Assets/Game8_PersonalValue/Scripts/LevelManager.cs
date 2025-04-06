@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Text.RegularExpressions;
 
 namespace PersonalValue
 {    
@@ -16,6 +17,12 @@ namespace PersonalValue
         Stage4,
         Stage5
     }
+    [System.Serializable]
+    public class BoxData
+    {
+        public string boxName;
+        public Sprite sprite;
+    }
 
     public class LevelManager : MonoBehaviour
     {
@@ -24,18 +31,23 @@ namespace PersonalValue
         public GameObject[] stageCardPriority;
         public GameObject[] stageTemplate;
 
-        [Header("Stage1 Model")]
+        [Header("Stage Model")]
         public Camera mainCamera;
         public GameObject canvasGame;
+        public TMPro.TextMeshProUGUI headerText;
+        public TMPro.TextMeshProUGUI fillText;
+        public GameObject fillBar;
         public GameObject boxPrefab;
         public GameObject boxParent;
         public GameObject cardPrefab;
         public GameObject cardParent;
         public GameObject mockUpDragCard;
         private readonly int maxCardCount = 5;
-        public int currentCardCount = 0;
 
-        [Header("Stage1 State")]
+        [Header("Stage State")]
+        public int fillCardCountCurrent = 0;
+        public int fillCardCountMax = 0;
+        public int currentCardCount = 0;
         public Stage currentStage;
         public DropBox importantBOX;
         public List<GameObject> boxList = new List<GameObject>();
@@ -53,8 +65,11 @@ namespace PersonalValue
         public void Stage1()
         {
             currentStage = Stage.Stage1;
+            headerText.text = GameManager.Instance.cardDatabaseSO.headers[0];
             GameManager.Instance.countdownTimer.StartCountdown();
             PersonalValueDatabaseSO databaseSO = GameManager.Instance.cardDatabaseSO;
+            fillCardCountMax = databaseSO.cardDataSO.Count();
+            UpdateFillCount(0);
             //Create Cards
             databaseSO.cardDataSO.ToList().ForEach(o =>
             {
@@ -65,27 +80,31 @@ namespace PersonalValue
             });
 
             //Create Box
+            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(300, 300);
+            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(30, 0);
             CreateBOX(databaseSO.boxsNameList_1);
             RerollCard();
       }
 
-        public void InitStage(string[] _nameBox)
+        public void InitStage(BoxData[] _nameBox)
         {
             GameManager.Instance.countdownTimer.StartCountdown();
             CreateBOX(_nameBox);
             RerollCard();
         }
 
-        private void CreateBOX(string[] nameBOX)
+        private void CreateBOX(BoxData[] nameBOX)
         {
             UiController.Instance.DestorySlot(boxParent);
             int index = 0;
+            boxList.Clear();
             nameBOX.ToList().ForEach(o =>
             {
                 GameObject box = UiController.Instance.InstantiateUIView(boxPrefab ,boxParent);
                 box.name = "boxStage_" + index;
-                box.GetComponent<DropBox>().dropName = o;
-                box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o;
+                box.GetComponent<DropBox>().dropName = o.boxName;
+                box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.boxName;
+                box.GetComponent<Image>().sprite = o.sprite;
                 if (o != null)
                 {
                     boxList.Add(box);
@@ -108,7 +127,9 @@ namespace PersonalValue
             GameManager.Instance.countdownTimer.StartCountdown();
             Shuffle(cardDataList);
             UiController.Instance.DestorySlot(cardParent);
-            for(int i = 0; i < maxCardCount; i++)
+
+            int loopCount = Mathf.Min(maxCardCount, cardDataList.Count);
+            for(int i = 0; i < loopCount; i++)
             {
                 GameObject card = UiController.Instance.InstantiateUIView(cardPrefab ,cardParent);
                 card.name = cardDataList[i].name;
@@ -119,7 +140,7 @@ namespace PersonalValue
                 card.transform.localScale = Vector3.zero; // เริ่มจาก 0
                 card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
             }
-            currentCardCount = maxCardCount;
+            currentCardCount = loopCount;
             mockUpDragCard.SetActive(false);
         }
 
@@ -173,10 +194,16 @@ namespace PersonalValue
                 {
                     case Stage.Stage1:
                         currentStage = Stage.Stage2;
+                        headerText.text = GameManager.Instance.cardDatabaseSO.headers[1];
                         NextStage();
+                        boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(325, 325);
+                        boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(170, 0);
                         InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_2);
                         break;
                     case Stage.Stage2:
+                        headerText.text = GameManager.Instance.cardDatabaseSO.headers[2];
+                        boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
+                        boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(90, 0);
                         Stage3();
                         break;
                     case Stage.Stage3:
@@ -225,6 +252,13 @@ namespace PersonalValue
                 NextStage();
                 InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_3);
             }
+        }
+
+        public void UpdateFillCount(int _fillCount)
+        {
+            fillCardCountCurrent += _fillCount;
+            fillText.text = "สำเร็จแล้ว " + fillCardCountCurrent + "/" + fillCardCountMax;
+            fillBar.GetComponent<Image>().fillAmount = (float)fillCardCountCurrent / fillCardCountMax;
         }
       #endregion
     }
