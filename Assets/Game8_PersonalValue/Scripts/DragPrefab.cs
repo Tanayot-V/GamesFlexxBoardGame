@@ -65,7 +65,7 @@ namespace  PersonalValue
         {
             if(collision.tag == "Menu")
             {
-                collision.gameObject.GetComponent<Image>().color = Color.red;
+                collision.gameObject.GetComponent<Image>().color = Color.black;
                 dropBox = collision.gameObject;
             }
         }

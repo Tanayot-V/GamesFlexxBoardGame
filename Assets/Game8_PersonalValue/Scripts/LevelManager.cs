@@ -27,6 +27,9 @@ namespace PersonalValue
     public class LevelManager : MonoBehaviour
     {
         [Header("MainGame")]
+        public GameObject messagePages;
+        public GameObject messageGroup;        
+        public GameObject messageButton;
         public GameObject[] stageCardPages;
         public GameObject[] stageCardPriority;
         public GameObject[] stageTemplate;
@@ -35,6 +38,7 @@ namespace PersonalValue
         public Camera mainCamera;
         public GameObject canvasGame;
         public TMPro.TextMeshProUGUI headerText;
+        public TMPro.TextMeshProUGUI messageText;
         public TMPro.TextMeshProUGUI fillText;
         public GameObject fillBar;
         public GameObject boxPrefab;
@@ -45,6 +49,7 @@ namespace PersonalValue
         private readonly int maxCardCount = 5;
 
         [Header("Stage State")]
+        private int messageIndex = 0;
         public int fillCardCountCurrent = 0;
         public int fillCardCountMax = 0;
         public int currentCardCount = 0;
@@ -53,13 +58,76 @@ namespace PersonalValue
         public List<GameObject> boxList = new List<GameObject>();
         private List<CardDataSO> cardDataList = new List<CardDataSO>();
 
-        #region Stage1
+        #region Message
+        public void ShowMessage(int _index)
+        {
+            stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
+            stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
+            stageTemplate.ToList().ForEach(o => { o.SetActive(false); });
+
+            messagePages.GetComponent<CanvasGroup>().alpha = 1;
+            messageIndex = _index;
+            messageText.text = GameManager.Instance.cardDatabaseSO.messages[_index];
+
+            messageButton.GetComponent<Button>().interactable = true;
+
+            /*
+            // ตั้งค่าเริ่มต้นให้โปร่งใสก่อน
+            Color startColor = messageText.color;
+            startColor.a = 0;
+            messageText.color = startColor;
+
+            // 🔥 เฟดเข้า (0 → 1) ใน 0.5 วินาที
+            messageText.DOFade(1f, 2f).OnComplete(() =>
+            {
+                Debug.Log("ข้อความหายแล้ว! ✅");
+                messageButton.SetActive(true);
+                // หรือจะ messageText.gameObject.SetActive(false); ก็ได้
+            });*/
+        }
+
+        public void ButtonMessage()
+        {
+            messageButton.GetComponent<Button>().interactable = false;
+            messageText.GetComponent<TMPro.TextMeshProUGUI>().color = UiController.Instance.SetColorWithHex("#000000");
+
+            CanvasGroup cg = messagePages.GetComponent<CanvasGroup>();
+            cg.alpha = 1; // เริ่มโปร่งใส
+            cg.DOFade(0f, 0.75f) // ค่อยๆ แสดง
+            .SetEase(Ease.InOutSine)// เลือก Ease ให้รู้สึก smooth
+            .OnComplete(()=> { 
+                messagePages.GetComponent<CanvasGroup>().alpha = 0;
+                messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                stageCardPages.ToList().ForEach(o => { o.SetActive(true); });
+                switch (messageIndex)
+                {
+                    case 0:
+                        Stage1();
+                        break;
+                    case 1:
+                        Stage2();
+                        break;
+                    case 2:
+                        Stage3();
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        break;
+                }
+                });
+        }
+        #endregion
+
+        #region Gameplay
         public void Start()
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLInput.mobileKeyboardSupport = true; //ต้องมีไม่งั้นไอแพดเปิดแป้นพิมพ์ไม่ได้
             #endif
-            Stage1();
+            ShowMessage(0);
         }
 
         public void Stage1()
@@ -69,6 +137,7 @@ namespace PersonalValue
             GameManager.Instance.countdownTimer.StartCountdown();
             PersonalValueDatabaseSO databaseSO = GameManager.Instance.cardDatabaseSO;
             fillCardCountMax = databaseSO.cardDataSO.Count();
+            fillCardCountCurrent = 0;
             UpdateFillCount(0);
             //Create Cards
             databaseSO.cardDataSO.ToList().ForEach(o =>
@@ -85,8 +154,30 @@ namespace PersonalValue
             CreateBOX(databaseSO.boxsNameList_1);
             RerollCard();
       }
+      
+        private void Stage2()
+        {
+            currentStage = Stage.Stage2;
+            headerText.text = GameManager.Instance.cardDatabaseSO.headers[1];
+            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(325, 325);
+            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(170, 0);
 
-        public void InitStage(BoxData[] _nameBox)
+            NextStage();
+            InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_2);
+        }
+
+        private void Stage3()
+        {
+            currentStage = Stage.Stage3;
+            headerText.text = GameManager.Instance.cardDatabaseSO.headers[2];
+            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
+            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(90, 0);
+
+            NextStage();
+            InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_3);
+        }
+
+        private void InitStage(BoxData[] _nameBox)
         {
             GameManager.Instance.countdownTimer.StartCountdown();
             CreateBOX(_nameBox);
@@ -193,18 +284,18 @@ namespace PersonalValue
                 switch(currentStage)
                 {
                     case Stage.Stage1:
-                        currentStage = Stage.Stage2;
-                        headerText.text = GameManager.Instance.cardDatabaseSO.headers[1];
-                        NextStage();
-                        boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(325, 325);
-                        boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(170, 0);
-                        InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_2);
+                        messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                        messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                        messagePages.GetComponent<Animator>().Play("Message_2");
+                        //messagePages.GetComponent<Animator>().SetInteger("messIndex",1);
+                        ShowMessage(1);
                         break;
                     case Stage.Stage2:
-                        headerText.text = GameManager.Instance.cardDatabaseSO.headers[2];
-                        boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
-                        boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(90, 0);
-                        Stage3();
+                        messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                        messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                        messagePages.GetComponent<Animator>().Play("Message_3");
+                        //messagePages.GetComponent<Animator>().SetInteger("messIndex",2);
+                        ShowMessage(2);
                         break;
                     case Stage.Stage3:
                         //เช็คว่า ขาดไม่ได้ จะต้องไม่เกิน 15 ใบ
@@ -217,6 +308,9 @@ namespace PersonalValue
                         {
                             Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
                             currentStage = Stage.Stage4;
+                            messagePages.GetComponent<Animator>().Play("Message_4");
+                            //messagePages.GetComponent<Animator>().SetInteger("messIndex",3);
+                            ShowMessage(3);
                         }
                         
                         break;
@@ -236,22 +330,18 @@ namespace PersonalValue
                 Debug.Log("🟢 ยังมีการ์ดเหลืออยู่");
                 return false;
             }
+        }
 
-            void NextStage()
+        private void NextStage()
+        {
+            cardDataList.Clear();
+            importantBOX.cardDataSOList.ToList().ForEach(o =>
             {
-                 cardDataList.Clear();
-                    importantBOX.cardDataSOList.ToList().ForEach(o =>
-                    {
-                        cardDataList.Add(o);
-                    });
-            }
-
-            void Stage3()
-            {
-                currentStage = Stage.Stage3;
-                NextStage();
-                InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_3);
-            }
+                cardDataList.Add(o);
+            });
+            fillCardCountMax = cardDataList.Count();
+            fillCardCountCurrent = 0;
+            UpdateFillCount(0);
         }
 
         public void UpdateFillCount(int _fillCount)
