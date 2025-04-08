@@ -14,6 +14,7 @@ namespace PersonalValue
         public BoxData[] boxsNameList_1;
         public BoxData[] boxsNameList_2;
         public BoxData[] boxsNameList_3;
+        public BoxData[] boxsNameList_4;
         private Dictionary<string,CardDataSO> cardDataDIC = new Dictionary<string,CardDataSO>();
         public CardDataSO GetCardData(string _id)
         {

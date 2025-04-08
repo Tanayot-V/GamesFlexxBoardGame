@@ -40,6 +40,7 @@ namespace PersonalValue
         public TMPro.TextMeshProUGUI headerText;
         public TMPro.TextMeshProUGUI messageText;
         public TMPro.TextMeshProUGUI fillText;
+        public Image bgIMG;
         public GameObject fillBar;
         public GameObject boxPrefab;
         public GameObject boxParent;
@@ -111,6 +112,7 @@ namespace PersonalValue
                         Stage3();
                         break;
                     case 3:
+                        Stage4();
                         break;
                     case 4:
                         break;
@@ -132,6 +134,7 @@ namespace PersonalValue
 
         public void Stage1()
         {
+            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
             currentStage = Stage.Stage1;
             headerText.text = GameManager.Instance.cardDatabaseSO.headers[0];
             GameManager.Instance.countdownTimer.StartCountdown();
@@ -157,6 +160,7 @@ namespace PersonalValue
       
         private void Stage2()
         {
+            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
             currentStage = Stage.Stage2;
             headerText.text = GameManager.Instance.cardDatabaseSO.headers[1];
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(325, 325);
@@ -168,6 +172,7 @@ namespace PersonalValue
 
         private void Stage3()
         {
+            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
             currentStage = Stage.Stage3;
             headerText.text = GameManager.Instance.cardDatabaseSO.headers[2];
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
@@ -175,6 +180,17 @@ namespace PersonalValue
 
             NextStage();
             InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_3);
+        }
+
+         private void Stage4()
+        {
+            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
+            currentStage = Stage.Stage4;
+            headerText.text = GameManager.Instance.cardDatabaseSO.headers[2];
+            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(310, 310);
+            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(30, 0);
+
+            CreateBOX(GameManager.Instance.cardDatabaseSO.boxsNameList_4);
         }
 
         private void InitStage(BoxData[] _nameBox)
@@ -194,8 +210,11 @@ namespace PersonalValue
                 GameObject box = UiController.Instance.InstantiateUIView(boxPrefab ,boxParent);
                 box.name = "boxStage_" + index;
                 box.GetComponent<DropBox>().dropName = o.boxName;
-                box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.boxName;
+                if(currentStage == Stage.Stage4) box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = string.Empty;
+                else box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.boxName;   
                 box.GetComponent<Image>().sprite = o.sprite;
+
+
                 if (o != null)
                 {
                     boxList.Add(box);
@@ -235,7 +254,7 @@ namespace PersonalValue
             mockUpDragCard.SetActive(false);
         }
 
-        public void Shuffle(List<CardDataSO> list)
+        private void Shuffle(List<CardDataSO> list)
         {
             for (int i = 0; i < list.Count; i++)
             {
@@ -284,16 +303,22 @@ namespace PersonalValue
                 switch(currentStage)
                 {
                     case Stage.Stage1:
+
+                    stageCardPages[0].SetActive(false);
+                    StartCoroutine(PlayAnimationThen("CameraZoom", () =>
+                    {
                         messagePages.GetComponent<CanvasGroup>().alpha = 1;
                         messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                        messagePages.GetComponent<Animator>().Play("Message_2");
-                        //messagePages.GetComponent<Animator>().SetInteger("messIndex",1);
                         ShowMessage(1);
+
+                        canvasGame.GetComponent<Animator>().Play("Message_2");
+                    }));
+
                         break;
                     case Stage.Stage2:
                         messagePages.GetComponent<CanvasGroup>().alpha = 1;
                         messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                        messagePages.GetComponent<Animator>().Play("Message_3");
+                        canvasGame.GetComponent<Animator>().Play("Message_3");
                         //messagePages.GetComponent<Animator>().SetInteger("messIndex",2);
                         ShowMessage(2);
                         break;
@@ -308,8 +333,7 @@ namespace PersonalValue
                         {
                             Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
                             currentStage = Stage.Stage4;
-                            messagePages.GetComponent<Animator>().Play("Message_4");
-                            //messagePages.GetComponent<Animator>().SetInteger("messIndex",3);
+                            canvasGame.GetComponent<Animator>().Play("Message_4");
                             ShowMessage(3);
                         }
                         
@@ -349,6 +373,20 @@ namespace PersonalValue
             fillCardCountCurrent += _fillCount;
             fillText.text = "สำเร็จแล้ว " + fillCardCountCurrent + "/" + fillCardCountMax;
             fillBar.GetComponent<Image>().fillAmount = (float)fillCardCountCurrent / fillCardCountMax;
+        }
+
+
+        private IEnumerator PlayAnimationThen(string animationName, System.Action onComplete)
+        {
+            Animator animator = canvasGame.GetComponent<Animator>();
+            animator.Play(animationName);
+
+            // รอจนกว่าอนิเมชั่นจะหยุด
+            yield return null;
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            yield return new WaitForSeconds(stateInfo.length);
+
+            onComplete?.Invoke();
         }
       #endregion
     }

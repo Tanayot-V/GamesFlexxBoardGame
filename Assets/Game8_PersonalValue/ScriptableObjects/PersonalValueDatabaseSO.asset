@@ -16,13 +16,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0aa6dec2144634ccbb47891f1f29ba7c, type: 2}
   - {fileID: 11400000, guid: 80b49287200f04247b8af3babe74321b, type: 2}
   - {fileID: 11400000, guid: d8afbffff8f4f410693d1f2bac8d9442, type: 2}
-  - {fileID: 11400000, guid: 891cc7dde8517414bb4875dccba5e65e, type: 2}
-  - {fileID: 11400000, guid: 503e352c841ff46bfb5e94ca627c1367, type: 2}
-  - {fileID: 11400000, guid: ed4c6d775e5cb42b4aef492f42a46dbf, type: 2}
-  - {fileID: 11400000, guid: 68f0db362d3024703a29ca9c74acbc25, type: 2}
-  - {fileID: 11400000, guid: 45c9ec0dae1db4c6fbaef06376370a70, type: 2}
-  - {fileID: 11400000, guid: 4bed321dcffb84e268d329237031a7ec, type: 2}
-  - {fileID: 11400000, guid: 231b81c1f974944b58d2ad3bb0e40a42, type: 2}
   messages:
   - "\u0E17\u0E38\u0E01\u0E01\u0E32\u0E23\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E02\u0E2D\u0E07\u0E40\u0E23\u0E32\u0E19\u0E33\u0E44\u0E1B\u0E2A\u0E39\u0E48\u0E2D\u0E19\u0E32\u0E04\u0E15\u2026
     \u0E41\u0E15\u0E48\u0E40\u0E23\u0E32\u0E01\u0E33\u0E25\u0E31\u0E07\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E40\u0E1E\u0E23\u0E32\u0E30\u0E2D\u0E30\u0E44\u0E23? "
@@ -40,8 +33,11 @@ MonoBehaviour:
   - "\u0E14\u0E48\u0E32\u0E19\u0E17\u0E35\u0E48 2 : \u0E1E\u0E34\u0E08\u0E32\u0E23\u0E13\u0E32
     \"\u0E01\u0E32\u0E23\u0E4C\u0E14\u0E04\u0E38\u0E13\u0E04\u0E48\u0E32\" \u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07
     \u0E41\u0E25\u0E49\u0E27\u0E19\u0E33\u0E44\u0E1B\u0E43\u0E2A\u0E48\u0E43\u0E19\u0E01\u0E25\u0E48\u0E2D\u0E07\u0E17\u0E35\u0E48\u0E40\u0E2B\u0E21\u0E32\u0E30\u0E2A\u0E21"
-  - "\u0E14\u0E48\u0E32\u0E19\u0E17\u0E35\u0E48 3 : \u0E1E\u0E34\u0E15\u0E32\u0E23\u0E13\u0E32
+  - "\u0E14\u0E48\u0E32\u0E19\u0E17\u0E35\u0E48 3 : \u0E1E\u0E34\u0E08\u0E32\u0E23\u0E13\u0E32
     \"\u0E01\u0E32\u0E23\u0E4C\u0E14\u0E04\u0E38\u0E13\u0E04\u0E48\u0E32\" \u0E43\u0E2B\u0E49\u0E25\u0E36\u0E01\u0E16\u0E36\u0E07\u0E15\u0E31\u0E27\u0E15\u0E19\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13"
+  - "\u0E14\u0E48\u0E32\u0E19\u0E17\u0E35\u0E48 4 : \u0E40\u0E25\u0E37\u0E2D\u0E01
+    \"\u0E01\u0E32\u0E23\u0E4C\u0E14\u0E04\u0E38\u0E13\u0E04\u0E48\u0E32\" \u0E2A\u0E39\u0E14\u0E2A\u0E38\u0E14\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13
+    5 \u0E2D\u0E31\u0E19\u0E14\u0E31\u0E1A\u0E41\u0E23\u0E01"
   boxsNameList_1:
   - boxName: "\u0E2A\u0E33\u0E04\u0E31\u0E0D\u0E17\u0E35\u0E48\u0E2A\u0E38\u0E14"
     sprite: {fileID: 21300000, guid: c76d60ff13a214eab95963a6834fe00a, type: 3}
@@ -67,3 +63,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 360eb0197e3904a78b54220cb90e6749, type: 3}
   - boxName: "\u0E15\u0E31\u0E27\u0E15\u0E19"
     sprite: {fileID: 21300000, guid: 425d9ea69628a4e2892e97659a194a38, type: 3}
+  boxsNameList_4:
+  - boxName: selectBox_1
+    sprite: {fileID: 21300000, guid: dfc6fd1d99ac2423298cb9a5ddb3a31d, type: 3}
+  - boxName: selectBox_2
+    sprite: {fileID: 21300000, guid: dfc6fd1d99ac2423298cb9a5ddb3a31d, type: 3}
+  - boxName: selectBox_3
+    sprite: {fileID: 21300000, guid: dfc6fd1d99ac2423298cb9a5ddb3a31d, type: 3}
+  - boxName: selectBox_4
+    sprite: {fileID: 21300000, guid: dfc6fd1d99ac2423298cb9a5ddb3a31d, type: 3}
+  - boxName: selectBox_5
+    sprite: {fileID: 21300000, guid: dfc6fd1d99ac2423298cb9a5ddb3a31d, type: 3}

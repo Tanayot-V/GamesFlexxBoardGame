@@ -121,6 +121,12 @@ public class UiController : MonoBehaviour
         GameObject prefab = Instantiate(_prefab);
         if(_parent != null) prefab.transform.SetParent(_parent.transform);
         prefab.GetComponent<RectTransform>().localScale = Vector3.one;
+        
+        RectTransform rect = prefab.GetComponent<RectTransform>();
+        Vector3 pos = rect.localPosition;
+        pos.z = 0f;
+        rect.localPosition = pos;
+
         return prefab;
     }
 

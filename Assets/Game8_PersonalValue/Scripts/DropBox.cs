@@ -9,6 +9,7 @@ public class DropBox : MonoBehaviour
 {
     public string dropName;
     public List<CardDataSO> cardDataSOList = new List<CardDataSO>();
+    public string cardName_Stage4;
 
     void Start()
     {
