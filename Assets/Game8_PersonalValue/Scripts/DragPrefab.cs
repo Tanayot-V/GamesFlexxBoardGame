@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace  PersonalValue
 {
@@ -46,18 +47,49 @@ namespace  PersonalValue
 
     public void SetCardToBox()
     {
+        LevelManager levelManager = GameManager.Instance.levelManager;
        if(dropBox != null)
        {
-         dropBox.GetComponent<DropBox>().cardDataSOList.Add(dragDropCard.cardDataSO);
-         GameManager.Instance.levelManager.UpdateFillCount(1);
-         GameManager.Instance.levelManager.RemoveCardFromList(dragDropCard.cardDataSO);
-         Destroy(dragDropCard.gameObject);
-        //ถ้าเป็นใบสุดท้ายจะสุ่มขึ้นมาใหม่
-         GameManager.Instance.levelManager.currentCardCount--;
-        if(!GameManager.Instance.levelManager.CheckAllCardCount())
+        if(levelManager.currentStage == Stage.Stage4)
         {
-            GameManager.Instance.levelManager.CheckCardCount();
+            if( dropBox.GetComponent<DropBox>().cardName_Stage4 != null)
+            {
+              levelManager.CreateCard(levelManager.cardPrefab,levelManager.priorityParent,dropBox.GetComponent<DropBox>().cardName_Stage4);
+            }
+            dropBox.GetComponent<DropBox>().cardName_Stage4 = dragDropCard.cardDataSO;
+
+            dropBox.GetComponent<DropBox>().transform.GetChild(0).GetComponent<Image>().sprite = dragDropCard.cardDataSO.picture;
+            levelManager.UpdateFillCount_Stage4();
+            Destroy(dragDropCard.gameObject);
+            return;
         }
+        else
+        {
+            dropBox.GetComponent<DropBox>().cardDataSOList.Add(dragDropCard.cardDataSO);
+            levelManager.UpdateFillCount(1);
+            levelManager.RemoveCardFromList(dragDropCard.cardDataSO);
+
+            if(levelManager.currentStage == Stage.Stage4) Destroy(dragDropCard.gameObject);
+            else
+            {
+                CanvasGroup canvasGroup = dragDropCard.gameObject.GetComponent<CanvasGroup>(); // อ้างอิง CanvasGroup ของคุณ
+                canvasGroup.DOFade(0f, 0.75f) // ค่อย ๆ หายใน 0.75 วินาที
+                    .SetEase(Ease.InOutSine)  // ใส่ Ease เพื่อให้ Smooth
+                    .OnComplete(() =>
+                    {
+                        canvasGroup.interactable = false;
+                        canvasGroup.blocksRaycasts = false;
+                        Debug.Log("CanvasGroup ซ่อนเรียบร้อยแล้ว");
+                    });
+            }
+
+            //ถ้าเป็นใบสุดท้ายจะสุ่มขึ้นมาใหม่
+            levelManager.currentCardCount--;
+            if(!levelManager.CheckAllCardCount())
+            {
+               levelManager.CheckCardCount();
+            }
+            }
        }
     }
 
@@ -65,7 +97,7 @@ namespace  PersonalValue
         {
             if(collision.tag == "Menu")
             {
-                collision.gameObject.GetComponent<Image>().color = Color.black;
+                collision.GetComponent<DropBox>().img.GetComponent<Image>().color = Color.black;
                 dropBox = collision.gameObject;
             }
         }
@@ -75,7 +107,7 @@ namespace  PersonalValue
             if(collision.tag == "Menu")
             {
                 //collision.gameObject.GetComponent<Image>().color = UiController.Instance.SetColorWithHex("#8C5E44");
-                collision.gameObject.GetComponent<Image>().color = Color.white;
+                collision.GetComponent<DropBox>().img.GetComponent<Image>().color = Color.white;
                 dropBox = null;
             }
         }

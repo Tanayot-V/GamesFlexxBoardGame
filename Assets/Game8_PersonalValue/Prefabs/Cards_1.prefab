@@ -92,8 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb6f8a3726ea42b7905aca12db9b115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayCanvas: {fileID: 0}
-  prefab: {fileID: 7251181763265034192, guid: ee44bd3b0fea645a191ebe6180eba71f, type: 3}
+  cardDataSO: {fileID: 0}
 --- !u!225 &2909869231767672369
 CanvasGroup:
   m_ObjectHideFlags: 0

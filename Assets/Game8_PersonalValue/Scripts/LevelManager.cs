@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Text.RegularExpressions;
+using BriefMe;
 
 namespace PersonalValue
 {    
@@ -37,21 +38,26 @@ namespace PersonalValue
         [Header("Stage Model")]
         public Camera mainCamera;
         public GameObject canvasGame;
+        public Sprite nullSprite;
         public TMPro.TextMeshProUGUI headerText;
         public TMPro.TextMeshProUGUI messageText;
-        public TMPro.TextMeshProUGUI fillText;
         public Image bgIMG;
+        public GameObject fillBarGroup;
+        public TMPro.TextMeshProUGUI fillText;
         public GameObject fillBar;
         public GameObject boxPrefab;
+        public GameObject boxPriorityPrefab;
         public GameObject boxParent;
         public GameObject cardPrefab;
         public GameObject cardParent;
         public GameObject mockUpDragCard;
+        public GameObject timeObj;
+        public GameObject priorityParent;
         private readonly int maxCardCount = 5;
 
         [Header("Stage State")]
-        private int messageIndex = 0;
         public int fillCardCountCurrent = 0;
+        private int messageIndex = 0;
         public int fillCardCountMax = 0;
         public int currentCardCount = 0;
         public Stage currentStage;
@@ -134,6 +140,7 @@ namespace PersonalValue
 
         public void Stage1()
         {
+            fillBarGroup.SetActive(true);
             bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
             currentStage = Stage.Stage1;
             headerText.text = GameManager.Instance.cardDatabaseSO.headers[0];
@@ -154,72 +161,103 @@ namespace PersonalValue
             //Create Box
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(300, 300);
             boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(30, 0);
-            CreateBOX(databaseSO.boxsNameList_1);
+            CreateBOX(databaseSO.boxsNameList_1,boxPrefab);
             RerollCard();
       }
       
         private void Stage2()
         {
+            fillBarGroup.SetActive(true);
             bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
             currentStage = Stage.Stage2;
             headerText.text = GameManager.Instance.cardDatabaseSO.headers[1];
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(325, 325);
             boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(170, 0);
 
+            timeObj.SetActive(true);
             NextStage();
-            InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_2);
+            InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_2,boxPrefab);
         }
 
         private void Stage3()
         {
+            fillBarGroup.SetActive(true);
             bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
             currentStage = Stage.Stage3;
             headerText.text = GameManager.Instance.cardDatabaseSO.headers[2];
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
             boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(90, 0);
 
+            timeObj.SetActive(true);
             NextStage();
-            InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_3);
+            InitStage(GameManager.Instance.cardDatabaseSO.boxsNameList_3 ,boxPrefab);
         }
 
          private void Stage4()
         {
+            Debug.Log("Stage4_1");
+            fillBarGroup.SetActive(true);
+            stageCardPriority.ToList().ForEach(o => { o.SetActive(true); });
             bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
             currentStage = Stage.Stage4;
-            headerText.text = GameManager.Instance.cardDatabaseSO.headers[2];
-            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(310, 310);
-            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(30, 0);
+            headerText.text = GameManager.Instance.cardDatabaseSO.headers[3];
+            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
+            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(0, 0);
 
-            CreateBOX(GameManager.Instance.cardDatabaseSO.boxsNameList_4);
+            GameManager.Instance.countdownTimer.StopCountdown();
+            timeObj.SetActive(false);
+            NextStage();
+            CreateBOX(GameManager.Instance.cardDatabaseSO.boxsNameList_4, boxPriorityPrefab);
+            
+            UiController.Instance.DestorySlot(priorityParent);
+            cardDataList.ToList().ForEach(o =>
+            {
+                GameObject card = UiController.Instance.InstantiateUIView(cardPrefab, priorityParent);
+                card.name = o.name;
+                card.GetComponent<Image>().sprite = o.picture;
+                card.GetComponent<DragDropCard>().cardDataSO = o;
+
+                 // 🔥 เพิ่ม Effect Scale ด้วย DOTween
+                card.transform.localScale = Vector3.zero; // เริ่มจาก 0
+                card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
+            });
+            
+            Debug.Log("Stage4_2");
         }
 
-        private void InitStage(BoxData[] _nameBox)
+        private void InitStage(BoxData[] _nameBox ,GameObject _boxPrefab)
         {
             GameManager.Instance.countdownTimer.StartCountdown();
-            CreateBOX(_nameBox);
+            CreateBOX(_nameBox,_boxPrefab);
             RerollCard();
         }
 
-        private void CreateBOX(BoxData[] nameBOX)
+        private void CreateBOX(BoxData[] _nameBOX ,GameObject _boxPrefab)
         {
             UiController.Instance.DestorySlot(boxParent);
             int index = 0;
             boxList.Clear();
-            nameBOX.ToList().ForEach(o =>
+            Debug.Log(_nameBOX.Length);
+            _nameBOX.ToList().ForEach(o =>
             {
-                GameObject box = UiController.Instance.InstantiateUIView(boxPrefab ,boxParent);
+                GameObject box = UiController.Instance.InstantiateUIView(_boxPrefab ,boxParent);
                 box.name = "boxStage_" + index;
                 box.GetComponent<DropBox>().dropName = o.boxName;
-                if(currentStage == Stage.Stage4) box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = string.Empty;
-                else box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.boxName;   
+                if(currentStage == Stage.Stage4) 
+                {
+                    box.transform.GetChild(0).GetComponent<Image>().sprite = nullSprite;
+                }
+                else 
+                {
+                    box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.boxName;
+                }   
                 box.GetComponent<Image>().sprite = o.sprite;
-
 
                 if (o != null)
                 {
                     boxList.Add(box);
                 }
-                if(index == 0)
+                if(index == 0 && currentStage != Stage.Stage4)
                 {
                     importantBOX = box.GetComponent<DropBox>();
                 }
@@ -241,17 +279,22 @@ namespace PersonalValue
             int loopCount = Mathf.Min(maxCardCount, cardDataList.Count);
             for(int i = 0; i < loopCount; i++)
             {
-                GameObject card = UiController.Instance.InstantiateUIView(cardPrefab ,cardParent);
-                card.name = cardDataList[i].name;
-                card.GetComponent<Image>().sprite = cardDataList[i].picture;
-                card.GetComponent<DragDropCard>().cardDataSO = cardDataList[i];
-
-                 // 🔥 เพิ่ม Effect Scale ด้วย DOTween
-                card.transform.localScale = Vector3.zero; // เริ่มจาก 0
-                card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
+               CreateCard(cardPrefab,cardParent,cardDataList[i]);
             }
             currentCardCount = loopCount;
             mockUpDragCard.SetActive(false);
+        }
+
+        public void CreateCard(GameObject _prefab, GameObject _parent,CardDataSO _cardDataSO)
+        {
+            GameObject card = UiController.Instance.InstantiateUIView(_prefab ,_parent);
+            card.name = _cardDataSO.name;
+            card.GetComponent<Image>().sprite = _cardDataSO.picture;
+            card.GetComponent<DragDropCard>().cardDataSO = _cardDataSO;
+
+                // 🔥 เพิ่ม Effect Scale ด้วย DOTween
+            card.transform.localScale = Vector3.zero; // เริ่มจาก 0
+            card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
         }
 
         private void Shuffle(List<CardDataSO> list)
@@ -332,7 +375,8 @@ namespace PersonalValue
                         else
                         {
                             Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
-                            currentStage = Stage.Stage4;
+                            messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
                             canvasGame.GetComponent<Animator>().Play("Message_4");
                             ShowMessage(3);
                         }
@@ -375,6 +419,14 @@ namespace PersonalValue
             fillBar.GetComponent<Image>().fillAmount = (float)fillCardCountCurrent / fillCardCountMax;
         }
 
+         public void UpdateFillCount_Stage4()
+        {
+            fillCardCountMax = cardDataList.Count;
+            fillCardCountCurrent = boxStageCount();
+            fillText.text = "สำเร็จแล้ว " + boxStageCount() + "/" + fillCardCountMax;
+            fillBar.GetComponent<Image>().fillAmount = (float)fillCardCountCurrent / fillCardCountMax;
+        }
+
 
         private IEnumerator PlayAnimationThen(string animationName, System.Action onComplete)
         {
@@ -387,6 +439,20 @@ namespace PersonalValue
             yield return new WaitForSeconds(stateInfo.length);
 
             onComplete?.Invoke();
+        }
+
+        //นับจำนวนไพ่ที่อยู่ในกล่องแล้ว ใน stage4
+        public int boxStageCount()
+        {
+            int count = 0;
+            boxList.ToList().ForEach(o =>
+            {
+               if( o.GetComponent<DropBox>().cardName_Stage4 != null)
+                {
+                    count++;
+                }
+            });
+            return count;
         }
       #endregion
     }

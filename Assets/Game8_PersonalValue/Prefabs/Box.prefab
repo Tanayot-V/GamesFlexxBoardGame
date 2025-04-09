@@ -203,7 +203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c76d60ff13a214eab95963a6834fe00a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dfc6fd1d99ac2423298cb9a5ddb3a31d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -225,8 +225,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc351428118b437b9337a6b8005e8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  img: {fileID: 238489639750389251}
   dropName: 
   cardDataSOList: []
+  cardName_Stage4: 
 --- !u!61 &2561288330288355982
 BoxCollider2D:
   m_ObjectHideFlags: 0

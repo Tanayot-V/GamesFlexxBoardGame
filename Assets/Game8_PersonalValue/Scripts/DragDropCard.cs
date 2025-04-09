@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using DG.Tweening;
 
 namespace  PersonalValue
 {
     
     public class DragDropCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        public Image img;
         public CardDataSO cardDataSO;
         private RectTransform mockupRect;
 
@@ -53,7 +54,14 @@ namespace  PersonalValue
             if (mockupRect != null)
             {
                 mockupRect.GetComponent<DragPrefab>().SetCardToBox();
-                mockupRect.gameObject.SetActive(false);
+                //mockupRect.gameObject.SetActive(false);
+
+                mockupRect.transform.localScale = Vector3.one;
+                mockupRect.transform.DOScale(Vector3.zero, 0.25f)
+                .SetEase(Ease.Linear)
+                .OnComplete(()=>{
+                    mockupRect.gameObject.SetActive(false);
+                });; // ค่อยๆ ขยายแบบ Pop-up
             }
         }
     }

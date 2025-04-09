@@ -25,6 +25,9 @@ namespace PersonalValue
                     duration = 30f;
                     break;
                 case Stage.Stage2:
+                    duration = 40f; 
+                    break;
+                case Stage.Stage3:
                     duration = 40f;
                     break;
             }
