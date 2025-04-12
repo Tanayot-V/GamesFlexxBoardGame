@@ -4,8 +4,6 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using DG.Tweening;
-using System.Text.RegularExpressions;
-using BriefMe;
 
 namespace PersonalValue
 {    
@@ -34,6 +32,7 @@ namespace PersonalValue
         public GameObject[] stageCardPages;
         public GameObject[] stageCardPriority;
         public GameObject[] stageTemplate;
+        public GameObject cropImagePage;
 
         [Header("Stage Model")]
         public Camera mainCamera;
@@ -63,7 +62,9 @@ namespace PersonalValue
         public Stage currentStage;
         public DropBox importantBOX;
         public List<GameObject> boxList = new List<GameObject>();
+        public List<GameObject> priorityList = new List<GameObject>();
         private List<CardDataSO> cardDataList = new List<CardDataSO>();
+
 
         #region Message
         public void ShowMessage(int _index)
@@ -71,6 +72,7 @@ namespace PersonalValue
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
             stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(false); });
+            cropImagePage.SetActive(false);
 
             messagePages.GetComponent<CanvasGroup>().alpha = 1;
             messageIndex = _index;
@@ -272,7 +274,6 @@ namespace PersonalValue
 
         public void RerollCard()
         {
-            GameManager.Instance.countdownTimer.StartCountdown();
             Shuffle(cardDataList);
             UiController.Instance.DestorySlot(cardParent);
 
@@ -283,6 +284,7 @@ namespace PersonalValue
             }
             currentCardCount = loopCount;
             mockUpDragCard.SetActive(false);
+            GameManager.Instance.countdownTimer.StartCountdown();
         }
 
         public void CreateCard(GameObject _prefab, GameObject _parent,CardDataSO _cardDataSO)
@@ -422,11 +424,11 @@ namespace PersonalValue
          public void UpdateFillCount_Stage4()
         {
             fillCardCountMax = cardDataList.Count;
+            if(fillCardCountMax > 5) fillCardCountMax = 5;
             fillCardCountCurrent = boxStageCount();
             fillText.text = "สำเร็จแล้ว " + boxStageCount() + "/" + fillCardCountMax;
             fillBar.GetComponent<Image>().fillAmount = (float)fillCardCountCurrent / fillCardCountMax;
         }
-
 
         private IEnumerator PlayAnimationThen(string animationName, System.Action onComplete)
         {
@@ -453,6 +455,33 @@ namespace PersonalValue
                 }
             });
             return count;
+        }
+
+        public void OpenTemplate()
+        {
+            stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
+            stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
+            stageTemplate.ToList().ForEach(o => { o.SetActive(true); });
+
+            CanvasGroup canvasGroup = stageTemplate[0].GetComponent<CanvasGroup>();
+            canvasGroup.alpha = 0;
+            canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{
+                
+            });
+
+            int index = 0;
+            boxList.ToList().ForEach(o =>
+            {
+                if(o.GetComponent<DropBox>().cardName_Stage4 != null)
+                {
+                    priorityList[index].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.GetComponent<DropBox>().cardName_Stage4.cardTH;
+                }
+                else
+                {
+                    priorityList[index].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = string.Empty;
+                }
+                index++;
+            });
         }
       #endregion
     }

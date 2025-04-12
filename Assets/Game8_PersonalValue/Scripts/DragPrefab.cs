@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 
-namespace  PersonalValue
+namespace PersonalValue
 {
     public class DragPrefab : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
@@ -15,6 +15,7 @@ namespace  PersonalValue
         private Vector3 offset;
         public GameObject dropBox;
         public DragDropCard dragDropCard;
+        public Color dragColor;
 
     void Awake()
     {
@@ -72,24 +73,24 @@ namespace  PersonalValue
             if(levelManager.currentStage == Stage.Stage4) Destroy(dragDropCard.gameObject);
             else
             {
+                //Card ค่่อยๆจางลง
                 CanvasGroup canvasGroup = dragDropCard.gameObject.GetComponent<CanvasGroup>(); // อ้างอิง CanvasGroup ของคุณ
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
                 canvasGroup.DOFade(0f, 0.75f) // ค่อย ๆ หายใน 0.75 วินาที
                     .SetEase(Ease.InOutSine)  // ใส่ Ease เพื่อให้ Smooth
                     .OnComplete(() =>
                     {
-                        canvasGroup.interactable = false;
-                        canvasGroup.blocksRaycasts = false;
-                        Debug.Log("CanvasGroup ซ่อนเรียบร้อยแล้ว");
                     });
-            }
+                            //ถ้าเป็นใบสุดท้ายจะสุ่มขึ้นมาใหม่
+                levelManager.currentCardCount--;
+                if(!levelManager.CheckAllCardCount())
+                {
+                levelManager.CheckCardCount();
+                }
 
-            //ถ้าเป็นใบสุดท้ายจะสุ่มขึ้นมาใหม่
-            levelManager.currentCardCount--;
-            if(!levelManager.CheckAllCardCount())
-            {
-               levelManager.CheckCardCount();
             }
-            }
+        }
        }
     }
 
@@ -97,7 +98,7 @@ namespace  PersonalValue
         {
             if(collision.tag == "Menu")
             {
-                collision.GetComponent<DropBox>().img.GetComponent<Image>().color = Color.black;
+                collision.GetComponent<DropBox>().img.GetComponent<Image>().color = dragColor;
                 dropBox = collision.gameObject;
             }
         }

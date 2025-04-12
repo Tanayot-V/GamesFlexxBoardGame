@@ -1,49 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using BriefMe;
+
+namespace PersonalValue
+{       
 
 public class CropImage : MonoBehaviour
 {
     public Image[] imgCropAll;
     public Image imgCrop;
     private RectTransform rectTransform;
+    [SerializeField] private Slider zoomSlider;  
 
     [Header("Zoom Settings")]
     public float zoomSpeed = 0.01f;
-    public float minScale = 0.5f;
-    public float maxScale = 3f;
+    private float minScale = 0.15f;
+    private float maxScale = 3f;
 
-    private void Awake()
+     [Header("Rotat Settings")]
+     private int[] rotationAngles = { 0, 90, 180, 270 };
+    private int currentRotatIndex = 0;
+
+    private void Start()
     {
         rectTransform = imgCrop.GetComponent<RectTransform>();
+        // ✅ Set Slider Value
+        zoomSlider.minValue = minScale;
+        zoomSlider.maxValue = maxScale;
+        zoomSlider.value = imgCrop.GetComponent<RectTransform>().localScale.x;
+
+        // ✅ Set Slider Event
+        zoomSlider.onValueChanged.AddListener(OnZoomSliderChanged);
+    }
+    private void OnZoomSliderChanged(float value)
+    {
+        rectTransform.localScale = new Vector3(value, value, 1);
+        imgCropAll.ToList().ForEach(x => x.rectTransform.localScale = imgCrop.rectTransform.localScale);
     }
 
     void Update()
     {
+        /*
         // ✅ Mouse Scroll Zoom (PC)
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll != 0)
         {
             Zoom(scroll * 10); // เพิ่ม sensitivity สำหรับ scroll
-        }
+        }*/
 
-        // ✅ Touch Pinch Zoom (Mobile)
-        if (Input.touchCount == 2)
-        {
-            Touch touch0 = Input.GetTouch(0);
-            Touch touch1 = Input.GetTouch(1);
-
-            // คำนวณระยะห่างระหว่างนิ้วก่อนและหลัง
-            Vector2 prevTouch0 = touch0.position - touch0.deltaPosition;
-            Vector2 prevTouch1 = touch1.position - touch1.deltaPosition;
-
-            float prevDistance = Vector2.Distance(prevTouch0, prevTouch1);
-            float currentDistance = Vector2.Distance(touch0.position, touch1.position);
-            float delta = currentDistance - prevDistance;
-
-            Zoom(delta);
-        }
+        imgCropAll.ToList().ForEach(x => x.sprite = imgCrop.sprite);
+        imgCropAll.ToList().ForEach(x => x.rectTransform.localScale = imgCrop.rectTransform.localScale);
+        imgCropAll.ToList().ForEach(x => x.rectTransform.position = imgCrop.rectTransform.position);
+        imgCropAll.ToList().ForEach(x => x.rectTransform.rotation = imgCrop.rectTransform.rotation);
     }
 
     private void Zoom(float delta)
@@ -54,4 +66,41 @@ public class CropImage : MonoBehaviour
 
         rectTransform.localScale = new Vector3(scale, scale, 1);
     }
+
+    public void SetCropImagePosition()
+    {
+        imgCropAll.ToList().ForEach(x => x.rectTransform.position = imgCrop.rectTransform.position);
+    }
+
+    public void SetSizeAllImage()
+    {
+        imgCropAll.ToList().ForEach(x => x.rectTransform.sizeDelta = imgCrop.rectTransform.sizeDelta);
+    }
+
+    public void RotateNextButton()
+    {
+        currentRotatIndex = (currentRotatIndex + 1) % rotationAngles.Length;
+        imgCrop.transform.DORotate(new Vector3(0, 0, rotationAngles[currentRotatIndex]), 0.5f).SetEase(Ease.OutQuad);
+    }
+
+    public void UploadImgButton()
+    {
+        if(imgCrop.GetComponent<Image>().sprite == null)
+        {
+            GameManager.Instance.webGLFileLoader.OnFileSelected(string.Empty);
+            GameManager.Instance.webGLFileLoader.PickImage();
+            OpenCropSetting();
+            return;
+        }
+        else
+        {
+           OpenCropSetting();
+        }
+
+        void OpenCropSetting()
+        {
+             GameManager.Instance.levelManager.cropImagePage.SetActive(true);
+        }
+    }
+}
 }

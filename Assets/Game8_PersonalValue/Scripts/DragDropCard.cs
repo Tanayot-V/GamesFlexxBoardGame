@@ -53,15 +53,23 @@ namespace  PersonalValue
             this.GetComponent<Image>().color = Color.white;
             if (mockupRect != null)
             {
-                mockupRect.GetComponent<DragPrefab>().SetCardToBox();
-                //mockupRect.gameObject.SetActive(false);
-
-                mockupRect.transform.localScale = Vector3.one;
-                mockupRect.transform.DOScale(Vector3.zero, 0.25f)
-                .SetEase(Ease.Linear)
-                .OnComplete(()=>{
+                
+                if(mockupRect.GetComponent<DragPrefab>().dropBox != null)
+                {
+                    mockupRect.GetComponent<DragPrefab>().SetCardToBox();
+                    //mockupRect.gameObject.SetActive(false);
+                    //mockupRect สเกลลง
+                    mockupRect.transform.localScale = Vector3.one;
+                    mockupRect.transform.DOScale(Vector3.zero, 0.25f)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(()=>{
+                        mockupRect.gameObject.SetActive(false);
+                    });; // ค่อยๆ ขยายแบบ Pop-up
+                }
+                else
+                {
                     mockupRect.gameObject.SetActive(false);
-                });; // ค่อยๆ ขยายแบบ Pop-up
+                }
             }
         }
     }

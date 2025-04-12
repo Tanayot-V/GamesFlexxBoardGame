@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.IO;
+using PersonalValue;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -14,7 +17,7 @@ public class WebGLFileLoader : MonoBehaviour
     public Image targetImage;
     public void Start()
     {
-        OnFileSelected(string.Empty);
+        //OnFileSelected(string.Empty);
     }
      public void PickImage()
     {
@@ -66,6 +69,26 @@ public class WebGLFileLoader : MonoBehaviour
 
         targetImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         targetImage.preserveAspect = true;
+
+        ColliderSetting(texture);
         yield return null;
+    }
+
+    private void ColliderSetting(Texture2D texture)
+    {   
+        RectTransform rect = targetImage.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(texture.width, texture.height);
+        rect.localScale = new Vector3(0.15f, 0.15f, 1);
+
+         BoxCollider2D box = targetImage.GetComponent<BoxCollider2D>();
+        if (box != null)
+        {
+            float width = texture.width;   // แปลงจาก px → world space
+            float height = texture.height;
+            box.size = new Vector2(width, height);
+        }
+
+        GameManager.Instance.cropImage.SetSizeAllImage();
+        Debug.Log($"✅ Resize to {texture.width} x {texture.height} px สำเร็จ");
     }
 }

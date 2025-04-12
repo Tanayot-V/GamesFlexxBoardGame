@@ -16,30 +16,26 @@ namespace PersonalValue
         // 👉 เริ่มนับถอยหลัง
         public void StartCountdown()
         {
-
             StopCountdown(); // หยุดก่อนถ้ามีการทำงานอยู่
-            countdownCoroutine = StartCoroutine(Countdown());
             switch (GameManager.Instance.levelManager.currentStage)
             {
                 case Stage.Stage1:
-                    duration = 30f;
+                    duration = 10f;
                     break;
                 case Stage.Stage2:
-                    duration = 40f; 
+                    duration = 10f; 
                     break;
                 case Stage.Stage3:
-                    duration = 40f;
+                    duration = 10f;
                     break;
             }
-
-            /*
-            countdownTimer.StartCountdown(); // เริ่มใหม่
-            countdownTimer.StopCountdown();  // หยุด*/
+            countdownCoroutine = StartCoroutine(Countdown());
         }
 
         // 👉 หยุดนับถอยหลัง
         public void StopCountdown()
         {
+            Debug.Log("StopCountdown");
             if (countdownCoroutine != null)
             {
                 StopCoroutine(countdownCoroutine);
@@ -66,8 +62,9 @@ namespace PersonalValue
             timeText.text = "0";
 
             Debug.Log("🔔 Cooldown หมดแล้ว!");
-            GameManager.Instance.levelManager.RerollCard(); // เรียกใช้ฟังก์ชัน RerollCard() ที่อยู่ใน LevelManager
             countdownCoroutine = null; // เคลียร์ค่า
+            GameManager.Instance.levelManager.RerollCard(); // เรียกใช้ฟังก์ชัน RerollCard() ที่อยู่ใน LevelManager
+
         }
     }
 }

@@ -8,7 +8,6 @@ using PersonalValue;
 public class DropBox : MonoBehaviour
 {
     public Image img;
-    
     public string dropName;
     public List<CardDataSO> cardDataSOList = new List<CardDataSO>();
     public CardDataSO cardName_Stage4;

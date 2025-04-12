@@ -10,6 +10,8 @@ public class GameManager : Singletons<GameManager>
     public PersonalValueDatabaseSO cardDatabaseSO;
     public LevelManager levelManager;
     public CountdownTimer countdownTimer;
+    public  CropImage cropImage;
+    public WebGLFileLoader webGLFileLoader;
    
     void Start()
     {
