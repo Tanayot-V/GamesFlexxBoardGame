@@ -86,7 +86,7 @@ namespace PersonalValue
                 levelManager.currentCardCount--;
                 if(!levelManager.CheckAllCardCount())
                 {
-                levelManager.CheckCardCount();
+                    levelManager.CheckCardCount();
                 }
 
             }

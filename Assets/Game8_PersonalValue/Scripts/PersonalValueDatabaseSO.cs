@@ -9,8 +9,9 @@ namespace PersonalValue
     public class PersonalValueDatabaseSO : ScriptableObject 
     {
         public CardDataSO[] cardDataSO;
-        public string[] messages;
+        //public string[] messages;
         public string[] headers;
+        public string[] messages;
         public BoxData[] boxsNameList_1;
         public BoxData[] boxsNameList_2;
         public BoxData[] boxsNameList_3;
