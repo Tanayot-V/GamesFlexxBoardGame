@@ -24,6 +24,7 @@ public class CropImage : MonoBehaviour
      [Header("Rotat Settings")]
      private int[] rotationAngles = { 0, 90, 180, 270 };
     private int currentRotatIndex = 0;
+    private bool isUploadIMG;
 
     private void Start()
     {
@@ -87,8 +88,8 @@ public class CropImage : MonoBehaviour
     {
         if(imgCrop.GetComponent<Image>().sprite == null)
         {
-            GameManager.Instance.webGLFileLoader.OnFileSelected(string.Empty);
-            GameManager.Instance.webGLFileLoader.PickImage();
+            GameManager.Instance.webGLFileLoaderButton.OnFileSelected(string.Empty);
+            GameManager.Instance.webGLFileLoaderButton.PickImage();
             OpenCropSetting();
             return;
         }
@@ -99,8 +100,15 @@ public class CropImage : MonoBehaviour
 
         void OpenCropSetting()
         {
-             GameManager.Instance.levelManager.cropImagePage.SetActive(true);
+            GameManager.Instance.webGLFileLoaderButton.ShowFileInputButton();
+            GameManager.Instance.levelManager.cropImagePage.SetActive(true);
         }
+    }
+
+    public void CloseCropPage()
+    {
+        GameManager.Instance.levelManager.cropImagePage.SetActive(false);
+        GameManager.Instance.webGLFileLoaderButton.HideFileInputButton();
     }
 }
 }

@@ -28,5 +28,14 @@ namespace PersonalValue
             }
         }
         #endregion
+
+        public void EndStage4Button()
+        {
+            gameManager.levelManager.EndStage4();
+        }
+        public void EndTempleteButton()
+        {
+            gameManager.levelManager.EndTemplete();
+        }
     }
 }

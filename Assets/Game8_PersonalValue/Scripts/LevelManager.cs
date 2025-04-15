@@ -81,11 +81,14 @@ namespace PersonalValue
             cameraZoomIMG.SetActive(false);
 
             messagePages.GetComponent<CanvasGroup>().alpha = 1;
+            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
             messageIndex = _index;
 
             messageButton.GetComponent<Button>().interactable = true;
             canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
 
+            messageText[0].text = string.Empty;
+            messageText[1].text = string.Empty;
             //Show Text Message ว่าอะไร
             switch(_index)
             {
@@ -103,7 +106,27 @@ namespace PersonalValue
                     break;
                 case 3:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[6];
-                    messageText[1].text = string.Empty;
+                    break;
+                case 7:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[7];
+                    break; 
+                case 8:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[8];
+                    break;
+                case 9:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[9];
+                    break;
+                case 10:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[10];
+                    break;
+                 case 11:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[11];
+                    break;
+                case 12:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[12];
+                    break;
+                case 13:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[13];
                     break;
             }
         }
@@ -134,13 +157,24 @@ namespace PersonalValue
 
                         messagePages.GetComponent<CanvasGroup>().alpha = 0;
                         messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                        bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
+
                         //Open Tutorial
                         gameManager.tutorial.tutorialPageGroup.SetActive(true);
                         canvasGame.GetComponent<Animator>().Play("Tutorial");
-                          }));
+                        }));
                         break;
                     case 4: Stage2();break;
                     case 5: Stage3();break;
+                    case 6: Stage4();break;
+                    case 7: ShowMessage(8);break;
+                    case 8: OpenTemplate();break;
+                    case 9: ShowMessage(10);break;
+                    case 10: ShowMessage(11);break;
+                    case 11: ShowMessage(12);break;
+                    case 12: ShowMessage(13);break;
+                    
                     default:
                         break;
                 }
@@ -157,7 +191,7 @@ namespace PersonalValue
             #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLInput.mobileKeyboardSupport = true; //ต้องมีไม่งั้นไอแพดเปิดแป้นพิมพ์ไม่ได้
             #endif
-            ShowMessage(2);
+            ShowMessage(3);
         }
 
         public void Stage1()
@@ -167,7 +201,6 @@ namespace PersonalValue
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
             fillBarGroup.SetActive(true);
-            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
             currentStage = Stage.Stage1;
             headerText.text = GameManager.Instance.cardDatabaseSO.headers[0];
             PersonalValueDatabaseSO databaseSO = gameManager.cardDatabaseSO;
@@ -196,7 +229,6 @@ namespace PersonalValue
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
 
-            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
             currentStage = Stage.Stage2;
             headerText.text = gameManager.cardDatabaseSO.headers[1];
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(325, 325);
@@ -209,8 +241,10 @@ namespace PersonalValue
 
         private void Stage3()
         {
+            stageCardPages.ToList().ForEach(o => { o.SetActive(true); });
+            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
-            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
+
             currentStage = Stage.Stage3;
             headerText.text = gameManager.cardDatabaseSO.headers[2];
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
@@ -223,9 +257,11 @@ namespace PersonalValue
 
          private void Stage4()
         {
+            stageCardPages.ToList().ForEach(o => { o.SetActive(true); });
+            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
             stageCardPriority.ToList().ForEach(o => { o.SetActive(true); });
-            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
+
             currentStage = Stage.Stage4;
             headerText.text = gameManager.cardDatabaseSO.headers[3];
             boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
@@ -387,17 +423,26 @@ namespace PersonalValue
 
                         StartCoroutine(PlayAnimationThen("BGTransition_2", () =>
                         {
+                            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
+
                             messageIndex = 4;
                             ButtonMessage();//=> ด่าน 2 
                         }));
                     }));
                         break;
+                    //หลังจบด่าน 2
                     case Stage.Stage2:
                         stageCardPages[0].SetActive(false);
                         boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
                         cameraZoomIMG.SetActive(true);
                         cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                        StartCoroutine(PlayAnimationThen("CameraZoom_1", () =>
+                        RectTransform rect = cameraZoomIMG.GetComponent<RectTransform>();
+                        if (rect != null)
+                        {
+                            rect.anchoredPosition = new Vector2(-659.25f, 166.63f);
+                            rect.localPosition = new Vector3(rect.anchoredPosition.x, rect.anchoredPosition.y, 0); // เผื่อ Z ต้องเป็น 0
+                        }
+                        StartCoroutine(PlayAnimationThen("CameraZoom_2", () =>
                         {
                             cameraZoomIMG.SetActive(false);
 
@@ -406,12 +451,15 @@ namespace PersonalValue
 
                             StartCoroutine(PlayAnimationThen("BGTransition_3", () =>
                             {
+                                bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
+
                                 messageIndex = 5;
                                 ButtonMessage();//=> ด่าน 3 
                             }));
 
                         }));
                         break;
+                    //หลังจบด่าน 3
                     case Stage.Stage3:
                         //เช็คว่า ขาดไม่ได้ จะต้องไม่เกิน 15 ใบ
                         if(importantBOX.cardDataSOList.Count > 15)
@@ -422,10 +470,25 @@ namespace PersonalValue
                         else
                         {
                             Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
-                            messagePages.GetComponent<CanvasGroup>().alpha = 1;
-                            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                            canvasGame.GetComponent<Animator>().Play("Message_4");
-                            ShowMessage(3);
+                            stageCardPages[0].SetActive(false);
+                            boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
+                            cameraZoomIMG.SetActive(true);
+                            cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
+                            StartCoroutine(PlayAnimationThen("CameraZoom_3", () =>
+                            {
+                                cameraZoomIMG.SetActive(false);
+
+                                messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                                messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                                StartCoroutine(PlayAnimationThen("BGTransition_4", () =>
+                                {
+                                    bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
+
+                                    messageIndex = 6;
+                                    ButtonMessage();//=> ด่าน 4 
+                                }));
+                            }));
                         }
                         
                         break;
@@ -527,6 +590,16 @@ namespace PersonalValue
                 }
                 index++;
             });
+        }
+
+        public void EndStage4()
+        {
+            ShowMessage(7);
+        }
+
+        public void EndTemplete()
+        {
+         ShowMessage(9);
         }
       #endregion
     }

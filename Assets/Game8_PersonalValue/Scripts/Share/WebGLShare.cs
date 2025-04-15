@@ -29,6 +29,7 @@ public class WebGLShare : MonoBehaviour
 #endif
     }
 
+    //จะทดสอบแชร์ต้อง build ขึ้น Https//: เท่านั้น ทดสอบแชร์ local ไม่ได้
     IEnumerator CaptureScreenshotAndShare()
     {
         yield return new WaitForEndOfFrame();
@@ -44,6 +45,6 @@ public class WebGLShare : MonoBehaviour
         Destroy(screenshot);
 
         // 📤 ส่งไปที่ Web Share API
-      ShareImage(base64String);
+        ShareImage(base64String);
     }
 }

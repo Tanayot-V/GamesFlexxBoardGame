@@ -12,6 +12,8 @@ public class GameManager : Singletons<GameManager>
     public CountdownTimer countdownTimer;
     public  CropImage cropImage;
     public WebGLFileLoader webGLFileLoader;
+    
+    public WebGLFileLoaderButton webGLFileLoaderButton;
     public Tutorial tutorial;
    
     void Start()

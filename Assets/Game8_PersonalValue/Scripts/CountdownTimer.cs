@@ -20,13 +20,13 @@ namespace PersonalValue
             switch (GameManager.Instance.levelManager.currentStage)
             {
                 case Stage.Stage1:
-                    duration = 10f;
+                    duration = 30f;
                     break;
                 case Stage.Stage2:
-                    duration = 10f; 
+                    duration = 40f; 
                     break;
                 case Stage.Stage3:
-                    duration = 10f;
+                    duration = 40f;
                     break;
             }
             countdownCoroutine = StartCoroutine(Countdown());

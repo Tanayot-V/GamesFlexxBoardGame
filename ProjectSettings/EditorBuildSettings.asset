@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Game8_PersonalValue/Scenes/8_ProsonalValue.unity
     guid: 04b74624eaea540328cf2d29c5bac51d
   - enabled: 0
+    path: Assets/Game8_PersonalValue/Scenes/ShareTest.unity
+    guid: f94608aa45e08448da95042c0d8fb2d1
+  - enabled: 0
     path: Assets/Game8_PersonalValue/Scenes/TextWebInputTest.unity
     guid: b8711c37808a442a88e883a318f0fa6a
   m_configObjects: {}

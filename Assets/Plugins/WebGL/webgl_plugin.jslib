@@ -114,5 +114,5 @@ mergeInto(LibraryManager.library, {
             URL.revokeObjectURL(imageUrl);
             console.log("✅ Temporary URL Revoked");
         }, 10000);
-    }
+    },
 });
