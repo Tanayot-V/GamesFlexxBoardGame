@@ -16,15 +16,19 @@ namespace PersonalValue
         }
 
         #region Tutorial
-        public void HideTutorialButton(string _buttonName)
+        public void HideTutorialButton()
         {
-            switch (_buttonName)
+            switch (gameManager.levelManager.currentStage)
             {
-                case "1":
+                case Stage.Stage1:
                     gameManager.tutorial.tutorialPageGroup.SetActive(false);
                     gameManager.levelManager.Stage1();
                     Debug.Log("Stage1");
                 break;
+                case Stage.Stage5:
+                    gameManager.tutorial.tutorialPageGroup.SetActive(false);
+                break;
+
             }
         }
         #endregion
@@ -36,6 +40,16 @@ namespace PersonalValue
         public void EndTempleteButton()
         {
             gameManager.levelManager.EndTemplete();
+        }
+
+        public void MessageNextButton()
+        {
+            gameManager.levelManager.OpenTemplateInput();
+        }
+
+        public void MessageStopButton()
+        {
+            gameManager.levelManager.ShowMessage(14);
         }
     }
 }

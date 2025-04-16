@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
+using System.Linq;
+
 
 public class WebGLShare : MonoBehaviour
 {
+    public GameObject[] saveButton;
+
     [DllImport("__Internal")]
     private static extern void ShareImage(string base64Image);
     [DllImport("__Internal")]
@@ -32,6 +36,8 @@ public class WebGLShare : MonoBehaviour
     //จะทดสอบแชร์ต้อง build ขึ้น Https//: เท่านั้น ทดสอบแชร์ local ไม่ได้
     IEnumerator CaptureScreenshotAndShare()
     {
+        saveButton.ToList().ForEach(o => { o.SetActive(false); });
+
         yield return new WaitForEndOfFrame();
         
         Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
@@ -42,6 +48,7 @@ public class WebGLShare : MonoBehaviour
         string base64Image = System.Convert.ToBase64String(imageData);
         string base64String = "data:image/png;base64," + base64Image;
 
+        saveButton.ToList().ForEach(o => { o.SetActive(false); });
         Destroy(screenshot);
 
         // 📤 ส่งไปที่ Web Share API

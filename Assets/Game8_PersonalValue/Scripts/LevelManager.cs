@@ -30,6 +30,7 @@ namespace PersonalValue
         public GameObject messagePages;
         public GameObject messageGroup;        
         public GameObject messageButton;
+        public GameObject messageChoices;
         public GameObject[] stageCardPages;
         public GameObject[] stageCardPriority;
         public GameObject[] stageTemplate;
@@ -40,7 +41,6 @@ namespace PersonalValue
         [Header("Stage Model")]
         public Camera mainCamera;
         public GameObject canvasGame;
-        public Sprite nullSprite;
         public TMPro.TextMeshProUGUI headerText;
         public TMPro.TextMeshProUGUI[] messageText;
         public Image bgIMG;
@@ -55,7 +55,9 @@ namespace PersonalValue
         public GameObject mockUpDragCard;
         public GameObject timeObj;
         public GameObject priorityParent;
+        public GameObject cameraZoomGroup;
         public GameObject cameraZoomIMG;
+        public TMPro.TextMeshProUGUI cameraZoomTX;
         private readonly int maxCardCount = 5;
 
         [Header("Stage State")]
@@ -85,48 +87,68 @@ namespace PersonalValue
             messageIndex = _index;
 
             messageButton.GetComponent<Button>().interactable = true;
-            canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
 
             messageText[0].text = string.Empty;
             messageText[1].text = string.Empty;
+            messageChoices.SetActive(false);
+            
             //Show Text Message ว่าอะไร
             switch(_index)
             {
                 case 0:
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[0];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[1];
                     break;
                 case 1:
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[2];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[3];
                     break;
                 case 2:
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[4];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[5];
                     break;
                 case 3:
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[6];
                     break;
                 case 7:
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[7];
                     break; 
                 case 8:
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[8];
                     break;
                 case 9:
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[9];
                     break;
                 case 10:
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[10];
                     break;
                  case 11:
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[11];
                     break;
                 case 12:
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[12];
                     break;
                 case 13:
+                //คุณต้องการลงลึกมากขึ้นกับคุณค่าของเธอไหม? ไปต่อ พอแค่นี้
                     messageText[0].text = gameManager.cardDatabaseSO.messages[13];
+                    StartCoroutine(PlayAnimationThen("Message_1", () =>
+                    {
+                        messageChoices.SetActive(true);
+                    }));
+                    break;
+                case 14:
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[14];
                     break;
             }
         }
@@ -134,14 +156,10 @@ namespace PersonalValue
         //หลังโชว์เสร็จกดแล้วจะไปไหน
         public void ButtonMessage()
         {
+            if(messageIndex == 14 || messageIndex == 13) return;
             messageButton.GetComponent<Button>().interactable = false;
 
-            CanvasGroup cg = messagePages.GetComponent<CanvasGroup>();
-            cg.alpha = 1; // เริ่มโปร่งใส
-            cg.DOFade(0f, 0.75f) // ค่อยๆ แสดง
-            .SetEase(Ease.InOutSine)// เลือก Ease ให้รู้สึก smooth
-            .OnComplete(()=> {
-                //messageButton.GetComponent<Button>().interactable = true; 
+                            //messageButton.GetComponent<Button>().interactable = true; 
                 messagePages.GetComponent<CanvasGroup>().alpha = 0;
                 stageCardPages[1].SetActive(true);
                 switch (messageIndex)
@@ -162,6 +180,8 @@ namespace PersonalValue
 
                         //Open Tutorial
                         gameManager.tutorial.tutorialPageGroup.SetActive(true);
+                        tutorialPages[1].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.tutorialSP[0];
+                        tutorialPages[2].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.tutorialSP[1];
                         canvasGame.GetComponent<Animator>().Play("Tutorial");
                         }));
                         break;
@@ -174,11 +194,7 @@ namespace PersonalValue
                     case 10: ShowMessage(11);break;
                     case 11: ShowMessage(12);break;
                     case 12: ShowMessage(13);break;
-                    
-                    default:
-                        break;
                 }
-                });
 
                 Debug.Log("🟢 กดปุ่มแล้ว" + messageIndex);
         }
@@ -191,12 +207,14 @@ namespace PersonalValue
             #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLInput.mobileKeyboardSupport = true; //ต้องมีไม่งั้นไอแพดเปิดแป้นพิมพ์ไม่ได้
             #endif
+            cameraZoomGroup.SetActive(true);
+            messageGroup.SetActive(true);
             ShowMessage(3);
         }
 
         public void Stage1()
         {
-            stageCardPages.ToList().ForEach(o => { o.SetActive(true); });
+            stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
             gameManager.tutorial.tutorialPageGroup.SetActive(false);
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
@@ -225,7 +243,7 @@ namespace PersonalValue
       
         private void Stage2()
         {
-            stageCardPages.ToList().ForEach(o => { o.SetActive(true); });
+            stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
 
@@ -241,7 +259,7 @@ namespace PersonalValue
 
         private void Stage3()
         {
-            stageCardPages.ToList().ForEach(o => { o.SetActive(true); });
+            stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
 
@@ -257,7 +275,7 @@ namespace PersonalValue
 
          private void Stage4()
         {
-            stageCardPages.ToList().ForEach(o => { o.SetActive(true); });
+            stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
             stageCardPriority.ToList().ForEach(o => { o.SetActive(true); });
@@ -284,8 +302,6 @@ namespace PersonalValue
                 card.transform.localScale = Vector3.zero; // เริ่มจาก 0
                 card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
             });
-            
-            Debug.Log("Stage4_2");
         }
 
         private void InitStage(BoxData[] _nameBox ,GameObject _boxPrefab)
@@ -308,7 +324,7 @@ namespace PersonalValue
                 box.GetComponent<DropBox>().dropName = o.boxName;
                 if(currentStage == Stage.Stage4) 
                 {
-                    box.transform.GetChild(0).GetComponent<Image>().sprite = nullSprite;
+                    box.transform.GetChild(0).GetComponent<Image>().sprite = gameManager.cardDatabaseSO.nullSprite;
                 }
                 else 
                 {
@@ -410,54 +426,62 @@ namespace PersonalValue
                 {
                     //หลังจบด่าน 1
                     case Stage.Stage1:
-                    stageCardPages[0].SetActive(false);
-                    boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
-                    cameraZoomIMG.SetActive(true);
-                    cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                    StartCoroutine(PlayAnimationThen("CameraZoom_1", () =>
-                    {
-                        cameraZoomIMG.SetActive(false);
-
-                        messagePages.GetComponent<CanvasGroup>().alpha = 1;
-                        messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-                        StartCoroutine(PlayAnimationThen("BGTransition_2", () =>
+                    //รอสามวิก่อน
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom1);}));
+                        void CameraZoom1()
                         {
-                            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
+                            cameraZoomIMG.SetActive(true);
+                            cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
+                            cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
 
-                            messageIndex = 4;
-                            ButtonMessage();//=> ด่าน 2 
-                        }));
-                    }));
-                        break;
+                            boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
+                            StartCoroutine(PlayAnimationThen("CameraZoom_1", () =>
+                            {
+                                cameraZoomIMG.SetActive(false);
+                                
+                                messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                                messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                                StartCoroutine(PlayAnimationThen("BGTransition_2", () =>
+                                {
+                                    bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
+
+                                    messageIndex = 4;
+                                    ButtonMessage();//=> ด่าน 2 
+                                })); //PlayAnimationThen
+                        })); //PlayAnimationThen
+                    }
+
+                    break;
+
                     //หลังจบด่าน 2
                     case Stage.Stage2:
-                        stageCardPages[0].SetActive(false);
-                        boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
-                        cameraZoomIMG.SetActive(true);
-                        cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                        RectTransform rect = cameraZoomIMG.GetComponent<RectTransform>();
-                        if (rect != null)
-                        {
-                            rect.anchoredPosition = new Vector2(-659.25f, 166.63f);
-                            rect.localPosition = new Vector3(rect.anchoredPosition.x, rect.anchoredPosition.y, 0); // เผื่อ Z ต้องเป็น 0
-                        }
-                        StartCoroutine(PlayAnimationThen("CameraZoom_2", () =>
-                        {
-                            cameraZoomIMG.SetActive(false);
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom2);}));
 
-                            messagePages.GetComponent<CanvasGroup>().alpha = 1;
-                            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-                            StartCoroutine(PlayAnimationThen("BGTransition_3", () =>
+                        void CameraZoom2()
+                        {
+                            cameraZoomIMG.SetActive(true);
+                            cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
+                            cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
+                            
+                            boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
+                            StartCoroutine(PlayAnimationThen("CameraZoom_2", () =>
                             {
-                                bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
+                                cameraZoomIMG.SetActive(false);
 
-                                messageIndex = 5;
-                                ButtonMessage();//=> ด่าน 3 
+                                messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                                messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                                StartCoroutine(PlayAnimationThen("BGTransition_3", () =>
+                                {
+                                    bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
+
+                                    messageIndex = 5;
+                                    ButtonMessage();//=> ด่าน 3 
+                                }));
+
                             }));
-
-                        }));
+                        }
                         break;
                     //หลังจบด่าน 3
                     case Stage.Stage3:
@@ -469,26 +493,33 @@ namespace PersonalValue
                         }
                         else
                         {
-                            Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
-                            stageCardPages[0].SetActive(false);
-                            boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
-                            cameraZoomIMG.SetActive(true);
-                            cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                            StartCoroutine(PlayAnimationThen("CameraZoom_3", () =>
+                            StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom3);}));
+
+                            void CameraZoom3()
                             {
-                                cameraZoomIMG.SetActive(false);
+                                Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
 
-                                messagePages.GetComponent<CanvasGroup>().alpha = 1;
-                                messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                                cameraZoomIMG.SetActive(true);
+                                cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
+                                cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
 
-                                StartCoroutine(PlayAnimationThen("BGTransition_4", () =>
+                                boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
+                                StartCoroutine(PlayAnimationThen("CameraZoom_3", () =>
                                 {
-                                    bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
+                                    cameraZoomIMG.SetActive(false);
 
-                                    messageIndex = 6;
-                                    ButtonMessage();//=> ด่าน 4 
+                                    messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                                    messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                                    StartCoroutine(PlayAnimationThen("BGTransition_4", () =>
+                                    {
+                                        bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
+
+                                        messageIndex = 6;
+                                        ButtonMessage();//=> ด่าน 4 
+                                    }));
                                 }));
-                            }));
+                            }
                         }
                         
                         break;
@@ -508,6 +539,28 @@ namespace PersonalValue
                 Debug.Log("🟢 ยังมีการ์ดเหลืออยู่");
                 return false;
             }
+
+            void FadeBoxList(System.Action onComplete)
+            {
+                stageCardPages[0].GetComponent<CanvasGroup>().DOFade(0,2f);
+                gameManager.countdownTimer.StopCountdown();
+                
+                var seq = DOTween.Sequence();
+
+                foreach (var o in boxList)
+                {
+                    if (o == importantBOX.gameObject) continue;
+
+                    CanvasGroup cg = o.GetComponent<CanvasGroup>();
+                    if (cg != null)
+                    {
+                        seq.Join(cg.DOFade(0f, 2f).SetEase(Ease.InOutSine));
+                    }
+                }
+
+                seq.OnComplete(() => { onComplete(); });
+            
+        }
         }
 
         private void NextStage()
@@ -567,15 +620,15 @@ namespace PersonalValue
 
         public void OpenTemplate()
         {
+            currentStage = Stage.Stage4;
             stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
+            stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(true); });
 
             CanvasGroup canvasGroup = stageTemplate[0].GetComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
-            canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{
-                
-            });
+            canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{});
 
             int index = 0;
             boxList.ToList().ForEach(o =>
@@ -592,6 +645,28 @@ namespace PersonalValue
             });
         }
 
+        public void OpenTemplateInput()
+        {
+            currentStage = Stage.Stage5;
+            messagePages.GetComponent<CanvasGroup>().alpha = 0;
+            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+            //Open Tutorial
+            gameManager.tutorial.tutorialPageGroup.SetActive(true);
+            tutorialPages[1].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.nullSprite;
+            tutorialPages[2].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.tutorialSP[2];
+            canvasGame.GetComponent<Animator>().Play("Tutorial");
+
+            stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
+            stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
+            stageTemplate.ToList().ForEach(o => { o.SetActive(false); });
+            stageTemplateInput.ToList().ForEach(o => { o.SetActive(true); });
+            
+            CanvasGroup canvasGroup = stageTemplate[0].GetComponent<CanvasGroup>();
+            canvasGroup.alpha = 0;
+            canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{});
+        }
+
         public void EndStage4()
         {
             ShowMessage(7);
@@ -599,7 +674,7 @@ namespace PersonalValue
 
         public void EndTemplete()
         {
-         ShowMessage(9);
+            ShowMessage(9);
         }
       #endregion
     }

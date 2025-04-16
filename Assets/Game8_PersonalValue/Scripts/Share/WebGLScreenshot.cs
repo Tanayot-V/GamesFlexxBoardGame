@@ -2,9 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Linq;
 
 public class WebGLScreenshot : MonoBehaviour
 {
+    public GameObject[] saveButton;
+
    [DllImport("__Internal")]
     private static extern void DownloadScreenshot(string base64Image);
     [DllImport("__Internal")]
@@ -22,6 +25,7 @@ public class WebGLScreenshot : MonoBehaviour
 
     private IEnumerator TakeScreenshot()
     {
+         saveButton.ToList().ForEach(o => { o.SetActive(false); });
         yield return new WaitForEndOfFrame();
 
         // สร้าง Texture2D สำหรับแคปหน้าจอ
@@ -42,6 +46,8 @@ public class WebGLScreenshot : MonoBehaviour
         #else
         Debug.Log("WebGL function only works in WebGL build!");
         #endif
+
+        saveButton.ToList().ForEach(o => { o.SetActive(true); });
 
         // ลบ Texture เพื่อลดการใช้หน่วยความจำ
         Destroy(screenshot);
