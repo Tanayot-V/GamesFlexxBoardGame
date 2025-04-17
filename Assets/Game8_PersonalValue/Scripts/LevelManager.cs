@@ -35,7 +35,6 @@ namespace PersonalValue
         public GameObject[] stageCardPriority;
         public GameObject[] stageTemplate;
         public GameObject[] stageTemplateInput;
-        public GameObject[] tutorialPages;
         public GameObject cropImagePage;
 
         [Header("Stage Model")]
@@ -55,6 +54,8 @@ namespace PersonalValue
         public GameObject mockUpDragCard;
         public GameObject timeObj;
         public GameObject priorityParent;
+        public TMPro.TMP_InputField nameTextField_Stage4;
+        public TMPro.TMP_InputField nameTextField_Stage5;
         public GameObject cameraZoomGroup;
         public GameObject cameraZoomIMG;
         public TMPro.TextMeshProUGUI cameraZoomTX;
@@ -159,7 +160,7 @@ namespace PersonalValue
             if(messageIndex == 14 || messageIndex == 13) return;
             messageButton.GetComponent<Button>().interactable = false;
 
-                            //messageButton.GetComponent<Button>().interactable = true; 
+                //messageButton.GetComponent<Button>().interactable = true; 
                 messagePages.GetComponent<CanvasGroup>().alpha = 0;
                 stageCardPages[1].SetActive(true);
                 switch (messageIndex)
@@ -179,10 +180,9 @@ namespace PersonalValue
                         bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
 
                         //Open Tutorial
-                        gameManager.tutorial.tutorialPageGroup.SetActive(true);
-                        tutorialPages[1].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.tutorialSP[0];
-                        tutorialPages[2].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.tutorialSP[1];
-                        canvasGame.GetComponent<Animator>().Play("Tutorial");
+                        GameManager.Instance.tutorial.InitTutorial();
+                        //gameManager.tutorial.tutorialPageGroup.SetActive(true);
+                        //canvasGame.GetComponent<Animator>().Play("Tutorial",0,0);
                         }));
                         break;
                     case 4: Stage2();break;
@@ -427,6 +427,7 @@ namespace PersonalValue
                     //หลังจบด่าน 1
                     case Stage.Stage1:
                     //รอสามวิก่อน
+                        gameManager.countdownTimer.StopCountdown();
                         StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom1);}));
                         void CameraZoom1()
                         {
@@ -456,6 +457,7 @@ namespace PersonalValue
 
                     //หลังจบด่าน 2
                     case Stage.Stage2:
+                        gameManager.countdownTimer.StopCountdown();
                         StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom2);}));
 
                         void CameraZoom2()
@@ -493,6 +495,7 @@ namespace PersonalValue
                         }
                         else
                         {
+                            gameManager.countdownTimer.StopCountdown();
                             StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom3);}));
 
                             void CameraZoom3()
@@ -543,7 +546,6 @@ namespace PersonalValue
             void FadeBoxList(System.Action onComplete)
             {
                 stageCardPages[0].GetComponent<CanvasGroup>().DOFade(0,2f);
-                gameManager.countdownTimer.StopCountdown();
                 
                 var seq = DOTween.Sequence();
 
@@ -635,7 +637,7 @@ namespace PersonalValue
             {
                 if(o.GetComponent<DropBox>().cardName_Stage4 != null)
                 {
-                    priorityList[index].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.GetComponent<DropBox>().cardName_Stage4.cardTH;
+                    priorityList[index].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = string.Format(o.GetComponent<DropBox>().cardName_Stage4.cardTH,"\n");
                 }
                 else
                 {
@@ -651,11 +653,10 @@ namespace PersonalValue
             messagePages.GetComponent<CanvasGroup>().alpha = 0;
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
 
+            nameTextField_Stage5.text = nameTextField_Stage4.text;
+
             //Open Tutorial
-            gameManager.tutorial.tutorialPageGroup.SetActive(true);
-            tutorialPages[1].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.nullSprite;
-            tutorialPages[2].GetComponent<Image>().sprite = gameManager.cardDatabaseSO.tutorialSP[2];
-            canvasGame.GetComponent<Animator>().Play("Tutorial");
+            gameManager.tutorial.InitTutorial2();
 
             stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });

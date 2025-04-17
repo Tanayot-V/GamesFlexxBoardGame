@@ -15,6 +15,13 @@ var WebGLInput = {
             if(typeof Runtime === "undefined") Runtime = { dynCall : dynCall }
         }
     },
+    IsIPad: function() {
+        if (navigator.userAgent.includes("iPad") ||
+            (navigator.userAgent.includes("Macintosh") && 'ontouchend' in document)) {
+            return 1;
+        }
+        return 0;
+    },
     WebGLInputCreate: function (canvasId, x, y, width, height, fontsize, text, placeholder, isMultiLine, isPassword, isHidden, isMobile) {
 
         var container = document.getElementById(UTF8ToString(canvasId));

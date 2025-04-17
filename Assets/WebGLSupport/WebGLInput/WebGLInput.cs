@@ -15,6 +15,13 @@ namespace WebGLSupport
 {
     internal class WebGLInputPlugin
     {
+                #if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    public static extern int IsIPad();
+#else
+    public static int IsIPad() { return 0; } // <-- fallback สำหรับ Editor/Android/iOS/etc.
+#endif
+
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")]
         public static extern void WebGLInputInit();
@@ -171,7 +178,7 @@ namespace WebGLSupport
         {
             var rect = input.GetScreenCoordinates();
             // モバイルの場合、強制表示する
-            if (showHtmlElement || Application.isMobilePlatform)
+            if (showHtmlElement || Application.isMobilePlatform || WebGLInputPlugin.IsIPad() == 1)
             {
                 var x = (int)(rect.x);
                 var y = (int)(Screen.height - (rect.y + rect.height));
@@ -198,8 +205,9 @@ namespace WebGLSupport
             var fontSize = Mathf.Max(14, input.fontSize); // limit font size : 14 !!
 
             // モバイルの場合、強制表示する
-            var isHidden = !(showHtmlElement || Application.isMobilePlatform);
-            id = WebGLInputPlugin.WebGLInputCreate(WebGLInput.CanvasId, rect.x, rect.y, rect.width, rect.height, fontSize, input.text, input.placeholder, input.lineType != LineType.SingleLine, isPassword, isHidden, Application.isMobilePlatform);
+            var isMobile = Application.isMobilePlatform || WebGLInputPlugin.IsIPad() == 1; // ✅ แบบนี้ถูก
+            var isHidden = !(showHtmlElement || isMobile);
+            id = WebGLInputPlugin.WebGLInputCreate(WebGLInput.CanvasId, rect.x, rect.y, rect.width, rect.height, fontSize, input.text, input.placeholder, input.lineType != LineType.SingleLine, isPassword, isHidden, isMobile);
 
             instances[id] = this;
             WebGLInputPlugin.WebGLInputEnterSubmit(id, input.lineType != LineType.MultiLineNewline);
@@ -440,7 +448,7 @@ namespace WebGLSupport
 
         private void CheckOutFocus()
         {
-            if (!Application.isMobilePlatform) return;
+            if (!Application.isMobilePlatform ||  WebGLInputPlugin.IsIPad() != 1) return;
             if (!instances.ContainsKey(id)) return;
             var current = EventSystem.current.currentSelectedGameObject;
             if (current != null) return;

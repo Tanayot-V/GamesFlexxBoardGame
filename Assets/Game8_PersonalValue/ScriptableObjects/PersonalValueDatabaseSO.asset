@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: PersonalValueDatabaseSO
   m_EditorClassIdentifier: 
   cardDataSO:
-  - {fileID: 11400000, guid: 0aa6dec2144634ccbb47891f1f29ba7c, type: 2}
-  - {fileID: 11400000, guid: 80b49287200f04247b8af3babe74321b, type: 2}
-  - {fileID: 11400000, guid: d8afbffff8f4f410693d1f2bac8d9442, type: 2}
-  - {fileID: 11400000, guid: 891cc7dde8517414bb4875dccba5e65e, type: 2}
-  - {fileID: 11400000, guid: 503e352c841ff46bfb5e94ca627c1367, type: 2}
+  - {fileID: 11400000, guid: 68f0db362d3024703a29ca9c74acbc25, type: 2}
+  - {fileID: 11400000, guid: 122ab889bd3634cfaa3281c18c7271fb, type: 2}
+  - {fileID: 11400000, guid: 7e7be4a14583f49a4a8790e1a8ef6cb2, type: 2}
+  - {fileID: 11400000, guid: 5c8e0d7fd086b4ecf965ede217f0bfd6, type: 2}
   headers:
   - "\u0E14\u0E48\u0E32\u0E19\u0E17\u0E35\u0E48 1 : \u0E1E\u0E34\u0E08\u0E32\u0E23\u0E13\u0E32
     \"\u0E01\u0E32\u0E23\u0E4C\u0E14\u0E04\u0E38\u0E13\u0E04\u0E48\u0E32\" \u0E17\u0E35\u0E48\u0E21\u0E35\u0E04\u0E27\u0E32\u0E21\u0E2A\u0E33\u0E04\u0E31\u0E0D\u0E01\u0E31\u0E1A\u0E04\u0E38\u0E13

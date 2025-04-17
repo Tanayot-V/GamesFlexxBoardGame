@@ -11,6 +11,7 @@ namespace PersonalValue
 
 public class CropImage : MonoBehaviour
 {
+    public GameObject cropObj;
     public Image[] imgCropAll;
     public Image imgCrop;
     private RectTransform rectTransform;
@@ -45,18 +46,13 @@ public class CropImage : MonoBehaviour
 
     void Update()
     {
-        /*
-        // ✅ Mouse Scroll Zoom (PC)
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (scroll != 0)
+        if(cropObj.activeInHierarchy)
         {
-            Zoom(scroll * 10); // เพิ่ม sensitivity สำหรับ scroll
-        }*/
-
-        imgCropAll.ToList().ForEach(x => x.sprite = imgCrop.sprite);
-        imgCropAll.ToList().ForEach(x => x.rectTransform.localScale = imgCrop.rectTransform.localScale);
-        imgCropAll.ToList().ForEach(x => x.rectTransform.position = imgCrop.rectTransform.position);
-        imgCropAll.ToList().ForEach(x => x.rectTransform.rotation = imgCrop.rectTransform.rotation);
+            imgCropAll.ToList().ForEach(x => x.sprite = imgCrop.sprite);
+            imgCropAll.ToList().ForEach(x => x.rectTransform.localScale = imgCrop.rectTransform.localScale);
+            imgCropAll.ToList().ForEach(x => x.rectTransform.position = imgCrop.rectTransform.position);
+            imgCropAll.ToList().ForEach(x => x.rectTransform.rotation = imgCrop.rectTransform.rotation);
+        }
     }
 
     private void Zoom(float delta)
@@ -88,7 +84,7 @@ public class CropImage : MonoBehaviour
     {
         if(imgCrop.GetComponent<Image>().sprite == null)
         {
-            GameManager.Instance.webGLFileLoaderButton.OnFileSelected(string.Empty);
+            //GameManager.Instance.webGLFileLoaderButton.OnFileSelected(string.Empty);
             GameManager.Instance.webGLFileLoaderButton.PickImage();
             OpenCropSetting();
             return;

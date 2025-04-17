@@ -15,24 +15,6 @@ namespace PersonalValue
             gameManager = GameManager.Instance;
         }
 
-        #region Tutorial
-        public void HideTutorialButton()
-        {
-            switch (gameManager.levelManager.currentStage)
-            {
-                case Stage.Stage1:
-                    gameManager.tutorial.tutorialPageGroup.SetActive(false);
-                    gameManager.levelManager.Stage1();
-                    Debug.Log("Stage1");
-                break;
-                case Stage.Stage5:
-                    gameManager.tutorial.tutorialPageGroup.SetActive(false);
-                break;
-
-            }
-        }
-        #endregion
-
         public void EndStage4Button()
         {
             gameManager.levelManager.EndStage4();
