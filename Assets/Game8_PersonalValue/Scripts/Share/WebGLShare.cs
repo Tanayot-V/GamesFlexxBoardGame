@@ -48,7 +48,7 @@ public class WebGLShare : MonoBehaviour
         string base64Image = System.Convert.ToBase64String(imageData);
         string base64String = "data:image/png;base64," + base64Image;
 
-        saveButton.ToList().ForEach(o => { o.SetActive(false); });
+        saveButton.ToList().ForEach(o => { o.SetActive(true); });
         Destroy(screenshot);
 
         // 📤 ส่งไปที่ Web Share API

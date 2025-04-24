@@ -22,8 +22,9 @@ public class WebGLFileLoaderButton : MonoBehaviour
 
     [DllImport("__Internal")]
     private static extern void HideFileInput();
-    
 
+    private bool isShowFileInputButton;
+    
     void Start()
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
@@ -32,21 +33,29 @@ public class WebGLFileLoaderButton : MonoBehaviour
 
             // ซ่อนไว้ก่อนตอนเริ่มต้น
             HideFileInput();
+
         #endif
     }
 
     public void PickImage()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        //ShowFileInput(); // ✅ เปิด File Picker ผ่าน JavaScript
-        InitializeVisibleFileInput();
+        //InitializeVisibleFileInput();
+        if(!isShowFileInputButton)  
+        {
+            ShowFileInputButton(); // ✅ เปิด File Picker ผ่าน JavaScript
+        }
+        else 
+        {
+            HideFileInputButton();
+        }
 #else
         PickImageInEditor();
         Debug.Log("File Picker works only in WebGL.");
 #endif
     }
 
-      private void PickImageInEditor()
+    private void PickImageInEditor()
     {
 #if UNITY_EDITOR
         string filePath = EditorUtility.OpenFilePanel("เลือกไฟล์รูป", "", "png,jpg,jpeg");
@@ -103,7 +112,13 @@ public class WebGLFileLoaderButton : MonoBehaviour
     {   
         RectTransform rect = targetImage.GetComponent<RectTransform>();
         rect.sizeDelta = new Vector2(texture.width, texture.height);
-        rect.localScale = new Vector3(0.15f, 0.15f, 1);
+
+        if(texture.width < 600) rect.localScale = new Vector3(1f, 1f, 1);
+        else if(texture.width > 1200)rect.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        else if(texture.width > 2400)rect.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        else rect.localScale = new Vector3(1f, 1f, 1);
+
+        GameManager.Instance.cropImage.zoomSlider.value = rect.localScale.x;
 
          BoxCollider2D box = targetImage.GetComponent<BoxCollider2D>();
         if (box != null)
@@ -122,6 +137,7 @@ public class WebGLFileLoaderButton : MonoBehaviour
     {
          #if UNITY_WEBGL && !UNITY_EDITOR
             ShowFileInput();
+            isShowFileInputButton = true;
         #endif
     }
 
@@ -129,6 +145,7 @@ public class WebGLFileLoaderButton : MonoBehaviour
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
             HideFileInput();
+            isShowFileInputButton = false;
         #endif
     }
 }

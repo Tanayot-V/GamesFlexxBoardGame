@@ -15,7 +15,7 @@ public class CropImage : MonoBehaviour
     public Image[] imgCropAll;
     public Image imgCrop;
     private RectTransform rectTransform;
-    [SerializeField] private Slider zoomSlider;  
+    public Slider zoomSlider;  
 
     [Header("Zoom Settings")]
     public float zoomSpeed = 0.01f;
@@ -38,7 +38,7 @@ public class CropImage : MonoBehaviour
         // ✅ Set Slider Event
         zoomSlider.onValueChanged.AddListener(OnZoomSliderChanged);
     }
-    private void OnZoomSliderChanged(float value)
+    public void OnZoomSliderChanged(float value)
     {
         rectTransform.localScale = new Vector3(value, value, 1);
         imgCropAll.ToList().ForEach(x => x.rectTransform.localScale = imgCrop.rectTransform.localScale);
@@ -85,7 +85,7 @@ public class CropImage : MonoBehaviour
         if(imgCrop.GetComponent<Image>().sprite == null)
         {
             //GameManager.Instance.webGLFileLoaderButton.OnFileSelected(string.Empty);
-            GameManager.Instance.webGLFileLoaderButton.PickImage();
+            //GameManager.Instance.webGLFileLoaderButton.PickImage();
             OpenCropSetting();
             return;
         }
@@ -96,7 +96,7 @@ public class CropImage : MonoBehaviour
 
         void OpenCropSetting()
         {
-            GameManager.Instance.webGLFileLoaderButton.ShowFileInputButton();
+            //GameManager.Instance.webGLFileLoaderButton.ShowFileInputButton();
             GameManager.Instance.levelManager.cropImagePage.SetActive(true);
         }
     }

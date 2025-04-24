@@ -8,7 +8,8 @@ mergeInto(LibraryManager.library, {
       input.style.top = '0';
       input.style.left = '0';
       input.style.transform = '';
-
+      input.id = 'hidden-file-upload';
+      
       input.style.width = '200px';         // ✅ กำหนดความกว้าง
       input.style.height = '50px';         // ✅ กำหนดความสูง
       input.style.padding = '10px 20px';   // เพิ่มพื้นที่ภายในปุ่ม (optional)

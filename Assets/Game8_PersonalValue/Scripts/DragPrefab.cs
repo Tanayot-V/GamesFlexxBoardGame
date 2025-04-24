@@ -60,7 +60,7 @@ namespace PersonalValue
             dropBox.GetComponent<DropBox>().cardName_Stage4 = dragDropCard.cardDataSO;
 
             dropBox.GetComponent<DropBox>().transform.GetChild(0).GetComponent<Image>().sprite = dragDropCard.cardDataSO.picture;
-            levelManager.UpdateFillCount_Stage4();
+            //levelManager.UpdateFillCount_Stage4();
             Destroy(dragDropCard.gameObject);
             return;
         }

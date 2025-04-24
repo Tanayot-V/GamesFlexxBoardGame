@@ -53,6 +53,7 @@ namespace PersonalValue
         public GameObject cardParent;
         public GameObject mockUpDragCard;
         public GameObject timeObj;
+        public Button myValueButton;
         public GameObject priorityParent;
         public TMPro.TMP_InputField nameTextField_Stage4;
         public TMPro.TMP_InputField nameTextField_Stage5;
@@ -71,6 +72,10 @@ namespace PersonalValue
         public List<GameObject> boxList = new List<GameObject>();
         public List<GameObject> priorityList = new List<GameObject>();
         private List<CardDataSO> cardDataList = new List<CardDataSO>();
+
+        private List<CardDataSO> cardDataList_Stage1 = new List<CardDataSO>(); //ไพ่ด่านที่ 1
+        private List<CardDataSO> cardDataList_Stage2 = new List<CardDataSO>(); //ไพ่ด่านที่ 2
+        private List<CardDataSO> cardDataList_Stage3 = new List<CardDataSO>(); //ไพ่ด่านที่ 3
 
 
         #region Message
@@ -201,7 +206,7 @@ namespace PersonalValue
         #endregion
 
         #region Gameplay
-        public void Start()
+        private void Start()
         {
             gameManager = GameManager.Instance;
             #if UNITY_WEBGL && !UNITY_EDITOR
@@ -209,7 +214,22 @@ namespace PersonalValue
             #endif
             cameraZoomGroup.SetActive(true);
             messageGroup.SetActive(true);
-            ShowMessage(3);
+            ShowMessage(1);
+        }
+
+        private void Update()
+        {
+            if(currentStage == Stage.Stage4)
+            {
+                if(boxStageCount() == boxList.Count)
+                {
+                    myValueButton.interactable = true;
+                }
+                else
+                {
+                    myValueButton.interactable = false;
+                }
+            }
         }
 
         public void Stage1()
@@ -253,7 +273,7 @@ namespace PersonalValue
             boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(170, 0);
 
             timeObj.SetActive(true);
-            NextStage();
+            NextStage(cardDataList_Stage1);
             InitStage(gameManager.cardDatabaseSO.boxsNameList_2,boxPrefab);
         }
 
@@ -269,7 +289,7 @@ namespace PersonalValue
             boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(90, 0);
 
             timeObj.SetActive(true);
-            NextStage();
+            NextStage(cardDataList_Stage2);
             InitStage(gameManager.cardDatabaseSO.boxsNameList_3 ,boxPrefab);
         }
 
@@ -277,7 +297,7 @@ namespace PersonalValue
         {
             stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            fillBarGroup.SetActive(true);
+            fillBarGroup.SetActive(false);
             stageCardPriority.ToList().ForEach(o => { o.SetActive(true); });
 
             currentStage = Stage.Stage4;
@@ -287,7 +307,7 @@ namespace PersonalValue
 
             gameManager.countdownTimer.StopCountdown();
             timeObj.SetActive(false);
-            NextStage();
+            NextStage(cardDataList_Stage3);
             CreateBOX(gameManager.cardDatabaseSO.boxsNameList_4, boxPriorityPrefab);
             
             UiController.Instance.DestorySlot(priorityParent);
@@ -426,9 +446,17 @@ namespace PersonalValue
                 {
                     //หลังจบด่าน 1
                     case Stage.Stage1:
-                    //รอสามวิก่อน
-                        gameManager.countdownTimer.StopCountdown();
-                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom1);}));
+                        if(importantBOX.cardDataSOList.Count < 5)
+                        {
+                            Stage1();
+                        }
+                        else
+                        {
+                            //รอสามวิก่อน
+                            gameManager.countdownTimer.StopCountdown();
+                            StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom1);}));
+                            importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage1.Add(o); });
+                        }
                         void CameraZoom1()
                         {
                             cameraZoomIMG.SetActive(true);
@@ -452,14 +480,20 @@ namespace PersonalValue
                                 })); //PlayAnimationThen
                         })); //PlayAnimationThen
                     }
-
                     break;
 
                     //หลังจบด่าน 2
                     case Stage.Stage2:
-                        gameManager.countdownTimer.StopCountdown();
-                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom2);}));
-
+                        if(importantBOX.cardDataSOList.Count < 5)
+                        {
+                            Stage2();
+                        }
+                        else
+                        {
+                            gameManager.countdownTimer.StopCountdown();
+                            StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom2);}));
+                            importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage2.Add(o); });
+                        }
                         void CameraZoom2()
                         {
                             cameraZoomIMG.SetActive(true);
@@ -488,7 +522,7 @@ namespace PersonalValue
                     //หลังจบด่าน 3
                     case Stage.Stage3:
                         //เช็คว่า ขาดไม่ได้ จะต้องไม่เกิน 15 ใบ
-                        if(importantBOX.cardDataSOList.Count > 15)
+                        if(importantBOX.cardDataSOList.Count < 5 || importantBOX.cardDataSOList.Count > 15)
                         {
                             Debug.Log("🟢 ขาดไม่ได้ เกิน 15 ใบ เล่นใหม่");
                             Stage3();
@@ -497,8 +531,9 @@ namespace PersonalValue
                         {
                             gameManager.countdownTimer.StopCountdown();
                             StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom3);}));
-
-                            void CameraZoom3()
+                            importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage3.Add(o); });
+                        }
+                        void CameraZoom3()
                             {
                                 Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
 
@@ -522,9 +557,7 @@ namespace PersonalValue
                                         ButtonMessage();//=> ด่าน 4 
                                     }));
                                 }));
-                            }
-                        }
-                        
+                            }                        
                         break;
                     case Stage.Stage4:
                         currentStage = Stage.Stage5;
@@ -565,10 +598,10 @@ namespace PersonalValue
         }
         }
 
-        private void NextStage()
+        private void NextStage(List<CardDataSO> _cardDataSOs)
         {
             cardDataList.Clear();
-            importantBOX.cardDataSOList.ToList().ForEach(o =>
+            _cardDataSOs.ToList().ForEach(o =>
             {
                 cardDataList.Add(o);
             });

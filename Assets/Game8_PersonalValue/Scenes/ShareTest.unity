@@ -356,7 +356,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -130.49065, y: -50}
+  m_AnchoredPosition: {x: -130.49066, y: -50}
   m_SizeDelta: {x: 180, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &251904968
@@ -743,7 +743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -130.49, y: -228}
+  m_AnchoredPosition: {x: -130.48999, y: -228}
   m_SizeDelta: {x: 180, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &668908605
@@ -851,7 +851,7 @@ GameObject:
   - component: {fileID: 692217442}
   - component: {fileID: 692217443}
   m_Layer: 0
-  m_Name: WebGLFileLoaderSafari
+  m_Name: WebGLFileLoaderButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -884,7 +884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24532956eb8c4b2a8529d5bb5f00ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetImage: {fileID: 0}
+  targetImage: {fileID: 4815936}
+  targetButton: {fileID: 1518013023}
 --- !u!1 &776452774
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,6 +915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978be42e591be4d9598479160cf7c338, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveButton: []
 --- !u!4 &776452776
 Transform:
   m_ObjectHideFlags: 0
@@ -976,6 +978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff6ee68cd311464599ec60299df6a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveButton: []
 --- !u!114 &784269507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,7 +1051,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -130.49065, y: -138.7}
+  m_AnchoredPosition: {x: -130.49066, y: -138.70001}
   m_SizeDelta: {x: 180, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &817439281
@@ -1600,8 +1603,8 @@ Canvas:
   m_GameObject: {fileID: 1165672564}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1952921856}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1794,7 +1797,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 692217443}
-        m_TargetAssemblyTypeName: WebGLFileLoaderSafari, Assembly-CSharp
+        m_TargetAssemblyTypeName: WebGLFileLoaderButton, Assembly-CSharp
         m_MethodName: PickImage
         m_Mode: 1
         m_Arguments:
@@ -1900,9 +1903,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '39
-
-'
+  m_text: 44
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
