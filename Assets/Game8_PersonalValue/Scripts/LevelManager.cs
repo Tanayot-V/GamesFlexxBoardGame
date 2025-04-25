@@ -70,7 +70,8 @@ namespace PersonalValue
         public Stage currentStage;
         public DropBox importantBOX;
         public List<GameObject> boxList = new List<GameObject>();
-        public List<GameObject> priorityList = new List<GameObject>();
+        public List<TMPro.TextMeshProUGUI> priorityListTexts = new List<TMPro.TextMeshProUGUI>();
+        public List<TMPro.TextMeshProUGUI> priorityLastListTexts  = new List<TMPro.TextMeshProUGUI>();
         private List<CardDataSO> cardDataList = new List<CardDataSO>();
 
         private List<CardDataSO> cardDataList_Stage1 = new List<CardDataSO>(); //ไพ่ด่านที่ 1
@@ -661,23 +662,25 @@ namespace PersonalValue
             stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(true); });
 
-            CanvasGroup canvasGroup = stageTemplate[0].GetComponent<CanvasGroup>();
-            canvasGroup.alpha = 0;
-            canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{});
-
             int index = 0;
             boxList.ToList().ForEach(o =>
             {
                 if(o.GetComponent<DropBox>().cardName_Stage4 != null)
                 {
-                    priorityList[index].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = string.Format(o.GetComponent<DropBox>().cardName_Stage4.cardTH,"\n");
+                    priorityListTexts[index].text = string.Format(o.GetComponent<DropBox>().cardName_Stage4.cardTH,"\n");
                 }
                 else
                 {
-                    priorityList[index].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = string.Empty;
+                    priorityListTexts[index].text = string.Empty;
                 }
                 index++;
             });
+
+
+            CanvasGroup canvasGroup = stageTemplate[0].GetComponent<CanvasGroup>();
+            canvasGroup.alpha = 0;
+            canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{});
+
         }
 
         public void OpenTemplateInput()
@@ -696,6 +699,8 @@ namespace PersonalValue
             stageTemplate.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplateInput.ToList().ForEach(o => { o.SetActive(true); });
             
+            int index = 0;
+            priorityListTexts.ToList().ForEach(o => { priorityLastListTexts[index].text = o.text; index++; });
             CanvasGroup canvasGroup = stageTemplate[0].GetComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
             canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{});
