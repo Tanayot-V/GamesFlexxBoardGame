@@ -22,5 +22,18 @@ public class DropBox : MonoBehaviour
     {
         
     }
+    
+    public void UninstallCardStage4()
+    {
+        if (cardName_Stage4 != null)
+        {
+            GameManager.Instance.levelManager.UninstallCardStage4(this,cardName_Stage4);
+            cardName_Stage4 = null;
+        }
+        else
+        {
+            Debug.Log("Card is null");
+        }
+    }
 
 }

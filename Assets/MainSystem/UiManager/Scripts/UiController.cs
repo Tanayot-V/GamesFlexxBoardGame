@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UiController : MonoBehaviour
 {
@@ -134,6 +135,31 @@ public class UiController : MonoBehaviour
     {
         Button btn = ButtonGroupManager.Instance.GetButton(_group, _key);
         if (btn != null) ButtonGroupManager.Instance.Select(btn.GetComponent<ButtonGroup>());
+    }
+
+    public void CanvasGroupFade(GameObject _go,bool _IsFadeIn,float _duration,System.Action action = null)
+    {
+        CanvasGroup canvasGroup = _go.GetComponent<CanvasGroup>();
+        //Fade In 0 => 1
+        if(_IsFadeIn)
+        {   
+            canvasGroup.alpha = 0;
+            canvasGroup.gameObject.SetActive(true);
+            canvasGroup.DOFade(1,_duration).OnComplete(()=>{
+                action?.Invoke();
+            });
+        }
+
+        //Fade Out 1 => 0
+        else
+        {
+            canvasGroup.gameObject.SetActive(true);
+            canvasGroup.alpha = 1;
+            canvasGroup.DOFade(0,_duration).OnComplete(()=>{
+                canvasGroup.gameObject.SetActive(false); // ปิดหลัง fade out
+                action?.Invoke();
+            });        
+        }
     }
     
 }

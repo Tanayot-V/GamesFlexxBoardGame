@@ -85,6 +85,7 @@ namespace PersonalValue
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
             stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(false); });
+            stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
             cropImagePage.SetActive(false);
             GameManager.Instance.tutorial.tutorialPageGroup.SetActive(false);
             cameraZoomIMG.SetActive(false);
@@ -103,60 +104,67 @@ namespace PersonalValue
             switch(_index)
             {
                 case 0:
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[0];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[1];
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     break;
                 case 1:
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[2];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[3];
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     break;
                 case 2:
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[4];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[5];
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     break;
                 case 3:
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[6];
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
                     break;
                 case 7:
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[7];
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     break; 
                 case 8:
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[8];
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     break;
                 case 9:
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[9];
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     break;
                 case 10:
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[10];
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     break;
                  case 11:
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[11];
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     break;
                 case 12:
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[12];
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     break;
                 case 13:
                 //คุณต้องการลงลึกมากขึ้นกับคุณค่าของเธอไหม? ไปต่อ พอแค่นี้
                     messageText[0].text = gameManager.cardDatabaseSO.messages[13];
-                    StartCoroutine(PlayAnimationThen("Message_1", () =>
+                    StartCoroutine(PlayAnimationThen("Message_2", () =>
                     {
-                        messageChoices.SetActive(true);
+                        UiController.Instance.CanvasGroupFade(messageChoices,true,1);
+                        //messageChoices.SetActive(true);
                     }));
                     break;
                 case 14:
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
                     messageText[0].text = gameManager.cardDatabaseSO.messages[14];
+                    canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
                     break;
+                case 15:
+                //ปุ่มสิ้นสุด
+                    stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[14];
+                    canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
+                break;
             }
         }
 
@@ -236,6 +244,7 @@ namespace PersonalValue
         public void Stage1()
         {
             stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
+
             gameManager.tutorial.tutorialPageGroup.SetActive(false);
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
@@ -323,6 +332,20 @@ namespace PersonalValue
                 card.transform.localScale = Vector3.zero; // เริ่มจาก 0
                 card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
             });
+        }
+
+        public void UninstallCardStage4(DropBox _dropbox,CardDataSO _cardDataSO)
+        {
+            cardDataList.Add(_cardDataSO);
+            GameObject card = UiController.Instance.InstantiateUIView(cardPrefab, priorityParent);
+            card.name = _cardDataSO.name;
+            card.GetComponent<Image>().sprite = _cardDataSO.picture;
+            card.GetComponent<DragDropCard>().cardDataSO = _cardDataSO;
+
+                // 🔥 เพิ่ม Effect Scale ด้วย DOTween
+            card.transform.localScale = Vector3.zero; // เริ่มจาก 0
+            card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
+            _dropbox.transform.GetChild(0).GetComponent<Image>().sprite = gameManager.cardDatabaseSO.nullSprite;
         }
 
         private void InitStage(BoxData[] _nameBox ,GameObject _boxPrefab)
