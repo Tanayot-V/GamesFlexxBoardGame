@@ -24,15 +24,17 @@ namespace PersonalValue
         }
 
         //คำถามไปต่อ
-        public void MessageNextButton()
+        public void MessageNextButton() //คุณต้องการลงลึกไปอีกไหม
         {
-            gameManager.levelManager.OpenTemplateInput();
+            //if( gameManager.levelManager.GetMessageIndex() == 13) gameManager.levelManager.OpenTemplateInput();
+            if( gameManager.levelManager.GetMessageIndex() == 13) gameManager.levelManager.ShowMessage(16);
+            if( gameManager.levelManager.GetMessageIndex() == 16) gameManager.levelManager.ShowMessage(17);
         }
 
         //คำถาม พอแค่นี้
-        public void MessageStopButton()
+        public void MessageStopButton() //คุณต้องการลงลึกไปอีกไหม
         {
-            gameManager.levelManager.ShowMessage(14);
+            gameManager.levelManager.ShowMessage(14);//ไดอารอคตอนจบ
         }
 
         public void EndGameButton()

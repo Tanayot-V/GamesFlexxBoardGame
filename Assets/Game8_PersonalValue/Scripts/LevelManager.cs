@@ -30,7 +30,6 @@ namespace PersonalValue
         public GameObject messagePages;
         public GameObject messageGroup;        
         public GameObject messageButton;
-        public GameObject messageChoices;
         public GameObject[] stageCardPages;
         public GameObject[] stageCardPriority;
         public GameObject[] stageTemplate;
@@ -61,10 +60,12 @@ namespace PersonalValue
         public GameObject cameraZoomIMG;
         public TMPro.TextMeshProUGUI cameraZoomTX;
         private readonly int maxCardCount = 5;
+        [SerializeField] private GameObject animationTemplatePage;
 
         [Header("Stage State")]
         public int fillCardCountCurrent = 0;
         private int messageIndex = 0;
+        private int templateIndex = 0;
         public int fillCardCountMax = 0;
         public int currentCardCount = 0;
         public Stage currentStage;
@@ -89,6 +90,7 @@ namespace PersonalValue
             cropImagePage.SetActive(false);
             GameManager.Instance.tutorial.tutorialPageGroup.SetActive(false);
             cameraZoomIMG.SetActive(false);
+            animationTemplatePage.SetActive(false);
 
             messagePages.GetComponent<CanvasGroup>().alpha = 1;
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -98,9 +100,14 @@ namespace PersonalValue
 
             messageText[0].text = string.Empty;
             messageText[1].text = string.Empty;
-            messageChoices.SetActive(false);
             
             //Show Text Message ว่าอะไร
+            //Message_0 = สองบรรทัด => แตะต่อไป
+            //Message_1 = หนึ่งบรรทัด => แตะต่อไป
+            //Message_2 = สองบรรทัด => ไม่มีแตะถัดไป
+            //Message_3 = สามบรรทัด => มีแตะถัดไป
+            //Message_4 = สามบรรทัด => ไม่มีแตะถัดไป
+
             switch(_index)
             {
                 case 0:
@@ -149,23 +156,38 @@ namespace PersonalValue
                 case 13:
                 //คุณต้องการลงลึกมากขึ้นกับคุณค่าของเธอไหม? ไปต่อ พอแค่นี้
                     messageText[0].text = gameManager.cardDatabaseSO.messages[13];
-                    StartCoroutine(PlayAnimationThen("Message_2", () =>
-                    {
-                        UiController.Instance.CanvasGroupFade(messageChoices,true,1);
-                        //messageChoices.SetActive(true);
-                    }));
+                    canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
+
                     break;
                 case 14:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[14];
                     canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
                     break;
                 case 15:
-                //ปุ่มสิ้นสุด
+                //ปุ่มสิ้นสุด ขอบคุณที่ให้โอกาสตัวเอง...
                     stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
                     messageText[0].text = gameManager.cardDatabaseSO.messages[14];
                     canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
                 break;
+                case 16:
+                 messageText[0].text = gameManager.cardDatabaseSO.messages[15];
+                 messageText[1].text = gameManager.cardDatabaseSO.messages[16];
+                 messageText[2].text = gameManager.cardDatabaseSO.messages[17];
+                 canvasGame.GetComponent<Animator>().Play("Message_4",0,0);
+                    //StartCoroutine(PlayAnimationThen("Message_4", () =>{}));
+                break;
+                case 17:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[18];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[19];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[20];
+                    canvasGame.GetComponent<Animator>().Play("Message_3",0,0);
+                    break;                    
             }
+        }
+
+        public int GetMessageIndex()
+        {
+            return messageIndex;
         }
 
         //หลังโชว์เสร็จกดแล้วจะไปไหน
@@ -208,9 +230,41 @@ namespace PersonalValue
                     case 10: ShowMessage(11);break;
                     case 11: ShowMessage(12);break;
                     case 12: ShowMessage(13);break;
+                    case 17: 
+                        stageTemplate[1].SetActive(false);
+                        stageTemplate[2].SetActive(false);
+
+                        stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = false;
+                        UiController.Instance.CanvasGroupFade(stageTemplate[0],true,2f,()=>{
+                            animationTemplatePage.SetActive(true);
+                            StartCoroutine(PlayAnimationThen("Template-box_1", () => {
+                                canvasGame.GetComponent<Animator>().Play("Template-Massage",0,0);
+                                messageIndex = 18;
+                            }));
+
+                            UiController.Instance.CanvasGroupFade(stageTemplate[0],false,3f,()=>{
+                            });
+                        });
+
+                       
+                    break;
+
+                    case 18:
+                        canvasGame.GetComponent<Animator>().Play("Template-Massage_2",0,0);
+                        messageIndex = 19;
+                    break;
+                    case 19:
+                        canvasGame.GetComponent<Animator>().Play("Template-Massage_3",0,0);
+                        messageIndex = 20;
+                    break;
                 }
 
                 Debug.Log("🟢 กดปุ่มแล้ว" + messageIndex);
+        }
+
+        public void AnimationTemplateNextButton()
+        {
+            
         }
         #endregion
 
@@ -223,7 +277,7 @@ namespace PersonalValue
             #endif
             cameraZoomGroup.SetActive(true);
             messageGroup.SetActive(true);
-            ShowMessage(1);
+            ShowMessage(12);
         }
 
         private void Update()
