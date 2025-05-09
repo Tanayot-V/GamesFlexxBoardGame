@@ -40,6 +40,21 @@ namespace PersonalValue
         public void EndGameButton()
         {
             gameManager.levelManager.ShowMessage(15);
+        } 
+        
+        public void EndGameButton2()
+        {
+            gameManager.levelManager.ShowMessage(22);
+        }
+        
+        public void ConfirmPageButton()
+        {
+            gameManager.levelManager.ConfirmPageButton();
+        }
+
+        public void OpenComfirmPageButton(GameObject _obj)
+        {
+          UiController.Instance.CanvasGroupFade(_obj,true,1f);
         }
     }
 }

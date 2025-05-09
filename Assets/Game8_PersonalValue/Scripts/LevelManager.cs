@@ -34,6 +34,7 @@ namespace PersonalValue
         public GameObject[] stageCardPriority;
         public GameObject[] stageTemplate;
         public GameObject[] stageTemplateInput;
+        public GameObject[] animationTemplatePage;
         public GameObject cropImagePage;
 
         [Header("Stage Model")]
@@ -42,6 +43,7 @@ namespace PersonalValue
         public TMPro.TextMeshProUGUI headerText;
         public TMPro.TextMeshProUGUI[] messageText;
         public Image bgIMG;
+        public Image bgIMGMessage;
         public GameObject fillBarGroup;
         public TMPro.TextMeshProUGUI fillText;
         public GameObject fillBar;
@@ -60,21 +62,21 @@ namespace PersonalValue
         public GameObject cameraZoomIMG;
         public TMPro.TextMeshProUGUI cameraZoomTX;
         private readonly int maxCardCount = 5;
-        [SerializeField] private GameObject animationTemplatePage;
 
         [Header("Stage State")]
         public int fillCardCountCurrent = 0;
         private int messageIndex = 0;
-        private int templateIndex = 0;
         public int fillCardCountMax = 0;
         public int currentCardCount = 0;
+        private int confirmPageIndex = 0;
+        private int boxAnimateIndex = 0;
         public Stage currentStage;
         public DropBox importantBOX;
         public List<GameObject> boxList = new List<GameObject>();
         public List<TMPro.TextMeshProUGUI> priorityListTexts = new List<TMPro.TextMeshProUGUI>();
         public List<TMPro.TextMeshProUGUI> priorityLastListTexts  = new List<TMPro.TextMeshProUGUI>();
+        public List<GameObject> templateBoxList = new List<GameObject>();
         private List<CardDataSO> cardDataList = new List<CardDataSO>();
-
         private List<CardDataSO> cardDataList_Stage1 = new List<CardDataSO>(); //ไพ่ด่านที่ 1
         private List<CardDataSO> cardDataList_Stage2 = new List<CardDataSO>(); //ไพ่ด่านที่ 2
         private List<CardDataSO> cardDataList_Stage3 = new List<CardDataSO>(); //ไพ่ด่านที่ 3
@@ -90,7 +92,9 @@ namespace PersonalValue
             cropImagePage.SetActive(false);
             GameManager.Instance.tutorial.tutorialPageGroup.SetActive(false);
             cameraZoomIMG.SetActive(false);
-            animationTemplatePage.SetActive(false);
+            animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
+            animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
+            bgIMGMessage.gameObject.SetActive(true);
 
             messagePages.GetComponent<CanvasGroup>().alpha = 1;
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -181,7 +185,50 @@ namespace PersonalValue
                     messageText[1].text = gameManager.cardDatabaseSO.messages[19];
                     messageText[2].text = gameManager.cardDatabaseSO.messages[20];
                     canvasGame.GetComponent<Animator>().Play("Message_3",0,0);
-                    break;                    
+                    break;
+                case 18:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[22];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[23];
+                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
+                    messageIndex = 21;
+                    break; 
+                case 19:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[24];
+                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    messageIndex = 22;
+                    break; 
+                case 20:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[25];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[26];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[27];
+                    StartCoroutine(PlayAnimationThen("Message_5", () => {
+                        messageText[0].text = gameManager.cardDatabaseSO.messages[28];
+                        messageText[1].text = gameManager.cardDatabaseSO.messages[29];
+                        canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
+                    }));
+                    messageIndex = 23;
+                    break;      
+                case 21:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[30];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[31];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[32];
+                    canvasGame.GetComponent<Animator>().Play("Message_3",0,0);
+                    messageIndex = 24;
+                    break;    
+                case 22:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[33];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[34];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[35];
+                    messageText[3].text = gameManager.cardDatabaseSO.messages[36];
+                    canvasGame.GetComponent<Animator>().Play("Message_6",0,0);
+                    messageIndex = 25;
+                break;
+                case 23:
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[37];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[38];
+
+                    canvasGame.GetComponent<Animator>().Play("Message_7",0,0);
+                    break;          
             }
         }
 
@@ -207,14 +254,15 @@ namespace PersonalValue
                     case 3:
                     //เลื่อนขึ้น และ เข้า Tutorial
                         messagePages.GetComponent<CanvasGroup>().alpha = 1;
+
+                        bgIMGMessage.gameObject.SetActive(false);
+                        bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
+                        bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
                         StartCoroutine(PlayAnimationThen("BGTransition_1", () =>{
                         messageButton.GetComponent<Button>().interactable = true;
 
                         messagePages.GetComponent<CanvasGroup>().alpha = 0;
                         messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-                        bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1092);
-
                         //Open Tutorial
                         GameManager.Instance.tutorial.InitTutorial();
                         //gameManager.tutorial.tutorialPageGroup.SetActive(true);
@@ -231,40 +279,117 @@ namespace PersonalValue
                     case 11: ShowMessage(12);break;
                     case 12: ShowMessage(13);break;
                     case 17: 
-                        stageTemplate[1].SetActive(false);
-                        stageTemplate[2].SetActive(false);
-
-                        stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = false;
-                        UiController.Instance.CanvasGroupFade(stageTemplate[0],true,2f,()=>{
-                            animationTemplatePage.SetActive(true);
-                            StartCoroutine(PlayAnimationThen("Template-box_1", () => {
-                                canvasGame.GetComponent<Animator>().Play("Template-Massage",0,0);
-                                messageIndex = 18;
-                            }));
-
-                            UiController.Instance.CanvasGroupFade(stageTemplate[0],false,3f,()=>{
-                            });
-                        });
-
-                       
+                        boxAnimateIndex = 1;
+                        StageTemplateFade("Template-box_1");
                     break;
-
                     case 18:
                         canvasGame.GetComponent<Animator>().Play("Template-Massage_2",0,0);
                         messageIndex = 19;
+                        StartCoroutine(UiController.Instance.WaitForSecond(2,()=>{
+                            UiController.Instance.CanvasGroupFade(animationTemplatePage[1],true,1f);
+                        }));
                     break;
-                    case 19:
-                        canvasGame.GetComponent<Animator>().Play("Template-Massage_3",0,0);
-                        messageIndex = 20;
+                    case 19: //คลิกแล้ว หน้าเพสขึ้นมา
+                        UiController.Instance.CanvasGroupFade(animationTemplatePage[2],true,1f);
+                        confirmPageIndex = 1;
                     break;
+                    case 20: //คลิกแล้ว หน้าเพสขึ้นมา
+                        UiController.Instance.CanvasGroupFade(animationTemplatePage[2],true,1f);
+                        confirmPageIndex = 2;
+                        break;
+                    case 21: 
+                        animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });    
+                        animationTemplatePage[0].SetActive(true);
+                        animationTemplatePage[4].SetActive(true);
+                        StartCoroutine(PlayAnimationThen("Template-Heart",()=>{ ShowMessage(19);}));
+                    break;
+                    case 22:
+                        boxAnimateIndex = 3;
+                        StageTemplateFade("Template-box_3");
+                    break;
+                    case 23:
+                        boxAnimateIndex = 5;
+                        StageTemplateFade("Template-box_5");
+                    break;
+                    case 24:
+                        animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
+                         UiController.Instance.CanvasGroupFade(stageTemplateInput[0],true,1f);
+                         stageTemplateInput[1].SetActive(false);
+                    break;
+                    case 25:
+                        ShowMessage(23);
+                        break;
                 }
 
-                Debug.Log("🟢 กดปุ่มแล้ว" + messageIndex);
+                Debug.Log("🟢 กดปุ่มแล้ว" + messageIndex); 
         }
 
-        public void AnimationTemplateNextButton()
+        private void StageTemplateFade(string _nameBox)
         {
-            
+                //bgIMGMessage.gameObject.SetActive(true);
+                //bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
+
+                stageTemplate[1].SetActive(false);
+                stageTemplate[2].SetActive(false);
+
+                stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = false;
+                stageTemplate[0].GetComponent<CanvasGroup>().alpha = 1;
+                UiController.Instance.CanvasGroupFade(stageTemplate[0],true,2f,()=>
+                {
+                    StartCoroutine(UiController.Instance.WaitForSecond(1,()=>
+                    {
+                        animationTemplatePage[0].SetActive(true);
+                        templateBoxList[boxAnimateIndex-1].SetActive(false);
+
+                        UiController.Instance.CanvasGroupFade(stageTemplate[0],false,3f);
+                        StartCoroutine(PlayAnimationThen(_nameBox, () => {
+                        canvasGame.GetComponent<Animator>().Play("Template-Massage",0,0);
+                        messageIndex = 18;
+                        }));
+                    }));
+                });
+        }
+
+        public void ConfirmPageButton()
+        {
+            switch(confirmPageIndex)
+            {
+                case 1:
+                    animationTemplatePage[2].SetActive(false);
+                    animationTemplatePage[1].SetActive(false);
+                    canvasGame.GetComponent<Animator>().Play("Template-Massage_3",0,0);
+                    StartCoroutine(UiController.Instance.WaitForSecond(2,()=>{UiController.Instance.CanvasGroupFade(animationTemplatePage[3],true,1f);}));
+                    messageIndex = 20;
+                break;
+                case 2:
+                    StartCoroutine(PlayAnimationThen("Template-Massage_4", () => {
+                        animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
+                        boxAnimateIndex++;
+                        if(boxAnimateIndex == 2) //1-2 เล่นปกติ
+                        {
+                           StageTemplateFade("Template-box_2");
+                        }
+                        else if(boxAnimateIndex == 3)
+                        {
+                           ShowMessage(18);
+                        }
+                        else if(boxAnimateIndex == 4) //2-3 เล่นปกติ
+                        {
+                           StageTemplateFade("Template-box_4");
+                        }
+                        else if(boxAnimateIndex == 5) 
+                        {
+                            ShowMessage(20);
+                        }
+                        else if(boxAnimateIndex == 6)
+                        {
+                            ShowMessage(21);
+                        }
+                    }));
+                    animationTemplatePage[2].SetActive(false);
+                    animationTemplatePage[3].SetActive(false);
+                break;
+            }
         }
         #endregion
 
@@ -277,7 +402,7 @@ namespace PersonalValue
             #endif
             cameraZoomGroup.SetActive(true);
             messageGroup.SetActive(true);
-            ShowMessage(12);
+            ShowMessage(17);
         }
 
         private void Update()
@@ -549,10 +674,11 @@ namespace PersonalValue
                                 messagePages.GetComponent<CanvasGroup>().alpha = 1;
                                 messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
 
+                                bgIMGMessage.gameObject.SetActive(false);
+                                bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
+                                bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
                                 StartCoroutine(PlayAnimationThen("BGTransition_2", () =>
                                 {
-                                    bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
-
                                     messageIndex = 4;
                                     ButtonMessage();//=> ด่าน 2 
                                 })); //PlayAnimationThen
@@ -586,10 +712,11 @@ namespace PersonalValue
                                 messagePages.GetComponent<CanvasGroup>().alpha = 1;
                                 messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
 
+                                bgIMGMessage.gameObject.SetActive(false);
+                                bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
+                                bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
                                 StartCoroutine(PlayAnimationThen("BGTransition_3", () =>
                                 {
-                                    bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -1000);
-
                                     messageIndex = 5;
                                     ButtonMessage();//=> ด่าน 3 
                                 }));
@@ -627,10 +754,11 @@ namespace PersonalValue
                                     messagePages.GetComponent<CanvasGroup>().alpha = 1;
                                     messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
 
+                                    bgIMGMessage.gameObject.SetActive(false);
+                                    bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
+                                    bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
                                     StartCoroutine(PlayAnimationThen("BGTransition_4", () =>
                                     {
-                                        bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
-
                                         messageIndex = 6;
                                         ButtonMessage();//=> ด่าน 4 
                                     }));
@@ -738,6 +866,7 @@ namespace PersonalValue
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(true); });
+            stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = true;
 
             int index = 0;
             boxList.ToList().ForEach(o =>
