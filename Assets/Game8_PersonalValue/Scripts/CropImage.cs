@@ -15,7 +15,8 @@ public class CropImage : MonoBehaviour
     public Image[] imgCropAll;
     public Image imgCrop;
     private RectTransform rectTransform;
-    public Slider zoomSlider;  
+    public Slider zoomSlider; 
+    public Image priorityLastIMG; 
 
     [Header("Zoom Settings")]
     public float zoomSpeed = 0.01f;
@@ -66,7 +67,7 @@ public class CropImage : MonoBehaviour
 
     public void SetCropImagePosition()
     {
-        imgCropAll.ToList().ForEach(x => x.rectTransform.position = imgCrop.rectTransform.position);
+        imgCropAll.ToList().ForEach(x => x.rectTransform.localPosition = imgCrop.rectTransform.localPosition);
     }
 
     public void SetSizeAllImage()
@@ -105,6 +106,20 @@ public class CropImage : MonoBehaviour
     {
         GameManager.Instance.levelManager.cropImagePage.SetActive(false);
         GameManager.Instance.webGLFileLoaderButton.HideFileInputButton();
+        priorityLastIMG.sprite = imgCropAll[0].sprite;
+        
+        RectTransform src = imgCropAll[0].rectTransform;
+        RectTransform dest = priorityLastIMG.GetComponent<RectTransform>();
+
+        // คัดลอกค่า Transform ทั้งหมด
+        dest.anchoredPosition = src.anchoredPosition;
+        dest.sizeDelta = src.sizeDelta;
+        dest.anchorMin = src.anchorMin;
+        dest.anchorMax = src.anchorMax;
+        dest.pivot = src.pivot;
+        dest.localRotation = src.localRotation;
+        dest.localScale = src.localScale;
+        dest.localPosition = src.localPosition;
     }
 }
 }

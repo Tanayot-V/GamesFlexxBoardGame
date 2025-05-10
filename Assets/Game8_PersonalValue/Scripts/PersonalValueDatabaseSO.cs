@@ -12,6 +12,8 @@ namespace PersonalValue
         //public string[] messages;
         public string[] headers;
         public string[] messages;
+        public string[] messagesAnimTemplate_1;
+        public string[] messagesAnimTemplate_2;
         public BoxData[] boxsNameList_1;
         public BoxData[] boxsNameList_2;
         public BoxData[] boxsNameList_3;

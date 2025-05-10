@@ -22,6 +22,11 @@ namespace PersonalValue
         public string boxName;
         public Sprite sprite;
     }
+    [System.Serializable]
+    public class TextAminTemplate
+    {
+        public string[] strings;
+    }
 
     public class LevelManager : MonoBehaviour
     {
@@ -62,6 +67,8 @@ namespace PersonalValue
         public GameObject cameraZoomIMG;
         public TMPro.TextMeshProUGUI cameraZoomTX;
         private readonly int maxCardCount = 5;
+        public TMPro.TextMeshProUGUI mackupAminTemplateTX;
+
 
         [Header("Stage State")]
         public int fillCardCountCurrent = 0;
@@ -75,11 +82,15 @@ namespace PersonalValue
         public List<GameObject> boxList = new List<GameObject>();
         public List<TMPro.TextMeshProUGUI> priorityListTexts = new List<TMPro.TextMeshProUGUI>();
         public List<TMPro.TextMeshProUGUI> priorityLastListTexts  = new List<TMPro.TextMeshProUGUI>();
+        public List<TMPro.TextMeshProUGUI> priorityLastSummaryListTexts = new List<TMPro.TextMeshProUGUI>();
         public List<GameObject> templateBoxList = new List<GameObject>();
+        private List<string> templateBoxSummaryList = new List<string>();
         private List<CardDataSO> cardDataList = new List<CardDataSO>();
         private List<CardDataSO> cardDataList_Stage1 = new List<CardDataSO>(); //ไพ่ด่านที่ 1
         private List<CardDataSO> cardDataList_Stage2 = new List<CardDataSO>(); //ไพ่ด่านที่ 2
         private List<CardDataSO> cardDataList_Stage3 = new List<CardDataSO>(); //ไพ่ด่านที่ 3
+        private List<string> messageAnimTemplateList_1 = new List<string>();
+        private List<string> messageAnimTemplateList_2 = new List<string>();
 
 
         #region Message
@@ -159,8 +170,14 @@ namespace PersonalValue
                     break;
                 case 13:
                 //คุณต้องการลงลึกมากขึ้นกับคุณค่าของเธอไหม? ไปต่อ พอแค่นี้
+                /*
                     messageText[0].text = gameManager.cardDatabaseSO.messages[13];
                     canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
+                    */
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[39];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[40];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[41];
+                    canvasGame.GetComponent<Animator>().Play("Message_8",0,0);
 
                     break;
                 case 14:
@@ -280,12 +297,14 @@ namespace PersonalValue
                     case 12: ShowMessage(13);break;
                     case 17: 
                         boxAnimateIndex = 1;
+                        messageAnimTemplateList_1 = ShuffleList(gameManager.cardDatabaseSO.messagesAnimTemplate_1.ToList());
+                        messageAnimTemplateList_2 = ShuffleList(gameManager.cardDatabaseSO.messagesAnimTemplate_2.ToList());
                         StageTemplateFade("Template-box_1");
                     break;
                     case 18:
                         canvasGame.GetComponent<Animator>().Play("Template-Massage_2",0,0);
                         messageIndex = 19;
-                        StartCoroutine(UiController.Instance.WaitForSecond(2,()=>{
+                        StartCoroutine(UiController.Instance.WaitForSecond(10,()=>{
                             UiController.Instance.CanvasGroupFade(animationTemplatePage[1],true,1f);
                         }));
                     break;
@@ -311,10 +330,8 @@ namespace PersonalValue
                         boxAnimateIndex = 5;
                         StageTemplateFade("Template-box_5");
                     break;
-                    case 24:
-                        animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
-                         UiController.Instance.CanvasGroupFade(stageTemplateInput[0],true,1f);
-                         stageTemplateInput[1].SetActive(false);
+                    case 24: //เปิดหน้าสุดท้าย
+                        OpenTemplateInput();
                     break;
                     case 25:
                         ShowMessage(23);
@@ -328,9 +345,21 @@ namespace PersonalValue
         {
                 //bgIMGMessage.gameObject.SetActive(true);
                 //bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -2162);
-
+                int currentBoxAnimateIndex = boxAnimateIndex-1;
+                GameObject currrentBox = templateBoxList[currentBoxAnimateIndex];
+                mackupAminTemplateTX.text = currrentBox.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text;
+                animationTemplatePage[7].SetActive(true);
+                animationTemplatePage[7].GetComponent<TMPro.TMP_InputField>().text = string.Empty;
+                animationTemplatePage[8].SetActive(true);
+                animationTemplatePage[8].GetComponent<TMPro.TMP_InputField>().text = string.Empty;
+                
                 stageTemplate[1].SetActive(false);
                 stageTemplate[2].SetActive(false);
+                stageTemplate[3].SetActive(false);
+                stageTemplate[4].SetActive(false);
+
+                animationTemplatePage[5].GetComponent<TMPro.TextMeshProUGUI>().text = messageAnimTemplateList_1[currentBoxAnimateIndex];
+                animationTemplatePage[6].GetComponent<TMPro.TextMeshProUGUI>().text = messageAnimTemplateList_2[currentBoxAnimateIndex];
 
                 stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = false;
                 stageTemplate[0].GetComponent<CanvasGroup>().alpha = 1;
@@ -339,7 +368,7 @@ namespace PersonalValue
                     StartCoroutine(UiController.Instance.WaitForSecond(1,()=>
                     {
                         animationTemplatePage[0].SetActive(true);
-                        templateBoxList[boxAnimateIndex-1].SetActive(false);
+                       currrentBox.SetActive(false);
 
                         UiController.Instance.CanvasGroupFade(stageTemplate[0],false,3f);
                         StartCoroutine(PlayAnimationThen(_nameBox, () => {
@@ -358,10 +387,11 @@ namespace PersonalValue
                     animationTemplatePage[2].SetActive(false);
                     animationTemplatePage[1].SetActive(false);
                     canvasGame.GetComponent<Animator>().Play("Template-Massage_3",0,0);
-                    StartCoroutine(UiController.Instance.WaitForSecond(2,()=>{UiController.Instance.CanvasGroupFade(animationTemplatePage[3],true,1f);}));
+                    StartCoroutine(UiController.Instance.WaitForSecond(10,()=>{UiController.Instance.CanvasGroupFade(animationTemplatePage[3],true,1f);}));
                     messageIndex = 20;
                 break;
                 case 2:
+                    templateBoxSummaryList.Add(animationTemplatePage[8].GetComponent<TMPro.TMP_InputField>().text);
                     StartCoroutine(PlayAnimationThen("Template-Massage_4", () => {
                         animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
                         boxAnimateIndex++;
@@ -402,7 +432,7 @@ namespace PersonalValue
             #endif
             cameraZoomGroup.SetActive(true);
             messageGroup.SetActive(true);
-            ShowMessage(17);
+            ShowMessage(1);
         }
 
         private void Update()
@@ -511,12 +541,17 @@ namespace PersonalValue
                 card.transform.localScale = Vector3.zero; // เริ่มจาก 0
                 card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
             });
+
+            gameManager.gridScrollController.RefreshGrid(cardDataList);
         }
 
         public void UninstallCardStage4(DropBox _dropbox,CardDataSO _cardDataSO)
         {
             cardDataList.Add(_cardDataSO);
+            
             GameObject card = UiController.Instance.InstantiateUIView(cardPrefab, priorityParent);
+            card.transform.SetAsLastSibling();
+
             card.name = _cardDataSO.name;
             card.GetComponent<Image>().sprite = _cardDataSO.picture;
             card.GetComponent<DragDropCard>().cardDataSO = _cardDataSO;
@@ -612,6 +647,19 @@ namespace PersonalValue
             Debug.Log("✅ สุ่มการ์ดเสร็จแล้ว");
         }
 
+          private List<string> ShuffleList(List<string> inputList)
+        {
+            List<string> tempList = new List<string>(inputList);
+            for (int i = 0; i < tempList.Count; i++)
+            {
+                int randomIndex = Random.Range(i, tempList.Count);
+                string temp = tempList[i];
+                tempList[i] = tempList[randomIndex];
+                tempList[randomIndex] = temp;
+            }
+            return tempList;
+        }
+
         public void RemoveCardFromList(CardDataSO cardDataSO)
         {
             cardDataList.Remove(cardDataSO);
@@ -649,56 +697,45 @@ namespace PersonalValue
                 {
                     //หลังจบด่าน 1
                     case Stage.Stage1:
-                        if(importantBOX.cardDataSOList.Count < 5)
-                        {
-                            Stage1();
-                        }
-                        else
-                        {
-                            //รอสามวิก่อน
-                            gameManager.countdownTimer.StopCountdown();
-                            StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom1);}));
-                            importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage1.Add(o); });
-                        }
-                        void CameraZoom1()
-                        {
-                            cameraZoomIMG.SetActive(true);
-                            cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                            cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
+                    ConditionStage(27,()=>{ 
+                        gameManager.countdownTimer.StopCountdown();
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom1);}));
+                        importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage1.Add(o); });
+                    });
+                    void CameraZoom1()
+                    {
+                        cameraZoomIMG.SetActive(true);
+                        cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
+                        cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
 
-                            boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
-                            StartCoroutine(PlayAnimationThen("CameraZoom_1", () =>
+                        boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
+                        StartCoroutine(PlayAnimationThen("CameraZoom_1", () =>
+                        {
+                            cameraZoomIMG.SetActive(false);
+                            
+                            messagePages.GetComponent<CanvasGroup>().alpha = 1;
+                            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                            bgIMGMessage.gameObject.SetActive(false);
+                            bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
+                            bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
+                            StartCoroutine(PlayAnimationThen("BGTransition_2", () =>
                             {
-                                cameraZoomIMG.SetActive(false);
-                                
-                                messagePages.GetComponent<CanvasGroup>().alpha = 1;
-                                messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-                                bgIMGMessage.gameObject.SetActive(false);
-                                bgIMG.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
-                                bgIMGMessage.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 354);
-                                StartCoroutine(PlayAnimationThen("BGTransition_2", () =>
-                                {
-                                    messageIndex = 4;
-                                    ButtonMessage();//=> ด่าน 2 
-                                })); //PlayAnimationThen
-                        })); //PlayAnimationThen
+                                messageIndex = 4;
+                                ButtonMessage();//=> ด่าน 2 
+                            })); //PlayAnimationThen
+                    })); //PlayAnimationThen
                     }
                     break;
 
                     //หลังจบด่าน 2
                     case Stage.Stage2:
-                        if(importantBOX.cardDataSOList.Count < 5)
-                        {
-                            Stage2();
-                        }
-                        else
-                        {
-                            gameManager.countdownTimer.StopCountdown();
-                            StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom2);}));
-                            importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage2.Add(o); });
-                        }
-                        void CameraZoom2()
+                    ConditionStage(15,()=>{ 
+                        gameManager.countdownTimer.StopCountdown();
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom2);}));
+                        importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage2.Add(o); });
+                    });
+                    void CameraZoom2()
                         {
                             cameraZoomIMG.SetActive(true);
                             cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
@@ -723,22 +760,24 @@ namespace PersonalValue
 
                             }));
                         }
-                        break;
+                    break;
+
                     //หลังจบด่าน 3
                     case Stage.Stage3:
+                    ConditionStage(10,()=>{ 
+                        gameManager.countdownTimer.StopCountdown();
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom3);}));
+                        importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage3.Add(o); });
+                    });
+                        /*
                         //เช็คว่า ขาดไม่ได้ จะต้องไม่เกิน 15 ใบ
                         if(importantBOX.cardDataSOList.Count < 5 || importantBOX.cardDataSOList.Count > 15)
                         {
                             Debug.Log("🟢 ขาดไม่ได้ เกิน 15 ใบ เล่นใหม่");
                             Stage3();
-                        }
-                        else
-                        {
-                            gameManager.countdownTimer.StopCountdown();
-                            StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom3);}));
-                            importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage3.Add(o); });
-                        }
-                        void CameraZoom3()
+                        }*/
+
+                    void CameraZoom3()
                             {
                                 Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
 
@@ -764,7 +803,8 @@ namespace PersonalValue
                                     }));
                                 }));
                             }                        
-                        break;
+                    break;
+
                     case Stage.Stage4:
                         currentStage = Stage.Stage5;
                         break;
@@ -780,6 +820,38 @@ namespace PersonalValue
             {
                 Debug.Log("🟢 ยังมีการ์ดเหลืออยู่");
                 return false;
+            }
+
+            void ConditionStage(int _amount, System.Action _onComplete)
+            {
+                int requiredCount = _amount;
+                int currentCount = importantBOX.cardDataSOList.Count;
+
+                Debug.Log($"[เริ่มด่าน 1] กล่องหลักมี {currentCount} ใบ");
+
+                // ลูปกล่องที่เหลือ เพื่อเติมการ์ดให้ถึง x ใบ
+                for (int i = 1; i < boxList.Count && currentCount < requiredCount; i++)
+                {
+                    var dropBox = boxList[i].GetComponent<DropBox>();
+                    int cardsToAdd = dropBox.cardDataSOList.Count;
+
+                    importantBOX.cardDataSOList.AddRange(dropBox.cardDataSOList);
+                    currentCount = importantBOX.cardDataSOList.Count;
+
+                    Debug.Log($"➡️ เพิ่มจากกล่อง {i + 1} จำนวน {cardsToAdd} ใบ | รวม = {currentCount} ใบ");
+                }
+
+                // ตรวจสอบว่าผ่านหรือไม่
+                if (currentCount >= requiredCount)
+                {
+                    Debug.Log($"✅ ผ่านด่าน 1: รวมทั้งหมด {currentCount} ใบ (ครบ 27 แล้ว)");
+                    //รอสามวิก่อน
+                    _onComplete?.Invoke();                                                                                                                                                     
+                }
+                else
+                {
+                    Debug.LogWarning($"❌ ยังไม่ผ่านด่าน 1: รวมได้ {currentCount} ใบ (ยังไม่ถึง 27)");
+                }
             }
 
             void FadeBoxList(System.Action onComplete)
@@ -803,6 +875,7 @@ namespace PersonalValue
             
         }
         }
+        
 
         private void NextStage(List<CardDataSO> _cardDataSOs)
         {
@@ -866,6 +939,9 @@ namespace PersonalValue
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(true); });
+            stageTemplate[3].SetActive(false);
+            stageTemplate[4].SetActive(true);
+            stageTemplate[3].GetComponent<CanvasGroup>().alpha = 0;
             stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = true;
 
             int index = 0;
@@ -892,24 +968,31 @@ namespace PersonalValue
         public void OpenTemplateInput()
         {
             currentStage = Stage.Stage5;
-            messagePages.GetComponent<CanvasGroup>().alpha = 0;
-            messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-            nameTextField_Stage5.text = nameTextField_Stage4.text;
-
-            //Open Tutorial
-            gameManager.tutorial.InitTutorial2();
-
             stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplateInput.ToList().ForEach(o => { o.SetActive(true); });
             
-            int index = 0;
-            priorityListTexts.ToList().ForEach(o => { priorityLastListTexts[index].text = o.text; index++; });
-            CanvasGroup canvasGroup = stageTemplate[0].GetComponent<CanvasGroup>();
-            canvasGroup.alpha = 0;
-            canvasGroup.DOFade(1f, 0.5f).OnComplete(()=>{});
+            nameTextField_Stage5.text = nameTextField_Stage4.text;
+
+            animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
+                UiController.Instance.CanvasGroupFade(stageTemplateInput[0],true,1f);
+                stageTemplateInput[1].SetActive(false);
+
+                int index = 0;
+                priorityLastSummaryListTexts.ToList().ForEach(o => { 
+                o.text = templateBoxSummaryList[index];
+                index++;
+                });
+
+                int index2 = 0;
+                priorityLastListTexts.ToList().ForEach(o => { 
+                    o.text = priorityListTexts[index2].text;
+                    index2++;
+                });
+
+            //Open Tutorial
+            //gameManager.tutorial.InitTutorial2();
         }
 
         public void EndStage4()

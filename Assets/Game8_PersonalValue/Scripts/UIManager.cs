@@ -34,15 +34,15 @@ namespace PersonalValue
         //คำถาม พอแค่นี้
         public void MessageStopButton() //คุณต้องการลงลึกไปอีกไหม
         {
-            gameManager.levelManager.ShowMessage(14);//ไดอารอคตอนจบ
+            gameManager.levelManager.ShowMessage(23);//ไดอารอคตอนจบ
         }
 
-        public void EndGameButton()
+        public void EndPriorityPageButton()
         {
-            gameManager.levelManager.ShowMessage(15);
+            gameManager.levelManager.ShowMessage(9);
         } 
         
-        public void EndGameButton2()
+        public void EndLastPriorityPageButton()
         {
             gameManager.levelManager.ShowMessage(22);
         }

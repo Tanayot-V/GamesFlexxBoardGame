@@ -15,6 +15,7 @@ public class GameManager : Singletons<GameManager>
     
     public WebGLFileLoaderButton webGLFileLoaderButton;
     public Tutorial tutorial;
+    public GridScrollController gridScrollController;
    
     void Start()
     {
