@@ -7,7 +7,6 @@ using DG.Tweening;
 
 namespace  PersonalValue
 {
-    
     public class DragDropCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         public Image img;
@@ -63,12 +62,12 @@ namespace  PersonalValue
                     mockupRect.transform.DOScale(Vector3.zero, 0.25f)
                     .SetEase(Ease.Linear)
                     .OnComplete(()=>{
-                        mockupRect.gameObject.SetActive(false);
+                        mockupRect.GetComponent<DragPrefab>().Hide();
                     });; // ค่อยๆ ขยายแบบ Pop-up
                 }
                 else
                 {
-                    mockupRect.gameObject.SetActive(false);
+                    mockupRect.GetComponent<DragPrefab>().Hide();
                 }
             }
         }

@@ -26,7 +26,7 @@ public class CropImage : MonoBehaviour
      [Header("Rotat Settings")]
      private int[] rotationAngles = { 0, 90, 180, 270 };
     private int currentRotatIndex = 0;
-    private bool isUploadIMG;
+    public bool isUploadIMG;
 
     private void Start()
     {
@@ -73,6 +73,7 @@ public class CropImage : MonoBehaviour
     public void SetSizeAllImage()
     {
         imgCropAll.ToList().ForEach(x => x.rectTransform.sizeDelta = imgCrop.rectTransform.sizeDelta);
+        isUploadIMG = true;
     }
 
     public void RotateNextButton()

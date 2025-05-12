@@ -26,15 +26,13 @@ namespace PersonalValue
         //คำถามไปต่อ
         public void MessageNextButton() //คุณต้องการลงลึกไปอีกไหม
         {
-            //if( gameManager.levelManager.GetMessageIndex() == 13) gameManager.levelManager.OpenTemplateInput();
-            if( gameManager.levelManager.GetMessageIndex() == 13) gameManager.levelManager.ShowMessage(16);
-            if( gameManager.levelManager.GetMessageIndex() == 16) gameManager.levelManager.ShowMessage(17);
+            if( gameManager.levelManager.GetMessageIndex() == 13) gameManager.levelManager.ShowMessage(17);
         }
 
         //คำถาม พอแค่นี้
         public void MessageStopButton() //คุณต้องการลงลึกไปอีกไหม
         {
-            gameManager.levelManager.ShowMessage(23);//ไดอารอคตอนจบ
+            gameManager.levelManager.ShowMessage(21);//ไดอารอคตอนจบ
         }
 
         public void EndPriorityPageButton()
@@ -44,7 +42,7 @@ namespace PersonalValue
         
         public void EndLastPriorityPageButton()
         {
-            gameManager.levelManager.ShowMessage(22);
+            gameManager.levelManager.ShowMessage(20);
         }
         
         public void ConfirmPageButton()

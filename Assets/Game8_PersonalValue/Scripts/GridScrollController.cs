@@ -61,5 +61,15 @@ namespace PersonalValue
 
         Debug.Log($"📌 Scroll to row {currentRow + 1} / {totalRows} (Pos Y = {targetY})");
     }
+
+    public void InsertCardAtCurrentRow(GameObject cardObject)
+    {
+        int targetIndex = currentRow * cardsPerRow;
+
+        // ย้ายไปตำแหน่งแรกของแถวปัจจุบัน
+        cardObject.transform.SetSiblingIndex(targetIndex);
+
+        Debug.Log($"📦 ย้ายการ์ดไปไว้ที่ index {targetIndex} (แถว {currentRow + 1})");
+    }
     }
 }

@@ -53,14 +53,18 @@ namespace PersonalValue
        {
         if(levelManager.currentStage == Stage.Stage4)
         {
-            if( dropBox.GetComponent<DropBox>().cardName_Stage4 != null)
+            if( dropBox.GetComponent<DropBoxPriority>().cardName_Stage4 != null)
             {
-              levelManager.CreateCard(levelManager.cardPrefab,levelManager.priorityParent,dropBox.GetComponent<DropBox>().cardName_Stage4);
-            }
-            dropBox.GetComponent<DropBox>().cardName_Stage4 = dragDropCard.cardDataSO;
+                int targetIndex = dragDropCard.transform.GetSiblingIndex();
 
-            dropBox.GetComponent<DropBox>().transform.GetChild(0).GetComponent<Image>().sprite = dragDropCard.cardDataSO.picture;
-            //levelManager.UpdateFillCount_Stage4();
+                Debug.Log("สลับกับข้างบน");
+                GameObject newCard = levelManager.CreateCard(levelManager.cardPrefab,levelManager.priorityParent,dropBox.GetComponent<DropBoxPriority>().cardName_Stage4);
+                newCard.transform.SetSiblingIndex(targetIndex);              
+            }
+            
+            dropBox.GetComponent<DropBoxPriority>().cardName_Stage4 = dragDropCard.cardDataSO;
+            dropBox.GetComponent<DropBoxPriority>().transform.GetChild(0).GetComponent<Image>().sprite = dragDropCard.cardDataSO.picture;
+            
             Destroy(dragDropCard.gameObject);
             return;
         }
@@ -88,17 +92,25 @@ namespace PersonalValue
                 {
                     levelManager.CheckCardCount();
                 }
-
             }
         }
        }
     }
 
+        public void Hide()
+        {
+            dropBox = null;
+            dragDropCard = null;
+            this.gameObject.SetActive(false);
+        }
+
        private void OnTriggerEnter2D(Collider2D collision)
         {
             if(collision.tag == "Menu")
             {
-                collision.GetComponent<DropBox>().img.GetComponent<Image>().color = dragColor;
+                if(GameManager.Instance.levelManager.currentStage != Stage.Stage4) collision.GetComponent<DropBox>().img.GetComponent<Image>().color = dragColor;
+                else collision.GetComponent<DropBoxPriority>().img.GetComponent<Image>().color = dragColor;
+                
                 dropBox = collision.gameObject;
             }
         }
@@ -106,13 +118,12 @@ namespace PersonalValue
         private void OnTriggerExit2D(Collider2D collision)
         {
             if(collision.tag == "Menu")
-            {
-                //collision.gameObject.GetComponent<Image>().color = UiController.Instance.SetColorWithHex("#8C5E44");
-                collision.GetComponent<DropBox>().img.GetComponent<Image>().color = Color.white;
+            { 
+                if(GameManager.Instance.levelManager.currentStage != Stage.Stage4) collision.GetComponent<DropBox>().img.GetComponent<Image>().color = Color.white;
+                else collision.GetComponent<DropBoxPriority>().img.GetComponent<Image>().color = Color.white;
+
                 dropBox = null;
             }
         }
-    
-
     }
 }

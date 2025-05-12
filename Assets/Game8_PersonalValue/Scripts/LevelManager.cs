@@ -14,7 +14,8 @@ namespace PersonalValue
         Stage2,
         Stage3,
         Stage4,
-        Stage5
+        Template,
+        TemplateInput
     }
     [System.Serializable]
     public class BoxData
@@ -26,6 +27,13 @@ namespace PersonalValue
     public class TextAminTemplate
     {
         public string[] strings;
+    }
+
+    [System.Serializable]
+    public class MessageAnimTemplate
+    {
+        public string text_1;
+        public string text_2;
     }
 
     public class LevelManager : MonoBehaviour
@@ -44,7 +52,7 @@ namespace PersonalValue
 
         [Header("Stage Model")]
         public Camera mainCamera;
-        public GameObject canvasGame;
+        public Animator canvasAnim;
         public TMPro.TextMeshProUGUI headerText;
         public TMPro.TextMeshProUGUI[] messageText;
         public Image bgIMG;
@@ -58,6 +66,7 @@ namespace PersonalValue
         public GameObject cardPrefab;
         public GameObject cardParent;
         public GameObject mockUpDragCard;
+        public GameObject mockUpDragCardUn;
         public GameObject timeObj;
         public Button myValueButton;
         public GameObject priorityParent;
@@ -65,7 +74,7 @@ namespace PersonalValue
         public TMPro.TMP_InputField nameTextField_Stage5;
         public GameObject cameraZoomGroup;
         public GameObject cameraZoomIMG;
-        public TMPro.TextMeshProUGUI cameraZoomTX;
+        public GameObject[] cameraZoomMockIMG;
         private readonly int maxCardCount = 5;
         public TMPro.TextMeshProUGUI mackupAminTemplateTX;
 
@@ -89,8 +98,9 @@ namespace PersonalValue
         private List<CardDataSO> cardDataList_Stage1 = new List<CardDataSO>(); //ไพ่ด่านที่ 1
         private List<CardDataSO> cardDataList_Stage2 = new List<CardDataSO>(); //ไพ่ด่านที่ 2
         private List<CardDataSO> cardDataList_Stage3 = new List<CardDataSO>(); //ไพ่ด่านที่ 3
-        private List<string> messageAnimTemplateList_1 = new List<string>();
-        private List<string> messageAnimTemplateList_2 = new List<string>();
+        private List<MessageAnimTemplate> messageAnim = new List<MessageAnimTemplate>();
+        private bool hasStoppedBlink_6 = false;
+        private bool hasStoppedBlink_5 = false;
 
 
         #region Message
@@ -103,9 +113,12 @@ namespace PersonalValue
             cropImagePage.SetActive(false);
             GameManager.Instance.tutorial.tutorialPageGroup.SetActive(false);
             cameraZoomIMG.SetActive(false);
+            cameraZoomMockIMG.ToList().ForEach(o => { o.SetActive(false); });
             animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
             animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });
             bgIMGMessage.gameObject.SetActive(true);
+            mockUpDragCard.GetComponent<DragPrefab>().Hide();
+            mockUpDragCardUn.GetComponent<DragPrefabUn>().Hide();
 
             messagePages.GetComponent<CanvasGroup>().alpha = 1;
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -122,130 +135,110 @@ namespace PersonalValue
             //Message_2 = สองบรรทัด => ไม่มีแตะถัดไป
             //Message_3 = สามบรรทัด => มีแตะถัดไป
             //Message_4 = สามบรรทัด => ไม่มีแตะถัดไป
+            //Message_5 = จะเล่นท่ายากเสือกไม่เอา
+            //Message_6 = สี่บรรทัด => มีแตะถัดไป
+            //Message_7 = สองบรรทัด => ว่างเปล่า
+            //Message_8 = สามบรรทัด => คำถาม
+            //Message_9 = ขึ้นพร้อมกันทั้งหมด => มีแตะถัดไป
 
             switch(_index)
             {
                 case 0:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[0];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[1];
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
+                    canvasAnim.Play("Message_0",0,0);
                     break;
                 case 1:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[2];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[3];
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
+                    canvasAnim.Play("Message_0",0,0);
                     break;
                 case 2:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[4];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[5];
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
+                    canvasAnim.Play("Message_0",0,0);
                     break;
                 case 3:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[6];
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
+                    canvasAnim.Play("Message_0",0,0);
                     break;
                 case 7:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[7];
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    canvasAnim.Play("Message_1",0,0);
                     break; 
                 case 8:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[8];
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    canvasAnim.Play("Message_1",0,0);
                     break;
                 case 9:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[9];
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    canvasAnim.Play("Message_1",0,0);
                     break;
                 case 10:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[10];
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    canvasAnim.Play("Message_1",0,0);
                     break;
                  case 11:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[11];
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    canvasAnim.Play("Message_1",0,0);
                     break;
                 case 12:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[12];
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[13];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[14];
+                    messageText[3].text = gameManager.cardDatabaseSO.messages[0];
+                    canvasAnim.Play("Message_9",0,0);
                     break;
                 case 13:
                 //คุณต้องการลงลึกมากขึ้นกับคุณค่าของเธอไหม? ไปต่อ พอแค่นี้
-                /*
-                    messageText[0].text = gameManager.cardDatabaseSO.messages[13];
-                    canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
-                    */
-                    messageText[0].text = gameManager.cardDatabaseSO.messages[39];
-                    messageText[1].text = gameManager.cardDatabaseSO.messages[40];
-                    messageText[2].text = gameManager.cardDatabaseSO.messages[41];
-                    canvasGame.GetComponent<Animator>().Play("Message_8",0,0);
-
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[15];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[16];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[17];
+                    canvasAnim.Play("Message_4",0,0);
                     break;
                 case 14:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[14];
-                    canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
+                    canvasAnim.Play("Message_2",0,0);
                     break;
                 case 15:
                 //ปุ่มสิ้นสุด ขอบคุณที่ให้โอกาสตัวเอง...
                     stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
                     messageText[0].text = gameManager.cardDatabaseSO.messages[14];
-                    canvasGame.GetComponent<Animator>().Play("Message_2",0,0);
-                break;
-                case 16:
-                 messageText[0].text = gameManager.cardDatabaseSO.messages[15];
-                 messageText[1].text = gameManager.cardDatabaseSO.messages[16];
-                 messageText[2].text = gameManager.cardDatabaseSO.messages[17];
-                 canvasGame.GetComponent<Animator>().Play("Message_4",0,0);
-                    //StartCoroutine(PlayAnimationThen("Message_4", () =>{}));
+                    canvasAnim.Play("Message_2",0,0);
                 break;
                 case 17:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[18];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[19];
                     messageText[2].text = gameManager.cardDatabaseSO.messages[20];
-                    canvasGame.GetComponent<Animator>().Play("Message_3",0,0);
+                    canvasAnim.Play("Message_3",0,0);
                     break;
                 case 18:
-                    messageText[0].text = gameManager.cardDatabaseSO.messages[22];
-                    messageText[1].text = gameManager.cardDatabaseSO.messages[23];
-                    canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
+                    messageText[0].text = gameManager.cardDatabaseSO.messages[21];
+                    messageText[1].text = gameManager.cardDatabaseSO.messages[22];
+                    messageText[2].text = gameManager.cardDatabaseSO.messages[23];
+                    messageText[3].text = gameManager.cardDatabaseSO.messages[24];
+                    canvasAnim.Play("Message_6",0,0);
                     messageIndex = 21;
                     break; 
                 case 19:
-                    messageText[0].text = gameManager.cardDatabaseSO.messages[24];
-                    canvasGame.GetComponent<Animator>().Play("Message_1",0,0);
-                    messageIndex = 22;
-                    break; 
-                case 20:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[25];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[26];
                     messageText[2].text = gameManager.cardDatabaseSO.messages[27];
-                    StartCoroutine(PlayAnimationThen("Message_5", () => {
-                        messageText[0].text = gameManager.cardDatabaseSO.messages[28];
-                        messageText[1].text = gameManager.cardDatabaseSO.messages[29];
-                        canvasGame.GetComponent<Animator>().Play("Message_0",0,0);
-                    }));
-                    messageIndex = 23;
-                    break;      
-                case 21:
-                    messageText[0].text = gameManager.cardDatabaseSO.messages[30];
-                    messageText[1].text = gameManager.cardDatabaseSO.messages[31];
-                    messageText[2].text = gameManager.cardDatabaseSO.messages[32];
-                    canvasGame.GetComponent<Animator>().Play("Message_3",0,0);
+                    canvasAnim.Play("Message_3",0,0);
                     messageIndex = 24;
-                    break;    
-                case 22:
+                    break;
+                case 20:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[33];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[34];
                     messageText[2].text = gameManager.cardDatabaseSO.messages[35];
-                    messageText[3].text = gameManager.cardDatabaseSO.messages[36];
-                    canvasGame.GetComponent<Animator>().Play("Message_6",0,0);
+                    canvasAnim.Play("Message_3",0,0);
                     messageIndex = 25;
-                break;
-                case 23:
+                    break;      
+                case 21:
                     messageText[0].text = gameManager.cardDatabaseSO.messages[37];
                     messageText[1].text = gameManager.cardDatabaseSO.messages[38];
-
-                    canvasGame.GetComponent<Animator>().Play("Message_7",0,0);
-                    break;          
+                    canvasAnim.Play("Message_7",0,0);
+                    break;             
             }
         }
 
@@ -257,7 +250,7 @@ namespace PersonalValue
         //หลังโชว์เสร็จกดแล้วจะไปไหน
         public void ButtonMessage()
         {
-            if(messageIndex == 14 || messageIndex == 13) return;
+            //if(messageIndex == 14 || messageIndex == 13) return;
             messageButton.GetComponent<Button>().interactable = false;
 
                 //messageButton.GetComponent<Button>().interactable = true; 
@@ -297,12 +290,13 @@ namespace PersonalValue
                     case 12: ShowMessage(13);break;
                     case 17: 
                         boxAnimateIndex = 1;
-                        messageAnimTemplateList_1 = ShuffleList(gameManager.cardDatabaseSO.messagesAnimTemplate_1.ToList());
-                        messageAnimTemplateList_2 = ShuffleList(gameManager.cardDatabaseSO.messagesAnimTemplate_2.ToList());
+                        messageAnim = ShuffleList(gameManager.cardDatabaseSO.messagesAnim.ToList());
+                        //messageAnimTemplateList_1 = ShuffleList(gameManager.cardDatabaseSO.messagesAnimTemplate_1.ToList());
+                        //messageAnimTemplateList_2 = ShuffleList(gameManager.cardDatabaseSO.messagesAnimTemplate_2.ToList());
                         StageTemplateFade("Template-box_1");
                     break;
                     case 18:
-                        canvasGame.GetComponent<Animator>().Play("Template-Massage_2",0,0);
+                        canvasAnim.Play("Template-Massage_2",0,0);
                         messageIndex = 19;
                         StartCoroutine(UiController.Instance.WaitForSecond(10,()=>{
                             UiController.Instance.CanvasGroupFade(animationTemplatePage[1],true,1f);
@@ -310,35 +304,50 @@ namespace PersonalValue
                     break;
                     case 19: //คลิกแล้ว หน้าเพสขึ้นมา
                         UiController.Instance.CanvasGroupFade(animationTemplatePage[2],true,1f);
+                        animationTemplatePage[9].SetActive(true);
+                        animationTemplatePage[10].SetActive(true);
+                        animationTemplatePage[11].SetActive(true);
+                        animationTemplatePage[9].GetComponent<TMPro.TextMeshProUGUI>().text = string.Format(GameManager.Instance.cardDatabaseSO.confirmList[boxAnimateIndex-1],"\n");
+                        animationTemplatePage[10].GetComponent<TMPro.TextMeshProUGUI>().text = "เขียนเพิ่ม";
+                        animationTemplatePage[11].GetComponent<TMPro.TextMeshProUGUI>().text = "ไปต่อ";
                         confirmPageIndex = 1;
                     break;
                     case 20: //คลิกแล้ว หน้าเพสขึ้นมา
                         UiController.Instance.CanvasGroupFade(animationTemplatePage[2],true,1f);
+                        animationTemplatePage[9].SetActive(true);
+                        animationTemplatePage[10].SetActive(true);
+                        animationTemplatePage[11].SetActive(true);
+                        animationTemplatePage[9].GetComponent<TMPro.TextMeshProUGUI>().text = "พร้อมจะไปต่อไหม?";
+                        animationTemplatePage[10].GetComponent<TMPro.TextMeshProUGUI>().text = "ไม่พร้อม";
+                        animationTemplatePage[11].GetComponent<TMPro.TextMeshProUGUI>().text = "พร้อม";                        
                         confirmPageIndex = 2;
                         break;
                     case 21: 
-                        animationTemplatePage.ToList().ForEach(o => { o.SetActive(false); });    
-                        animationTemplatePage[0].SetActive(true);
-                        animationTemplatePage[4].SetActive(true);
-                        StartCoroutine(PlayAnimationThen("Template-Heart",()=>{ ShowMessage(19);}));
-                    break;
-                    case 22:
-                        boxAnimateIndex = 3;
-                        StageTemplateFade("Template-box_3");
-                    break;
-                    case 23:
-                        boxAnimateIndex = 5;
-                        StageTemplateFade("Template-box_5");
+                        boxAnimateIndex = 4;
+                        StageTemplateFade("Template-box_4");
                     break;
                     case 24: //เปิดหน้าสุดท้าย
                         OpenTemplateInput();
                     break;
                     case 25:
-                        ShowMessage(23);
+                        ShowMessage(21);
                         break;
                 }
 
-                Debug.Log("🟢 กดปุ่มแล้ว" + messageIndex); 
+                //Debug.Log("🟢 กดปุ่มแล้ว" + messageIndex);
+
+            List<MessageAnimTemplate> ShuffleList(List<MessageAnimTemplate> inputList)
+            {
+                List<MessageAnimTemplate> tempList = new List<MessageAnimTemplate>(inputList);
+                for (int i = 0; i < tempList.Count; i++)
+                {
+                    int randomIndex = Random.Range(i, tempList.Count);
+                    MessageAnimTemplate temp = tempList[i];
+                    tempList[i] = tempList[randomIndex];
+                    tempList[randomIndex] = temp;
+                }
+                return tempList;
+            } 
         }
 
         private void StageTemplateFade(string _nameBox)
@@ -352,14 +361,17 @@ namespace PersonalValue
                 animationTemplatePage[7].GetComponent<TMPro.TMP_InputField>().text = string.Empty;
                 animationTemplatePage[8].SetActive(true);
                 animationTemplatePage[8].GetComponent<TMPro.TMP_InputField>().text = string.Empty;
+                nameTextField_Stage4.placeholder.GetComponent<TMPro.TextMeshProUGUI>().text = string.Empty;
                 
                 stageTemplate[1].SetActive(false);
                 stageTemplate[2].SetActive(false);
                 stageTemplate[3].SetActive(false);
-                stageTemplate[4].SetActive(false);
+                stageTemplate[4].SetActive(false);                
+                stageTemplate[7].SetActive(true);                
+                stageTemplate[8].SetActive(true);
 
-                animationTemplatePage[5].GetComponent<TMPro.TextMeshProUGUI>().text = messageAnimTemplateList_1[currentBoxAnimateIndex];
-                animationTemplatePage[6].GetComponent<TMPro.TextMeshProUGUI>().text = messageAnimTemplateList_2[currentBoxAnimateIndex];
+                animationTemplatePage[5].GetComponent<TMPro.TextMeshProUGUI>().text = messageAnim[currentBoxAnimateIndex].text_1;
+                animationTemplatePage[6].GetComponent<TMPro.TextMeshProUGUI>().text = messageAnim[currentBoxAnimateIndex].text_2;
 
                 stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = false;
                 stageTemplate[0].GetComponent<CanvasGroup>().alpha = 1;
@@ -372,7 +384,7 @@ namespace PersonalValue
 
                         UiController.Instance.CanvasGroupFade(stageTemplate[0],false,3f);
                         StartCoroutine(PlayAnimationThen(_nameBox, () => {
-                        canvasGame.GetComponent<Animator>().Play("Template-Massage",0,0);
+                        canvasAnim.Play("Template-Massage",0,0);
                         messageIndex = 18;
                         }));
                     }));
@@ -386,8 +398,10 @@ namespace PersonalValue
                 case 1:
                     animationTemplatePage[2].SetActive(false);
                     animationTemplatePage[1].SetActive(false);
-                    canvasGame.GetComponent<Animator>().Play("Template-Massage_3",0,0);
-                    StartCoroutine(UiController.Instance.WaitForSecond(10,()=>{UiController.Instance.CanvasGroupFade(animationTemplatePage[3],true,1f);}));
+                    canvasAnim.Play("Template-Massage_3",0,0);
+                    StartCoroutine(UiController.Instance.WaitForSecond(10,()=>{
+                        UiController.Instance.CanvasGroupFade(animationTemplatePage[3],true,1f);
+                    }));
                     messageIndex = 20;
                 break;
                 case 2:
@@ -401,20 +415,21 @@ namespace PersonalValue
                         }
                         else if(boxAnimateIndex == 3)
                         {
-                           ShowMessage(18);
+                           StageTemplateFade("Template-box_3");
                         }
                         else if(boxAnimateIndex == 4) //2-3 เล่นปกติ
                         {
-                           StageTemplateFade("Template-box_4");
+                            ShowMessage(18);
+                           //StageTemplateFade("Template-box_4");
                         }
                         else if(boxAnimateIndex == 5) 
                         {
-                            ShowMessage(20);
+                            StageTemplateFade("Template-box_5");
                         }
                         else if(boxAnimateIndex == 6)
                         {
-                            ShowMessage(21);
-                        }
+                             ShowMessage(19);
+                        } 
                     }));
                     animationTemplatePage[2].SetActive(false);
                     animationTemplatePage[3].SetActive(false);
@@ -448,12 +463,29 @@ namespace PersonalValue
                     myValueButton.interactable = false;
                 }
             }
+
+            if(currentStage == Stage.Template)
+            {
+               if (!hasStoppedBlink_6 && gameManager.cropImage.isUploadIMG)
+                {
+                    stageTemplate[6].GetComponent<UICanvasBlinker>().StopBlink();
+                    stageTemplate[6].SetActive(false);
+                    hasStoppedBlink_6 = true;
+                }
+
+                if (!hasStoppedBlink_5 && stageTemplate[8].GetComponent<TMPro.TMP_InputField>().text.Length > 0)
+                {
+                    stageTemplate[5].GetComponent<UICanvasBlinker>().StopBlink();
+                    stageTemplate[5].SetActive(false);
+                    hasStoppedBlink_5 = true;
+                }
+
+            }
         }
 
         public void Stage1()
         {
             stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
-
             gameManager.tutorial.tutorialPageGroup.SetActive(false);
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
@@ -483,13 +515,15 @@ namespace PersonalValue
         private void Stage2()
         {
             stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
+
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
 
             currentStage = Stage.Stage2;
             headerText.text = gameManager.cardDatabaseSO.headers[1];
-            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(325, 325);
-            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(170, 0);
+            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(400, 400);
+            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(45, 0);
+            boxParent.GetComponent<GridLayoutGroup>().padding = new RectOffset(0, 0, 0, -40);// Left, Right, Top, Bottom
 
             timeObj.SetActive(true);
             NextStage(cardDataList_Stage1);
@@ -499,13 +533,15 @@ namespace PersonalValue
         private void Stage3()
         {
             stageCardPages.ToList().ForEach(o => { o.SetActive(true); o.GetComponent<CanvasGroup>().alpha = 1;});
+
             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = false;
             fillBarGroup.SetActive(true);
 
             currentStage = Stage.Stage3;
             headerText.text = gameManager.cardDatabaseSO.headers[2];
-            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(350, 350);
-            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(90, 0);
+            boxParent.GetComponent<GridLayoutGroup>().cellSize = new Vector2(400, 400);
+            boxParent.GetComponent<GridLayoutGroup>().spacing = new Vector2(45, 0);
+            boxParent.GetComponent<GridLayoutGroup>().padding = new RectOffset(0, 0, 0, -40);// Left, Right, Top, Bottom
 
             timeObj.SetActive(true);
             NextStage(cardDataList_Stage2);
@@ -528,7 +564,8 @@ namespace PersonalValue
             timeObj.SetActive(false);
             NextStage(cardDataList_Stage3);
             CreateBOX(gameManager.cardDatabaseSO.boxsNameList_4, boxPriorityPrefab);
-            
+            stageCardPriority[2].GetComponent<TMPro.TextMeshProUGUI>().text = "จำนวนการ์ดคุณค่าที่เลือก " + cardDataList.Count;
+
             UiController.Instance.DestorySlot(priorityParent);
             cardDataList.ToList().ForEach(o =>
             {
@@ -579,13 +616,15 @@ namespace PersonalValue
             {
                 GameObject box = UiController.Instance.InstantiateUIView(_boxPrefab ,boxParent);
                 box.name = "boxStage_" + index;
-                box.GetComponent<DropBox>().dropName = o.boxName;
+
                 if(currentStage == Stage.Stage4) 
                 {
+                    box.GetComponent<DropBoxPriority>().dropName = o.boxName;
                     box.transform.GetChild(0).GetComponent<Image>().sprite = gameManager.cardDatabaseSO.nullSprite;
                 }
                 else 
                 {
+                    box.GetComponent<DropBox>().dropName = o.boxName;
                     box.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = o.boxName;
                 }   
                 box.GetComponent<Image>().sprite = o.sprite;
@@ -618,11 +657,11 @@ namespace PersonalValue
                CreateCard(cardPrefab,cardParent,cardDataList[i]);
             }
             currentCardCount = loopCount;
-            mockUpDragCard.SetActive(false);
+            mockUpDragCard.GetComponent<DragPrefab>().Hide();
             gameManager.countdownTimer.StartCountdown();
         }
 
-        public void CreateCard(GameObject _prefab, GameObject _parent,CardDataSO _cardDataSO)
+        public GameObject CreateCard(GameObject _prefab, GameObject _parent,CardDataSO _cardDataSO)
         {
             GameObject card = UiController.Instance.InstantiateUIView(_prefab ,_parent);
             card.name = _cardDataSO.name;
@@ -632,6 +671,7 @@ namespace PersonalValue
                 // 🔥 เพิ่ม Effect Scale ด้วย DOTween
             card.transform.localScale = Vector3.zero; // เริ่มจาก 0
             card.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutBack); // ค่อยๆ ขยายแบบ Pop-up
+            return card;
         }
 
         private void Shuffle(List<CardDataSO> list)
@@ -646,7 +686,7 @@ namespace PersonalValue
 
             Debug.Log("✅ สุ่มการ์ดเสร็จแล้ว");
         }
-
+/*
           private List<string> ShuffleList(List<string> inputList)
         {
             List<string> tempList = new List<string>(inputList);
@@ -658,7 +698,7 @@ namespace PersonalValue
                 tempList[randomIndex] = temp;
             }
             return tempList;
-        }
+        }*/
 
         public void RemoveCardFromList(CardDataSO cardDataSO)
         {
@@ -693,26 +733,28 @@ namespace PersonalValue
         {
             if (cardDataList.Count <= 0)
             {
+                cameraZoomMockIMG.ToList().ForEach(o => { o.SetActive(false); });
                 switch(currentStage)
                 {
-                    //หลังจบด่าน 1
+                    //หลังจบด่าน 1 27
                     case Stage.Stage1:
                     ConditionStage(27,()=>{ 
                         gameManager.countdownTimer.StopCountdown();
-                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom1);}));
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{
+                            cameraZoomMockIMG[0].SetActive(true);
+                            FadeBoxList(CameraZoom1);}));
                         importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage1.Add(o); });
                     });
                     void CameraZoom1()
                     {
                         cameraZoomIMG.SetActive(true);
-                        cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                        cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
+                        cameraZoomMockIMG.ToList().ForEach(o => { o.SetActive(false); });
 
                         boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
                         StartCoroutine(PlayAnimationThen("CameraZoom_1", () =>
                         {
                             cameraZoomIMG.SetActive(false);
-                            
+
                             messagePages.GetComponent<CanvasGroup>().alpha = 1;
                             messagePages.GetComponent<CanvasGroup>().blocksRaycasts = true;
 
@@ -728,18 +770,19 @@ namespace PersonalValue
                     }
                     break;
 
-                    //หลังจบด่าน 2
+                    //หลังจบด่าน 2 15
                     case Stage.Stage2:
                     ConditionStage(15,()=>{ 
                         gameManager.countdownTimer.StopCountdown();
-                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom2);}));
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{
+                            cameraZoomMockIMG[1].SetActive(true);
+                            FadeBoxList(CameraZoom2);}));
                         importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage2.Add(o); });
                     });
                     void CameraZoom2()
                         {
                             cameraZoomIMG.SetActive(true);
-                            cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                            cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
+                            cameraZoomMockIMG.ToList().ForEach(o => { o.SetActive(false); });
                             
                             boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
                             StartCoroutine(PlayAnimationThen("CameraZoom_2", () =>
@@ -762,11 +805,12 @@ namespace PersonalValue
                         }
                     break;
 
-                    //หลังจบด่าน 3
+                    //หลังจบด่าน 3 10
                     case Stage.Stage3:
                     ConditionStage(10,()=>{ 
                         gameManager.countdownTimer.StopCountdown();
-                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{FadeBoxList(CameraZoom3);}));
+                        StartCoroutine(UiController.Instance.WaitForSecond(3,()=>{  
+                            cameraZoomMockIMG[2].SetActive(true); FadeBoxList(CameraZoom3);}));
                         importantBOX.cardDataSOList.ForEach(o => { cardDataList_Stage3.Add(o); });
                     });
                         /*
@@ -780,10 +824,8 @@ namespace PersonalValue
                     void CameraZoom3()
                             {
                                 Debug.Log("🟢 ขาดไม่ได้ ไม่เกิน 15 ใบ ไปด่านต่อไป");
-
                                 cameraZoomIMG.SetActive(true);
-                                cameraZoomIMG.GetComponent<Image>().sprite = importantBOX.GetComponent<Image>().sprite;
-                                cameraZoomTX.text = importantBOX.GetComponent<DropBox>().text.text;
+                                cameraZoomMockIMG.ToList().ForEach(o => { o.SetActive(false); });
 
                                 boxList.ForEach(o => { o.GetComponent<CanvasGroup>().alpha = 0; });
                                 StartCoroutine(PlayAnimationThen("CameraZoom_3", () =>
@@ -804,13 +846,6 @@ namespace PersonalValue
                                 }));
                             }                        
                     break;
-
-                    case Stage.Stage4:
-                        currentStage = Stage.Stage5;
-                        break;
-                    case Stage.Stage5:
-                        currentStage = Stage.Stage1;
-                        break;
                 }
                     
                 Debug.Log("🟢 ด่านต่อไป");
@@ -844,13 +879,13 @@ namespace PersonalValue
                 // ตรวจสอบว่าผ่านหรือไม่
                 if (currentCount >= requiredCount)
                 {
-                    Debug.Log($"✅ ผ่านด่าน 1: รวมทั้งหมด {currentCount} ใบ (ครบ 27 แล้ว)");
+                    Debug.Log($"✅ ผ่านด่าน : รวมทั้งหมด {currentCount} ใบ (ครบ {_amount} แล้ว)");
                     //รอสามวิก่อน
                     _onComplete?.Invoke();                                                                                                                                                     
                 }
                 else
                 {
-                    Debug.LogWarning($"❌ ยังไม่ผ่านด่าน 1: รวมได้ {currentCount} ใบ (ยังไม่ถึง 27)");
+                    Debug.LogWarning($"❌ ยังไม่ผ่านด่าน : รวมได้ {currentCount} ใบ (ยังไม่ถึง {_amount})");
                 }
             }
 
@@ -862,7 +897,7 @@ namespace PersonalValue
 
                 foreach (var o in boxList)
                 {
-                    if (o == importantBOX.gameObject) continue;
+                    //if (o == importantBOX.gameObject) continue;
 
                     CanvasGroup cg = o.GetComponent<CanvasGroup>();
                     if (cg != null)
@@ -876,7 +911,6 @@ namespace PersonalValue
         }
         }
         
-
         private void NextStage(List<CardDataSO> _cardDataSOs)
         {
             cardDataList.Clear();
@@ -907,12 +941,11 @@ namespace PersonalValue
 
         private IEnumerator PlayAnimationThen(string animationName, System.Action onComplete)
         {
-            Animator animator = canvasGame.GetComponent<Animator>();
-            animator.Play(animationName,0,0);
+            canvasAnim.Play(animationName,0,0);
 
             // รอจนกว่าอนิเมชั่นจะหยุด
             yield return null;
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo stateInfo = canvasAnim.GetCurrentAnimatorStateInfo(0);
             yield return new WaitForSeconds(stateInfo.length);
 
             onComplete?.Invoke();
@@ -924,7 +957,7 @@ namespace PersonalValue
             int count = 0;
             boxList.ToList().ForEach(o =>
             {
-               if( o.GetComponent<DropBox>().cardName_Stage4 != null)
+               if( o.GetComponent<DropBoxPriority>().cardName_Stage4 != null)
                 {
                     count++;
                 }
@@ -934,22 +967,24 @@ namespace PersonalValue
 
         public void OpenTemplate()
         {
-            currentStage = Stage.Stage4;
+            currentStage = Stage.Template;
             stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplateInput.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(true); });
             stageTemplate[3].SetActive(false);
             stageTemplate[4].SetActive(true);
+            stageTemplate[5].GetComponent<UICanvasBlinker>().StartBlink();
+            stageTemplate[6].GetComponent<UICanvasBlinker>().StartBlink();
             stageTemplate[3].GetComponent<CanvasGroup>().alpha = 0;
             stageTemplate[0].GetComponent<CanvasGroup>().blocksRaycasts = true;
 
             int index = 0;
             boxList.ToList().ForEach(o =>
             {
-                if(o.GetComponent<DropBox>().cardName_Stage4 != null)
+                if(o.GetComponent<DropBoxPriority>().cardName_Stage4 != null)
                 {
-                    priorityListTexts[index].text = string.Format(o.GetComponent<DropBox>().cardName_Stage4.cardTH,"\n");
+                    priorityListTexts[index].text = string.Format(o.GetComponent<DropBoxPriority>().cardName_Stage4.cardTH,"\n");
                 }
                 else
                 {
@@ -967,7 +1002,7 @@ namespace PersonalValue
 
         public void OpenTemplateInput()
         {
-            currentStage = Stage.Stage5;
+            currentStage = Stage.TemplateInput;
             stageCardPriority.ToList().ForEach(o => { o.SetActive(false); });
             stageCardPages.ToList().ForEach(o => { o.SetActive(false); });
             stageTemplate.ToList().ForEach(o => { o.SetActive(false); });
